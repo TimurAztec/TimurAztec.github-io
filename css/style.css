@@ -1,0 +1,86 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    padding-top: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+header{
+    border: 3px solid red;
+    height: 10%; width: 100%;
+    float: left;
+}
+
+.header-inner{
+    padding: 1%;
+    /*float: left;*/
+}
+
+.logo{
+    border: 3px solid red;
+    display: inline-block;
+    float: left;
+    margin-bottom: 1%;
+    /*height: 100%; width: 20%;*/
+}
+
+img{
+    height: 100px; width: 100px;
+}
+
+.menu{
+    float: left;
+    display: inline-block;
+    border: 3px solid red;
+    height: 100px;
+    margin-left: 15%;
+    margin-bottom: 1%;
+    width: 70%;
+    padding-top: 25px;
+}
+
+.points{
+
+}
+
+.points li{
+    font-size: xx-large;
+    display: inline;
+    margin-left: 5px;
+}
+
+main{
+    margin-top: 1%;
+    padding: 1%;
+    border: 3px solid red;
+    text-align: center;
+    width: 100%;
+    float: left;
+}
+
+h1{
+    margin-bottom: 1%;
+}
+
+footer{
+    margin-top: 1%;
+    border: 3px solid red;
+    text-align: center;
+    width: 100%;
+    float: left;
+}
+
+.points2{
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.points2 li{
+    display: inline;
+    margin-left: 5px;
+}
