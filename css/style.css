@@ -1,128 +1,36 @@
 * {
     margin: 0;
-    padding: 0;
+    height: 0;
     border-sizing: border-box;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-header {
-    padding-top: 7px;
-    padding-bottom: 2px;
-    width: 900px;
-    display: flex;
-    justify-content: space-between;
-    /*align-items: ;*/
-}
-
-.Карточка-товара {
-    color: gray;
-    display: flex;
-    font-size: 11pt;
-}
-
-.артикул{
-    color: gray;
-    display: flex;
-    font-size: 11.5pt;
-}
-
-.артикул-h3{
-    color: black;
-    font-weight: bold;
-    display: flex;
-}
-
-main {
-    width: 900px;
-    border: 1px solid gray;
-    /*padding: 100px;*/
-}
-
-h1{
-    color: cornflowerblue;
-    text-decoration: underline;
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 29.5pt;
-}
-
-.img-part{
-    display: flex;
-    justify-content: space-around;
-    padding-left: 80px;
-    padding-right: 80px;
-    width: 710px;
-}
-
-.phone-img{
-    position: relative;
-}
-
-.mark{
-    color: rgba(255, 255, 255, 1);
-    background: rgba(255, 0, 0, 0.51);
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    position: absolute;
-    left: -50px;
-    top: -50px;
+.flex-box {
+    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    max-width: 700px;
+    height: 500px;
+    margin: 50px auto;
 }
 
-.mark div{
-    /*margin-top: 30%;*/
-    /*height: 50px;*/
-}
-
-.img-part-columnm{
-    display: flex;
-    flex-direction: column;
-}
-
-#main-img{
-    width: 75%;
-}
-
-.Дисплей{
-    width: 345px;
-}
-
-.Оперативная-память{
-    width: 345px;
-    margin-top: 20px;
-}
-
-.small-imgs{
-    display: flex;
-    padding-left: 80px;
-}
-
-.small-imgs img{
-    margin-left: 15px;
-    width: 50px;
+.flex-item {
+    margin: 10px;
+    background: darkgray;
+    /*width: 100px;*/
     height: 100px;
+    width: 15%;
 }
 
-.p-on-footer{
-    font-size: 10pt;
-    padding-right: 80px;
-    padding-left: 80px;
-    margin-top: 20px;
-    margin-bottom: 10px;
+@media screen and (max-width: 700px) {
+    .flex-box{
+        flex-direction: column;
+    }
+
+    .flex-item{
+        background: url("https://steamuserimages-a.akamaihd.net/ugc/947345120829613425/A60A8305C54B4262AB3515566BA58F239E18805A/") no-repeat center center fixed;
+        background-size: cover;
+    }
 }
 
-footer {
-    margin-top: 20px;
-    width: 900px;
-    font-size: 7.5pt;
-}
+@media
