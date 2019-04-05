@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     border-sizing: border-box;
+    font-family: sans-serif;
 }
 
 body {
@@ -139,6 +140,10 @@ footer {
     .img-part{
         flex-direction: column;
         align-items: center;
+    }
+
+    .Дисплей{
+        margin-top: 20px;
     }
 
     .phone-img{
