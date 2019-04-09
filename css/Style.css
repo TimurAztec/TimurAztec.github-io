@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    border-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/571e6e9e2b8dde10a1ebd302/1462050322792/amenra.png?format=1500w") no-repeat center center fixed;
+    background-size: cover;
+}
+
+.Header-wrapper {
+    width: 100%;
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    align-items: center;
+    color: goldenrod;
+
+    /*border: 1px solid blue;*/
+}
+
+.Navbar{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: black;
+
+    /*border: 1px solid blue;*/
+}
+
+.Navbar__logo-part{
+    display: flex;
+    align-items: center;
+}
+
+h2 {
+    margin-left: 2%;
+    white-space: nowrap;
+}
+
+.Logo{
+    width: 100%;
+    max-width: 78px;
+    display: flex; align-items: center;
+}
+
+#Logo{
+    width: 100%;
+    height: auto;
+}
+
+.Navbar__navigation{
+    width: 600px;
+}
+
+.Navbar__ul{
+    list-style: none;
+    font-family: sans-serif;
+    font-size: 1em;
+    white-space: nowrap;
+    /*display: flex;*/
+    /*justify-content: space-around;*/
+    /*align-items: center;*/
+
+    /*border: 1px solid gray;*/
+}
+
+.Navbar__ul li{
+    margin-left: 1%;
+    margin-right: 1%;
+    text-align: center;
+    word-break: normal;
+    display: inline;
+    white-space: nowrap;
+}
+
+.Navbar__ul li:hover{
+    color: darkgoldenrod;
+    text-decoration: underline;
+}
+
+.Main-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 12% 5% 12% 5%;
+}
+
+h1{
+    text-align: center;
+    font-weight: bold;
+}
+
+.Main-info hr{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    border-color: darkgoldenrod;
+    width: 100px;
+}
+
+.Main-info p{
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.Main-info__button{
+    margin-top: 5%;
+    font-family: sans-serif;
+    border: 2px solid darkgoldenrod;
+    border-radius: 2px;
+    padding: 10px;
+}
+
+.Main-info__button:hover{
+    transform: scale(1.2);
+}
+
+@media screen and (max-width: 840px){
+    .Navbar{
+        flex-direction: column;
+    }
+
+    .Navbar__navigation{
+        line-height: 1.5;
+        text-align: center;
+        width: 20em;
+    }
+
+    .Navbar__ul{
+        white-space: normal;
+    }
+}
