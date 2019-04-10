@@ -35,7 +35,7 @@
     font-family: sans-serif;
 }
 
-.Block1__button{
+.Black__button{
     /*margin-top: 5%;*/
     font-family: sans-serif;
     border: 2px solid black;
@@ -44,7 +44,7 @@
     transition: all 0.7s;
 }
 
-.Block1__button:hover{
+.Black__button:hover{
     transform: scale(1.2);
 }
 
@@ -53,7 +53,226 @@
         flex-direction: column;
     }
 
+    .Block1-inner-wrapper{
+        padding: 7% 0% 7% 0%;
+    }
+
     .Block1__TextContent{
         margin: 5% auto auto auto;
+        padding: 0% 5% 0% 5%;
     }
+}
+
+.Block2{
+    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/594d4b22725e25f4a45c3536/1498237879256/volcom_bw_fortifem.png?format=1500w") no-repeat center center fixed;
+    background-size: cover;
+    display: flex; justify-content: center; align-items: center;
+    margin-top: 5%;
+}
+
+.Block2-wrapper{
+    width: 100%;
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: sans-serif;
+    color: goldenrod;
+    padding: 15% 0% 14% 0%;
+    background-color: rgba(0, 0, 0, 0.7);
+    transition: all 0.5s;
+}
+
+.Block2__play-button{
+    width: 148px;
+}
+
+.Block2__play-button:hover{
+    width: 152px;
+}
+
+.Block3{
+    display: flex; justify-content: center; align-items: center;
+}
+
+.Block3-wrapper{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 100%;
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.Block3-wrapper article{
+    margin-top: 2%;
+    font-family: sans-serif;
+}
+
+.Block3-wrapper hr {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    border-color: black;
+    width: 100px;
+}
+
+.Block3__inner-blocks{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Top-blocks{
+    width: 940px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Bottom_blocks{
+    width: 940px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Block3__block{
+    font-size: 0.9em;
+    margin-top: 2%;
+    max-width: 256px;
+    display: flex; flex-direction: column;
+    align-items: center;
+    font-family: sans-serif;
+}
+
+.Block3__block h3{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    white-space: nowrap;
+}
+
+.Block3__img{
+    display: flex;
+    align-items: center;
+    width: 128px;
+}
+
+@media screen and (max-width: 840px){
+    .Block3__img{
+        width: 64px;
+    }
+    .Top-blocks{
+        flex-direction: column;
+        width: 100%;
+    }
+    .Bottom_blocks{
+        flex-direction: column;
+        width: 100%;
+    }
+    .Block3__block p{
+        font-size: 0em;
+    }
+}
+
+.Block4{
+    display: flex; align-items: center; justify-content: center;
+    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/5c9a8afa15fcc0c97de1170e/1553632136236/emperor_crest_fortifem.png?format=1500w") no-repeat center center fixed;
+    background-size: cover;
+}
+
+.Block4-wrapper{
+    width: 100%;
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.Block4__header{
+    width: 100%;
+    margin-top: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: goldenrod;
+}
+
+.Block4__header article{
+    margin: 2%;
+    font-family: sans-serif;
+}
+
+.Block4__header hr{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    border-color: goldenrod;
+    width: 100px;
+}
+
+.Block4__people{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.person{
+    font-family: sans-serif;
+    color: goldenrod;
+    border: 2px solid goldenrod;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.person__img{
+    width: 100%;
+    max-width: 128px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Block4__footer{
+    width: 100%;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: goldenrod;
+    padding: 10% 0% 10% 0%;
+}
+
+.Block4__footer article{
+    margin: 5% 0% 5% 0%;
+}
+
+.Block4__button{
+    border: 2px solid darkgoldenrod;
+    padding: 10px;
+    transition: 0.7s;
+}
+
+.Block4__button:hover{
+    transform: scale(1.2);
+}
+
+.Block5__top{
+    width: 100%;
+    max-width: 940px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
