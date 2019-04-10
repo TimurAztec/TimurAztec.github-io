@@ -184,6 +184,7 @@
     display: flex; align-items: center; justify-content: center;
     background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/5c9a8afa15fcc0c97de1170e/1553632136236/emperor_crest_fortifem.png?format=1500w") no-repeat center center fixed;
     background-size: cover;
+    font-size: 1em;
 }
 
 .Block4-wrapper{
@@ -269,10 +270,54 @@
     transform: scale(1.2);
 }
 
+@media screen and (max-width: 840px){
+    .Block4__people{
+        flex-direction: column;
+    }
+}
+
+.Block5{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    /*justify-content: center;*/
+    font-size: 1em;
+}
+
 .Block5__top{
     width: 100%;
     max-width: 940px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 5% 0% 5% 0%;
+}
+
+.Block5__top article{
+    font-family: sans-serif;
+}
+
+.Block5__works{
+    width: 100%;
+    height: 264px;
+    background-color: gray;
+}
+
+.Block5__bottom{
+    width: 100%;
+    max-width: 940px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5% 0% 5% 0%;
+}
+
+@media screen and (max-width: 840px){
+    .Block5__top{
+        flex-direction: column;
+    }
+
+    .Block5__top article{
+        margin-top: 3%;
+    }
 }
