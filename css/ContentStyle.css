@@ -321,3 +321,36 @@
         margin-top: 3%;
     }
 }
+
+.Block6{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/5c9a3110e2c483bc60b571cf/1553631298056/fortifem_doomriders.png?format=1500w") no-repeat center center fixed;
+    background-size: cover;
+}
+
+.Block6-wrapper{
+    width: 100%;
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.Block6__text-part{
+    font-family: sans-serif;
+    text-align: center;
+    color: goldenrod;
+    padding-bottom: 8%;
+}
+
+.Block6__text-part article span{
+    font-weight: bold;
+}
+
+.Block6__text-part h2{
+    font-size: 8em;
+}
