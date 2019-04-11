@@ -1,0 +1,113 @@
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/577639ae6a4963453ea5825f/1467365880111/gojira_fortifem.png?format=1500w") no-repeat center center fixed;
+    background-size: cover;
+}
+
+.footer-wrapper{
+    width: 100%;
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    font-family: sans-serif;
+    color: goldenrod;
+}
+
+.Block-top{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 3% 0% 3% 0%;
+}
+
+.Block-top h1{
+    font-family: sans;
+}
+
+.Block-top__left{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 30%;
+}
+
+.Block-top__middle{
+    width: 30%;
+}
+
+.Block-top__right{
+    width: 30%;
+}
+
+.Block-middle{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 3% 0% 3% 0%;
+}
+
+.Block-middle__left{
+    width: 30%;
+}
+
+.Block-middle__middle{
+    width: 30%;
+}
+
+.Block-middle__right{
+    width: 30%;
+}
+
+.Block-bottom{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 3% 0% 3% 0%;
+}
+
+.Block-bottom__left{
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.Block-bottom__left article{
+    white-space: nowrap;
+    margin: 0% 2% 0% 2%;
+}
+
+.Block-bottom__middle{
+    width: 30%;
+}
+
+.Block-bottom__right{
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.Block-bottom__left article:hover{
+    color: whitesmoke;
+}
+
+@media screen and (max-width: 840px) {
+    .Block-bottom__left{
+        flex-direction: column;
+    }
+
+    .Block-bottom__left article{
+        margin: 2% 0% 2% 0%;
+        white-space: normal;
+        text-align: center;
+    }
+}
