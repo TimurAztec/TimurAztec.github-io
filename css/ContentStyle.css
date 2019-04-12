@@ -182,7 +182,7 @@
 
 .Block4{
     display: flex; align-items: center; justify-content: center;
-    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/5c9a8afa15fcc0c97de1170e/1553632136236/emperor_crest_fortifem.png?format=1500w") no-repeat center center fixed;
+    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/5c9ce3b3e5e5f0eb7a956335/1553785870288/ubisoft_stories_space_fortifem.png?format=1500w") no-repeat center center fixed;
     background-size: cover;
     font-size: 1em;
 }
@@ -326,7 +326,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/5c9a3110e2c483bc60b571cf/1553631298056/fortifem_doomriders.png?format=1500w") no-repeat center center fixed;
+    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/57cec1d49f7456813a378d84/1473168089950/holybloodybook_fortifem.jpg?format=1500w") no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -404,7 +404,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     margin: 2.5% 0% 2.5% 0%;
 }
 
