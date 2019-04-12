@@ -395,16 +395,40 @@
 .Block7__column2{
     display: flex;
     flex-direction: column;
+    /*justify-content: center;*/
     width: 100%;
     max-width: 420px;
+}
+
+.column2__row{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 2.5% 0% 2.5% 0%;
+}
+
+.column2__image{
+    height: 100px;
+    width: 180px;
+    background-color: gray;
 }
 
 @media screen and (max-width: 840px){
     .Block7-wrapper{
         flex-direction: column;
+        text-align: center;
     }
 
     #Black__button-Button-wrapper{
         justify-content: center;
+    }
+
+    .column2__row{
+        flex-direction: column;
+    }
+
+    .column2__image{
+        margin: 2.5% 0% 2.5% 0%;
     }
 }
