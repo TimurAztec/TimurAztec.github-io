@@ -4,6 +4,11 @@
     border-sizing: border-box;
 }
 
+a:visited {
+    color: goldenrod;
+    text-decoration: none;
+}
+
 body{
     display: flex;
     justify-content: center;
@@ -70,11 +75,7 @@ header {
     font-family: sans-serif;
     font-size: 1em;
     white-space: nowrap;
-    /*display: flex;*/
-    /*justify-content: space-around;*/
-    /*align-items: center;*/
-
-    /*border: 1px solid gray;*/
+    /*text-decoration: none;*/
 }
 
 .Navbar__ul li{
@@ -126,6 +127,30 @@ h1{
 
 .Main-info__button:hover{
     transform: scale(1.2);
+}
+
+.Main-info__circles{
+    margin: 2% 0% 0% 0%;
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.Main-info__circle{
+    width: 10px;
+    height: 10px;
+    border: 2px solid darkgoldenrod;
+    border-radius: 50%;
+    transition: all 0.5s;
+}
+
+.Main-info__circle:hover{
+    transform: scale(1.2);
+}
+
+.selected-circle{
+    background-color: goldenrod;
 }
 
 @media screen and (max-width: 840px){
