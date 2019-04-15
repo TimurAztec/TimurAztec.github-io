@@ -245,6 +245,10 @@
     justify-content: center;
 }
 
+.person h3{
+    margin: 3% 0% 2% 0%;
+}
+
 .Block4__footer{
     width: 100%;
     font-family: sans-serif;
@@ -273,6 +277,10 @@
 @media screen and (max-width: 840px){
     .Block4__people{
         flex-direction: column;
+    }
+
+    .person{
+        margin: 2% 0% 2% 0%;
     }
 }
 
