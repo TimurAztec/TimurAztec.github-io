@@ -1,9 +1,9 @@
-.Block1{
+.block1{
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.Block1-wrapper{
+.block1-wrapper{
     width: 100%;
     max-width: 940px;
     display: flex;
@@ -12,7 +12,7 @@
     flex-direction: column;
 }
 
-.Block1-inner-wrapper{
+.block1-inner-wrapper{
     width: 100%;
     display: flex;
     align-items: center;
@@ -20,22 +20,22 @@
     padding: 7% 5% 7% 5%;
 }
 
-.Block1__Picture{
+.block1__picture{
     width: 100%;
     max-width: 240px;
     min-width: 200px;
     display: flex; align-items: center;
 }
 
-.Block1__TextContent{
+.block1__text-content{
     margin: auto auto auto 5%;
 }
 
-.Block1__TextContent p{
+.block1__text-content p{
     font-family: sans-serif;
 }
 
-.Black__button{
+.black__button{
     /*margin-top: 5%;*/
     font-family: sans-serif;
     border: 2px solid black;
@@ -44,105 +44,89 @@
     transition: all 0.7s;
 }
 
-.Black__button:hover{
+.black__button:hover{
     transform: scale(1.2);
 }
 
 @media screen and (max-width: 840px) {
-    .Block1-inner-wrapper{
+    .block1-inner-wrapper{
         flex-direction: column;
     }
 
-    .Block1-inner-wrapper{
+    .block1-inner-wrapper{
         padding: 7% 0% 7% 0%;
     }
 
-    .Block1__TextContent{
+    .block1__TextContent{
         margin: 5% auto auto auto;
         padding: 0% 5% 0% 5%;
     }
 }
 
-.Block2{
-    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/594d4b22725e25f4a45c3536/1498237879256/volcom_bw_fortifem.png?format=1500w") no-repeat center center fixed;
+.block2{
+    background: url("../img/Content1-Background.png") no-repeat center center fixed;
     background-size: cover;
     display: flex; justify-content: center; align-items: center;
     margin-top: 5%;
-}
-
-.Block2-wrapper{
-    width: 100%;
-    max-width: 940px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    color: white;
     font-family: sans-serif;
-    color: goldenrod;
-    padding: 15% 0% 14% 0%;
-    background-color: rgba(0, 0, 0, 0.7);
-    transition: all 0.5s;
 }
 
-.Block2__play-button{
+.block2-wrapper{
+    padding: 15% 0% 14% 0%;
+}
+
+.block2__play-button{
     width: 148px;
 }
 
-.Block2__play-button:hover{
+.block2__play-button:hover{
     width: 152px;
 }
 
-.Block3{
+.block3{
     display: flex; justify-content: center; align-items: center;
 }
 
-.Block3-wrapper{
+.block3-wrapper{
     margin-top: 2%;
     margin-bottom: 2%;
-    width: 100%;
-    max-width: 940px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
 }
 
-.Block3-wrapper article{
+.block3-wrapper article{
     margin-top: 2%;
     font-family: sans-serif;
 }
 
-.Block3-wrapper hr {
+.block3-wrapper hr {
     margin-top: 2%;
     margin-bottom: 2%;
     border-color: black;
     width: 100px;
 }
 
-.Block3__inner-blocks{
+.block3__inner-blocks{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.Top-blocks{
+.top-blocks{
     width: 940px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.Bottom_blocks{
+.bottom-blocks{
     width: 940px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.Block3__block{
+.block3__block{
     font-size: 0.9em;
     margin-top: 2%;
     max-width: 256px;
@@ -151,43 +135,53 @@
     font-family: sans-serif;
 }
 
-.Block3__block h3{
+.block3__block h3{
     margin-top: 2%;
     margin-bottom: 2%;
     white-space: nowrap;
 }
 
-.Block3__img{
+.block3__img{
     display: flex;
     align-items: center;
     width: 128px;
 }
 
+.block3 hr{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    border-color: deepskyblue;
+    width: 100px;
+}
+
 @media screen and (max-width: 840px){
-    .Block3__img{
+    .block3{
+        text-align: center;
+    }
+    .block3__img{
         width: 64px;
     }
-    .Top-blocks{
+    .top-blocks{
         flex-direction: column;
         width: 100%;
     }
-    .Bottom_blocks{
+    .bottom-blocks{
         flex-direction: column;
         width: 100%;
     }
-    .Block3__block p{
+    .block3__block p{
         font-size: 0em;
     }
 }
 
-.Block4{
+.block4{
     display: flex; align-items: center; justify-content: center;
-    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/5c9ce3b3e5e5f0eb7a956335/1553785870288/ubisoft_stories_space_fortifem.png?format=1500w") no-repeat center center fixed;
+    background: url("../img/Content2-Background.png") no-repeat center center fixed;
     background-size: cover;
     font-size: 1em;
 }
 
-.Block4-wrapper{
+.block4-wrapper{
     width: 100%;
     max-width: 940px;
     display: flex;
@@ -198,28 +192,28 @@
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-.Block4__header{
+.block4__header{
     width: 100%;
     margin-top: 2%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: goldenrod;
+    color: white;
 }
 
-.Block4__header article{
+.block4__header article{
     margin: 2%;
     font-family: sans-serif;
 }
 
-.Block4__header hr{
+.block4__header hr{
     margin-top: 2%;
     margin-bottom: 2%;
-    border-color: goldenrod;
+    border-color: white;
     width: 100px;
 }
 
-.Block4__people{
+.block4__people{
     width: 100%;
     display: flex;
     align-items: center;
@@ -228,8 +222,8 @@
 
 .person{
     font-family: sans-serif;
-    color: goldenrod;
-    border: 2px solid goldenrod;
+    color: white;
+    border: 2px solid whitesmoke;
     padding: 2%;
     display: flex;
     flex-direction: column;
@@ -249,33 +243,27 @@
     margin: 3% 0% 2% 0%;
 }
 
-.Block4__footer{
+.block4__footer{
     width: 100%;
     font-family: sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: goldenrod;
+    color: white;
     padding: 10% 0% 10% 0%;
 }
 
-.Block4__footer article{
+.block4__footer article{
     margin: 5% 0% 5% 0%;
 }
 
-.Block4__button{
-    border: 2px solid darkgoldenrod;
-    padding: 10px;
-    transition: 0.7s;
-}
-
-.Block4__button:hover{
+.block4__button:hover{
     transform: scale(1.2);
 }
 
 @media screen and (max-width: 840px){
-    .Block4__people{
+    .block4__people{
         flex-direction: column;
     }
 
@@ -284,7 +272,7 @@
     }
 }
 
-.Block5{
+.block5{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -292,7 +280,7 @@
     font-size: 1em;
 }
 
-.Block5__top{
+.block5__top{
     width: 100%;
     max-width: 940px;
     display: flex;
@@ -301,17 +289,17 @@
     padding: 5% 0% 5% 0%;
 }
 
-.Block5__top article{
+.block5__top article{
     font-family: sans-serif;
 }
 
-.Block5__works{
+.block5__works{
     width: 100%;
     height: 264px;
     background-color: gray;
 }
 
-.Block5__bottom{
+.block5__bottom{
     width: 100%;
     max-width: 940px;
     display: flex;
@@ -321,55 +309,54 @@
 }
 
 @media screen and (max-width: 840px){
-    .Block5__top{
+    .block5__top{
         flex-direction: column;
     }
 
-    .Block5__top article{
+    .block5__top article{
         margin-top: 3%;
     }
 }
 
-.Block6{
+.block6{
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url("https://static1.squarespace.com/static/526ea4d1e4b0ad95468dcf1d/571e46a53c44d8776bb9c64c/57cec1d49f7456813a378d84/1473168089950/holybloodybook_fortifem.jpg?format=1500w") no-repeat center center fixed;
+    background: url("../img/Content3-Background.png") no-repeat center center fixed;
     background-size: cover;
 }
 
-.Block6-wrapper{
+.block6-wrapper{
     width: 100%;
     max-width: 940px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.7);
 }
 
-.Block6__text-part{
+.block6__text-part{
     font-family: sans-serif;
     text-align: center;
-    color: goldenrod;
+    color: white;
     padding-bottom: 8%;
 }
 
-.Block6__text-part article span{
+.block6__text-part article span{
     font-weight: bold;
 }
 
-.Block6__text-part h2{
+.block6__text-part h2{
     font-size: 8em;
 }
 
-.Block7{
+.block7{
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.Block7-wrapper{
+.block7-wrapper{
     width: 100%;
     max-width: 940px;
     display: flex;
@@ -377,30 +364,30 @@
     justify-content: space-around;
 }
 
-.Block7__column1{
+.block7__column1{
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 420px;
 }
 
-.Block7__column1 h2{
+.block7__column1 h2{
     margin: 10% 0% 3% 0%;
 }
 
-.Block7__column1 textarea{
+.block7__column1 textarea{
     resize: none;
     margin: 3% 0% 3% 0%;
 }
 
-#Black__button-Button-wrapper{
+#button-wrapper{
     display: flex;
     align-items: center;
     justify-content: flex-start;
     margin: 3% 0% 10% 0%;
 }
 
-.Block7__column2{
+.block7__column2{
     display: flex;
     flex-direction: column;
     /*justify-content: center;*/
@@ -423,12 +410,12 @@
 }
 
 @media screen and (max-width: 840px){
-    .Block7-wrapper{
+    .block7-wrapper{
         flex-direction: column;
         text-align: center;
     }
 
-    #Black__button-Button-wrapper{
+    #button-wrapper{
         justify-content: center;
     }
 
