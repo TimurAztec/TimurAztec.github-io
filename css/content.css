@@ -1,0 +1,172 @@
+content{
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    align-items: center;
+    width: 90%;
+}
+
+.taskBar{
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.taskBar textarea{
+    width: 100%;
+    resize: none;
+    margin-right: 2%;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid gray;
+}
+
+.tasksArea{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin: 2% 0% 0% 0%;
+}
+
+.searchingBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.dateSelector{
+    width: 108px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.prioritySelector{
+    width: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.nameSelector{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid grey;
+    width: 666px;
+    cursor: pointer;
+}
+
+.nameSelector textarea{
+    width: 100%;
+    resize: none;
+    outline: none;
+    border: none;
+}
+
+.readinessSelector{
+    cursor: pointer;
+}
+
+.tasksAreaImg{
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tasksContainer{
+    margin: 2% 0% 0% 0%;
+    width: 100%;
+    height: 480px;
+    overflow-y: auto;
+}
+
+.task{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 2px solid dimgray;
+    border-radius: 2px;
+    padding: 10px 0px 10px 0px;
+}
+
+.taskDone{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 2px solid dimgray;
+    border-radius: 2px;
+    padding: 10px 0px 10px 0px;
+    background: greenyellow;
+}
+
+.task__date{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 108px;
+}
+
+.task__priority{
+    background: dodgerblue;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.task__prioritySelect{
+    width: 16px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.task__edit{
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.task__made{
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.task__delete{
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.task__text{
+    width: 666px;
+    max-height: 128px;
+    overflow-y: auto;
+    background-color: lightgray;
+}
+
+.taskDone .task__text{
+    text-decoration: line-through;
+    background: greenyellow;
+}
