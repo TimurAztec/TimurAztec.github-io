@@ -9,7 +9,6 @@ var SBD, SBP, SBR;
 window.onload = function(){
 // function load(){
     taskObjectsList = JSON.parse(localStorage.getItem("Objects"));
-    console.log(taskObjectsList);
     if(taskObjectsList==null){
         taskObjectsList = [];
     }
