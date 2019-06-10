@@ -83,7 +83,7 @@ function addTaskObject() {
 
         taskObjectsList.push(
             {
-                taskDate: date.getDay() + '.' + date.getMonth() + '.' + date.getFullYear(),
+                taskDate: String(date.getDay()).padStart(2, '0') + '.' + String(date.getMonth()+1).padStart(2, '0') + '.' + date.getFullYear(),
                 taskTime: date.getHours() + ':' + date.getMinutes(),
                 taskPriority: 1,
                 taskText: inputTextArea.value,
