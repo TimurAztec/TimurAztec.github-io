@@ -274,7 +274,7 @@ function refreshContainer() {
     container.innerHTML = '';
     for (let i=0 ; i<taskItemsList.length ; i++){
         container.appendChild(taskItemsList[i]);
-        console.log(taskItemsList[i].children[3].innerHTML);
+        // console.log(taskItemsList[i].children[3].innerHTML);
     }
 
 }
