@@ -9,6 +9,9 @@ var SBD, SBP, SBR;
 window.onload = function(){
 // function load(){
     taskObjectsList = JSON.parse(localStorage.getItem("Objects"));
+    if(taskObjectsList==null){
+        taskObjectsList = [];
+    }
     taskItemsList = [];
     for (let i=0 ; i < taskObjectsList.length ; i++){
         taskItemsList.push(createTaskItem(taskObjectsList[i]));
@@ -271,6 +274,7 @@ function refreshContainer() {
     container.innerHTML = '';
     for (let i=0 ; i<taskItemsList.length ; i++){
         container.appendChild(taskItemsList[i]);
+        console.log(taskItemsList[i].children[3].innerHTML);
     }
 
 }
