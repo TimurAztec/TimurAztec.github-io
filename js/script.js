@@ -54,7 +54,7 @@ function refreshContainer() {
     for( i=0 ; i<itemsList.length ; i++ ) {
         container.appendChild(itemsList[i]);
     }
-    if(nameSearchTextArea.value==''){container.appendChild(createAddButton());}
+    if(nameSearchTextArea.value=='' && amountSearchTextArea.value=='' && priceSearchTextArea.value=='' && sumSearchTextArea.value==''){container.appendChild(createAddButton());}
 }
 
 function createAddButton() {
@@ -68,10 +68,6 @@ function createAddButton() {
     button.onclick = function () {
         itemsList.push(createItem());
         refreshContainer();
-
-        itemsList.forEach(function (element, i) {
-            console.log(element.children[2].children[0].value);
-        });
     }
 
     return button;
