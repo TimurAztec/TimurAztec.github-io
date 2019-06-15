@@ -1,0 +1,88 @@
+.inventoryList{
+    /*margin: 25px 0px 0px 0px;*/
+    width: 100%;
+    max-width: 1024px;
+    height: 580px;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*align-items: center;*/
+    border: 2px solid lightgray;
+    overflow-y: auto;
+}
+
+.item{
+    display: flex;
+    width: 100%;
+    height: 64px;
+    align-items: center;
+    background-color: lavender;
+    transition: 0.3s;
+    /*justify-content: space-between;*/
+    /*font-size: 16px;*/
+}
+
+.item *{
+    width: available;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.item div{
+    border: 1px solid darkgray;
+    display: flex;
+}
+
+.item textarea{
+    resize: none;
+    border: none;
+    width: 100%;
+    background-color: whitesmoke;
+    /*white-space: normal;*/
+    text-align: center;
+}
+
+.checkDiv{
+    width: 64px;
+}
+
+.numberDiv{
+    width: 64px;
+}
+
+.numeralDiv{
+    width: 84px;
+    overflow-y: auto;
+}
+
+.itemDiv{
+    width: 128px;
+}
+
+.invNumberInnerDiv{
+    width: 114px;
+    height: 54px;
+    text-align: center;
+    overflow-y: auto;
+    background-color: white;
+}
+
+.commentDiv{
+    width: 40%;
+}
+
+.commentDiv textarea{
+    text-align: left;
+}
+
+.deleteButtonDiv{
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.deleteButtonDiv:hover{
+    background-color: red;
+}
