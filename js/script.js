@@ -253,3 +253,20 @@ sumSortDiv.onclick = function () {
     });
     refreshContainer();
 }
+
+document.getElementById('sb__checkbox').onclick = function () {
+    if (document.getElementById('sb__checkbox').checked == true) {
+        itemsList.sort(function (taskA, taskB) {
+            return taskB.children[0].children[0].checked - taskA.children[0].children[0].checked;
+        });
+    }else{
+        itemsList.sort(function (taskA, taskB) {
+            return taskA.children[0].children[0].checked - taskB.children[0].children[0].checked;
+        });
+    }
+    console.log(document.getElementById('sb__checkbox').value);
+    itemsList.forEach(function (element, index) {
+        element.children[1].innerHTML = index+1;
+    });
+    refreshContainer();
+}
