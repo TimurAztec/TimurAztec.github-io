@@ -65,6 +65,16 @@
     text-align: center;
     overflow-y: auto;
     background-color: white;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.invNumberInnerDiv:hover{
+    /*transform: scale(1.1);*/
+    background: url("https://image.flaticon.com/icons/svg/109/109600.svg") center no-repeat;
+    color: transparent;
+    background-color: whitesmoke;
+    background-size: contain;
 }
 
 .commentDiv{

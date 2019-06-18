@@ -124,6 +124,17 @@ function createItem(Schecked, Sname, SinvNumber, Samount, Sprice, Ssum, Scomment
         refreshContainer();
     }
 
+    invNumberInnerDiv.onclick = function(){
+        html2canvas(invNumberInnerDiv).then(function(canvas) {
+            var tmpDownloadElement = document.createElement( 'a' );
+            tmpDownloadElement.download = 'Инвентарный_номер_' + name.value + '_' + invNumber + '.png';
+            tmpDownloadElement.href = canvas.toDataURL();
+            document.body.appendChild( tmpDownloadElement );
+            tmpDownloadElement.click();
+            document.body.removeChild( tmpDownloadElement );
+        });
+    }
+
     item.onchange = function (){
         location.reload();
     }
