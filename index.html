@@ -6,18 +6,19 @@
     <link href="css/contentStyle.css" rel="stylesheet">
     <link href="css/technicStyle.css" rel="stylesheet">
     <link href="css/inventoryList.css" rel="stylesheet">
+    <link href="css/optionsStyle.css" rel="stylesheet">
     <script type="text/javascript" src="js/html2canvas.min.js"></script>
 </head>
 <body>
     <div class="searchBar__item">
         <div class="checkDiv"><input type="checkbox" id="sb__checkbox" checked="checked"></div>
         <div class="numberDiv">№</div>
-        <div class="itemDiv"><textarea class="nameTextArea" placeholder="Название" id="sb__nameTextArea"></textarea></div>
-        <div class="itemDiv"></div>
-        <div class="sb__numeralDiv"><div class="sb__innerNumeralDiv" id="sb__amountInnerNumeralDiv">Количество</div><textarea class="amountTextArea" placeholder="Поиск" id="sb__amountTextArea"></textarea></div>
-        <div class="sb__numeralDiv"><div class="sb__innerNumeralDiv" id="sb__priceInnerNumeralDiv">Цена</div><textarea class="priceTextArea" placeholder="Поиск" id="sb__priceTextArea"></textarea></div>
-        <div class="sb__numeralDiv"><div class="sb__innerNumeralDiv" id="sb__sumInnerNumeralDiv">Сумма</div><textarea class="priceTextArea" placeholder="Поиск" id="sb__sumTextArea"></textarea></div>
-        <div class="commentDiv">Комментарии</div>
+        <div class="itemDiv"><textarea class="nameTextArea" placeholder="Назва" id="sb__nameTextArea"></textarea></div>
+        <div class="itemDiv">Інвентарні номери</div>
+        <div class="sb__numeralDiv"><div class="sb__innerNumeralDiv" id="sb__amountInnerNumeralDiv">Кількість</div><textarea class="amountTextArea" placeholder="Пошук" id="sb__amountTextArea"></textarea></div>
+        <div class="sb__numeralDiv"><div class="sb__innerNumeralDiv" id="sb__priceInnerNumeralDiv">Ціна</div><textarea class="priceTextArea" placeholder="Пошук" id="sb__priceTextArea"></textarea></div>
+        <div class="sb__numeralDiv"><div class="sb__innerNumeralDiv" id="sb__sumInnerNumeralDiv">Сума</div><textarea class="priceTextArea" placeholder="Пошук" id="sb__sumTextArea"></textarea></div>
+        <div class="commentDiv">Коментарі</div>
         <div class="sb__menuButton"><img class="img" src="https://www.flaticon.com/premium-icon/icons/svg/353/353984.svg"></div>
     </div>
 
@@ -43,7 +44,45 @@
     </div>
 
     <div class="technicalClasses">
+        <div class="options">
+            <div class="reference">
+                <div class="clippyImg"><img class="img" src="img/clippy.png"></div>
+                <p>
+                    Опис зовнішнього вигляду та функціоналу, Додаток складається з наступних частин:
+                    1. У першому стовпчику відображається відсутність або наявність предмету. Користувач може редагувати це, ставлячи або прибираючи спеціальну відмітку.
+                    2. Стовпчик з позначкою ”№” відображає нумерацію рядків.
+                    3. У стовпчику ”Назва” зазначено назву кожного окремого предмету.
+                    4. В наступному стовпчику відображається згенерований інвентарний номер, який можна завантажити в форматі png, натиснувши на нього. Після чого цей номер можна роздрукувати та розмістити на інвентарь.
+                    5. Стовпчик ”Кількість” відображає кількість кожного предмету.
+                    6. В стовпчик ”Ціна” записується ціна предмету.
+                    7. У стовпчику ”Сума” записується сума, яка розраховується за формулою ”Ціна X Кількість”.
+                    8. Останній стовпчик призначений для запису в нього додаткову інформацію (коментар).
+                    9. В таблиці присутній пошук за назвою, кількістю, ціною та сумою. Для використання цієї функції введіть текст або номер, за яким Ви бажаєте здійснити пошук у спеціальних пошукових полях, які знаходяться над відповідними стовпцями.
+                    10. Кнопка, яка з’являється під рядком після наведення на нього курсору, дозволяє додати новий ряд.
+                    11. Кнопка у вигляді смітника дозволяє повністю видалити рядок з таблиці.
+                    12. Присутня кнопка у верхньому правому куті, яка дозволяє відкрити вікно з інструкцією по роботі з програмою.
 
+                    Функції друку звіту та перетягу речей знаходяться в розробці! Тому ці функції можуть працювати некоректно!
+                </p>
+            </div>
+            <div class="checkBoxes">
+                <div class="checkBoxes__div"><input type="checkbox" id="DnDcheck"><span>Перетяг речей (в розробці)</span></div>
+            </div>
+            <div class="options__itemButton">
+                <div class="circleButton">
+                    <div class="buttonImg">
+                        <img class="img" src="https://image.flaticon.com/icons/svg/138/138601.svg">
+                    </div>
+                </div>
+            </div>
+            <div class="options__itemButton">
+                <div class="circleButton">
+                    <div class="buttonImg">
+                        <img class="img" src="https://image.flaticon.com/icons/svg/148/148766.svg">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="js/script.js"></script>
 </body>

@@ -6,7 +6,7 @@ var sumSearchTextArea = document.getElementById('sb__sumTextArea');
 var amountSortDiv = document.getElementById('sb__amountInnerNumeralDiv');
 var priceSortDiv = document.getElementById('sb__priceInnerNumeralDiv');
 var sumSortDiv = document.getElementById('sb__sumInnerNumeralDiv');
-var ASU, PSU, SSU, DragNDrop=false;
+var ASU, PSU, SSU, DragNDrop=false, menuButtonOn=false;
 var itemsList = [];
 var savingList = [];
 
@@ -327,4 +327,38 @@ document.getElementById('sb__checkbox').onclick = function () {
         element.children[1].innerHTML = index+1;
     });
     refreshContainer();
+}
+
+document.getElementsByClassName('sb__menuButton')[0].onclick = function () {
+    if(menuButtonOn){
+        document.getElementsByClassName('options')[0].style.display = 'flex'
+        menuButtonOn=false;
+    }else{
+        document.getElementsByClassName('options')[0].style.display = 'none';
+        menuButtonOn=true;
+    }
+}
+
+document.getElementsByClassName('options__itemButton')[1].querySelector('.circleButton').onclick = function () {
+    menuButtonOn=false;
+    document.getElementsByClassName('options')[0].style.display = 'none';
+}
+
+document.getElementsByName('DnDcheck').onchange = function () {
+    if (document.getElementsByName('DnDcheck').checked){
+        DragNDrop = true;
+    } else {
+        DragNDrop = false;
+    }
+}
+
+document.getElementsByClassName('options__itemButton')[0].querySelector('.circleButton').onclick = function () {
+    html2canvas(container).then(function(canvas) {
+        var tmpDownloadElement = document.createElement( 'a' );
+        tmpDownloadElement.download = 'Звіт.png';
+        tmpDownloadElement.href = canvas.toDataURL();
+        document.body.appendChild( tmpDownloadElement );
+        tmpDownloadElement.click();
+        document.body.removeChild( tmpDownloadElement );
+    });
 }
