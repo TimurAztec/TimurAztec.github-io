@@ -46,10 +46,12 @@
 
 .checkDiv{
     width: 64px;
+    user-select: none;
 }
 
 .numberDiv{
     width: 64px;
+    user-select: none;
 }
 
 .numeralDiv{
@@ -69,6 +71,7 @@
     background-color: white;
     cursor: pointer;
     transition: 0.5s;
+    user-select: none;
 }
 
 .invNumberInnerDiv:hover{
@@ -93,6 +96,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    user-select: none;
 }
 
 .deleteButtonDiv:hover{

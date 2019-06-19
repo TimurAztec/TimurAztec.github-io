@@ -148,19 +148,21 @@ function createItem(Schecked, Sname, SinvNumber, Samount, Sprice, Ssum, Scomment
         return false;
     }
 
-    item.onmousedown = function(e){
+    (checkDiv || numberDiv || invNumberDiv || sum).onmousedown = function(e){
+        let itemId = itemsList.indexOf(this);
         try {
             container.removeChild(container.querySelector('.itemButton'));
         }catch (e) {
             console.log(e);
         }
+        item.style.transform = 'scale(1.1)';
         item.style.position = 'absolute';
         moveAt(e);
         container.appendChild(item);
         item.style.zIndex = 1000;
 
         function moveAt(e) {
-            item.style.top = e.pageY - item.offsetHeight/2 + 'px';
+            item.style.top = e.pageY - item.offsetHeight / 0.5 + 'px';
         }
 
         document.onmousemove = function (e) {
@@ -168,15 +170,24 @@ function createItem(Schecked, Sname, SinvNumber, Samount, Sprice, Ssum, Scomment
         }
 
         item.onmouseup = function (e) {
+            console.log('a');
+            item.style.transform = 'none';
             document.onmousemove = null;
+
+            if (Array.prototype.indexOf.call(this.parentNode.children, this)==itemId) {
+                location.reload();
+                console,log('b');
+                console.log(Array.prototype.indexOf.call(this.parentNode.children, this));
+            }else{
+                itemsList[Array.prototype.indexOf.call(this.parentNode.children, this)] = itemsList[itemId];
+                itemsList.splice(itemId, 1);
+                location.reload();
+                console.log('c');
+                console.log(Array.prototype.indexOf.call(this.parentNode.children, this));
+            }
+
             item.onmouseup = null;
-
-            console.log(Array.prototype.indexOf.call(this.parentNode.children, this));
         }
-    }
-
-    function DnDchangePosition(index){
-
     }
 
     item.appendChild(checkDiv);
