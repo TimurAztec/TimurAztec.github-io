@@ -3,6 +3,7 @@
     width: 100%;
     max-width: 1024px;
     height: 580px;
+    position: relative;
     /*display: flex;*/
     /*flex-direction: column;*/
     /*align-items: center;*/
@@ -13,6 +14,7 @@
 .item{
     display: flex;
     width: 100%;
+    max-width: 1024px;
     height: 64px;
     align-items: center;
     background-color: lavender;

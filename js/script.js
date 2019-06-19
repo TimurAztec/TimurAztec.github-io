@@ -143,6 +143,42 @@ function createItem(Schecked, Sname, SinvNumber, Samount, Sprice, Ssum, Scomment
         sum.innerText = amount.value * price.value;
     }
 
+    //###DRAG AND DROP###
+    item.ondragstart = function(){
+        return false;
+    }
+
+    item.onmousedown = function(e){
+        try {
+            container.removeChild(container.querySelector('.itemButton'));
+        }catch (e) {
+            console.log(e);
+        }
+        item.style.position = 'absolute';
+        moveAt(e);
+        container.appendChild(item);
+        item.style.zIndex = 1000;
+
+        function moveAt(e) {
+            item.style.top = e.pageY - item.offsetHeight/2 + 'px';
+        }
+
+        document.onmousemove = function (e) {
+            moveAt(e);
+        }
+
+        item.onmouseup = function (e) {
+            document.onmousemove = null;
+            item.onmouseup = null;
+
+            console.log(Array.prototype.indexOf.call(this.parentNode.children, this));
+        }
+    }
+
+    function DnDchangePosition(index){
+
+    }
+
     item.appendChild(checkDiv);
     checkDiv.appendChild(check);
     item.appendChild(numberDiv);
