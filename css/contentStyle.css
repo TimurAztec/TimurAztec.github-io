@@ -31,11 +31,17 @@
     text-align: center;
 }
 
-.СdeleteButtonDiv{
+.sb__menuButton{
     width: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
+    cursor: pointer;
+}
+
+.sb__menuButton:hover{
+    background-color: #43b05c;
 }
 
 .sb__numeralDiv{

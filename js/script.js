@@ -6,7 +6,7 @@ var sumSearchTextArea = document.getElementById('sb__sumTextArea');
 var amountSortDiv = document.getElementById('sb__amountInnerNumeralDiv');
 var priceSortDiv = document.getElementById('sb__priceInnerNumeralDiv');
 var sumSortDiv = document.getElementById('sb__sumInnerNumeralDiv');
-var ASU, PSU, SSU;
+var ASU, PSU, SSU, DragNDrop=false;
 var itemsList = [];
 var savingList = [];
 
@@ -148,47 +148,51 @@ function createItem(Schecked, Sname, SinvNumber, Samount, Sprice, Ssum, Scomment
         return false;
     }
 
-    (checkDiv || numberDiv || invNumberDiv || sum).onmousedown = function(e){
-        let itemId = itemsList.indexOf(this);
-        try {
-            container.removeChild(container.querySelector('.itemButton'));
-        }catch (e) {
-            console.log(e);
-        }
-        item.style.transform = 'scale(1.1)';
-        item.style.position = 'absolute';
-        moveAt(e);
-        container.appendChild(item);
-        item.style.zIndex = 1000;
-
-        function moveAt(e) {
-            item.style.top = e.pageY - item.offsetHeight / 0.5 + 'px';
-        }
-
-        document.onmousemove = function (e) {
+    if(DragNDrop) {
+        (checkDiv || numberDiv || invNumberDiv || sum).onmousedown = function (e) {
+            let itemId = itemsList.indexOf(this);
+            try {
+                container.removeChild(container.querySelector('.itemButton'));
+            } catch (e) {
+                console.log(e);
+            }
+            item.style.transform = 'scale(1.1)';
+            item.style.position = 'absolute';
             moveAt(e);
-        }
+            container.appendChild(item);
+            item.style.zIndex = 1000;
 
-        item.onmouseup = function (e) {
-            console.log('a');
-            item.style.transform = 'none';
-            document.onmousemove = null;
-
-            if (Array.prototype.indexOf.call(this.parentNode.children, this)==itemId) {
-                location.reload();
-                console,log('b');
-                console.log(Array.prototype.indexOf.call(this.parentNode.children, this));
-            }else{
-                itemsList[Array.prototype.indexOf.call(this.parentNode.children, this)] = itemsList[itemId];
-                itemsList.splice(itemId, 1);
-                location.reload();
-                console.log('c');
-                console.log(Array.prototype.indexOf.call(this.parentNode.children, this));
+            function moveAt(e) {
+                item.style.top = e.pageY - item.offsetHeight / 0.5 + 'px';
             }
 
-            item.onmouseup = null;
+            document.onmousemove = function (e) {
+                moveAt(e);
+            }
+
+            item.onmouseup = function (e) {
+                console.log('a');
+                item.style.transform = 'none';
+                document.onmousemove = null;
+
+                if (Array.prototype.indexOf.call(this.parentNode.children, this) == itemId) {
+                    location.reload();
+                    console, log('b');
+                    console.log(Array.prototype.indexOf.call(this.parentNode.children, this));
+                } else {
+                    itemsList[Array.prototype.indexOf.call(this.parentNode.children, this)] = itemsList[itemId];
+                    itemsList.splice(itemId, 1);
+                    location.reload();
+                    console.log('c');
+                    console.log(Array.prototype.indexOf.call(this.parentNode.children, this));
+                }
+
+                item.onmouseup = null;
+            }
         }
     }
+
+    //### Drag and Drop end###
 
     item.appendChild(checkDiv);
     checkDiv.appendChild(check);
