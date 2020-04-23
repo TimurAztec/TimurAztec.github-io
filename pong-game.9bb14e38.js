@@ -9606,9 +9606,15 @@ canvas.height = 400;
 var score1 = 0;
 var score2 = 0;
 var keys = {};
+var accelerometerGamma;
 window.addEventListener('keydown', function (e) {
   keys[e.keyCode] = true; // e.preventDefault();
 });
+window.addEventListener('deviceorientation', function (ev) {
+  if (ev.gamma) {
+    accelerometerGamma = ev.gamma;
+  }
+}, true);
 window.addEventListener('keyup', function (e) {
   delete keys[e.keyCode];
 });
@@ -9673,26 +9679,30 @@ function input() {
     player2 = server_cords.player2;
   }
 
+  var player;
+
   if (left) {
-    if (38 in keys) {
-      if (player1.y - player1.gravity > 0) {
-        player1.y -= player1.gravity;
-      }
-    } else if (40 in keys) {
-      if (player1.y + player1.height + player1.gravity < canvas.height) {
-        player1.y += player1.gravity;
-      }
-    }
+    player = player1;
+  } else if (right) {
+    player = player2;
   }
 
-  if (right) {
+  if (accelerometerGamma) {
+    var futurePlayerPos = canvas.height / 2 - player.height / 2 + accelerometerGamma * 2.5;
+
+    if (futurePlayerPos > 0) {
+      if (futurePlayerPos + player.height < canvas.height) {
+        player.y = futurePlayerPos;
+      }
+    }
+  } else {
     if (38 in keys) {
-      if (player2.y - player2.gravity > 0) {
-        player2.y -= player2.gravity;
+      if (player.y - player.gravity > 0) {
+        player.y -= player.gravity;
       }
     } else if (40 in keys) {
-      if (player2.y + player2.height + player2.gravity < canvas.height) {
-        player2.y += player2.gravity;
+      if (player.y + player.height + player.gravity < canvas.height) {
+        player.y += player.gravity;
       }
     }
   }
@@ -9992,7 +10002,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58232" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61446" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
