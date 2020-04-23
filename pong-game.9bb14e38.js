@@ -590,7 +590,7 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":"node_modules/ms/index.js"}],"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/process/browser.js":[function(require,module,exports) {
+},{"ms":"node_modules/ms/index.js"}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -976,7 +976,7 @@ formatters.j = function (v) {
     return '[UnexpectedJSONParseError]: ' + error.message;
   }
 };
-},{"./common":"node_modules/debug/src/common.js","process":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/process/browser.js"}],"node_modules/socket.io-client/lib/url.js":[function(require,module,exports) {
+},{"./common":"node_modules/debug/src/common.js","process":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/process/browser.js"}],"node_modules/socket.io-client/lib/url.js":[function(require,module,exports) {
 
 /**
  * Module dependencies.
@@ -1598,7 +1598,7 @@ function localstorage() {
     return window.localStorage;
   } catch (e) {}
 }
-},{"./debug":"node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/src/debug.js","process":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/process/browser.js"}],"node_modules/component-emitter/index.js":[function(require,module,exports) {
+},{"./debug":"node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/src/debug.js","process":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/process/browser.js"}],"node_modules/component-emitter/index.js":[function(require,module,exports) {
 
 /**
  * Expose `Emitter`.
@@ -1770,7 +1770,7 @@ module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/base64-js/index.js":[function(require,module,exports) {
+},{}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/base64-js/index.js":[function(require,module,exports) {
 'use strict'
 
 exports.byteLength = byteLength
@@ -1924,7 +1924,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/ieee754/index.js":[function(require,module,exports) {
+},{}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/ieee754/index.js":[function(require,module,exports) {
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -2010,14 +2010,14 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/isarray/index.js":[function(require,module,exports) {
+},{}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/isarray/index.js":[function(require,module,exports) {
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/buffer/index.js":[function(require,module,exports) {
+},{}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/buffer/index.js":[function(require,module,exports) {
 
 var global = arguments[3];
 /*!
@@ -3810,7 +3810,7 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/base64-js/index.js","ieee754":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/ieee754/index.js","isarray":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/isarray/index.js","buffer":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/buffer/index.js"}],"node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js":[function(require,module,exports) {
+},{"base64-js":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/base64-js/index.js","ieee754":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/ieee754/index.js","isarray":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/isarray/index.js","buffer":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/buffer/index.js"}],"node_modules/socket.io-client/node_modules/socket.io-parser/is-buffer.js":[function(require,module,exports) {
 var Buffer = require("buffer").Buffer;
 
 module.exports = isBuf;
@@ -3833,7 +3833,7 @@ function isBuf(obj) {
           (withNativeArrayBuffer && (obj instanceof ArrayBuffer || isView(obj)));
 }
 
-},{"buffer":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/buffer/index.js"}],"node_modules/socket.io-client/node_modules/socket.io-parser/binary.js":[function(require,module,exports) {
+},{"buffer":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/buffer/index.js"}],"node_modules/socket.io-client/node_modules/socket.io-parser/binary.js":[function(require,module,exports) {
 /*global Blob,File*/
 
 /**
@@ -4539,7 +4539,7 @@ function hasBinary (obj) {
   return false;
 }
 
-},{"isarray":"node_modules/isarray/index.js","buffer":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/buffer/index.js"}],"node_modules/arraybuffer.slice/index.js":[function(require,module,exports) {
+},{"isarray":"node_modules/isarray/index.js","buffer":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/buffer/index.js"}],"node_modules/arraybuffer.slice/index.js":[function(require,module,exports) {
 /**
  * An abstraction for slicing an arraybuffer even when
  * ArrayBuffer.prototype.slice is not supported
@@ -6784,7 +6784,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
   }
 };
 
-},{"./polling":"node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"node_modules/component-inherit/index.js"}],"../../../nvm/v13.9.0/node_modules/parcel-bundler/src/builtins/_empty.js":[function(require,module,exports) {
+},{"./polling":"node_modules/engine.io-client/lib/transports/polling.js","component-inherit":"node_modules/component-inherit/index.js"}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/_empty.js":[function(require,module,exports) {
 
 },{}],"node_modules/engine.io-client/lib/transports/websocket.js":[function(require,module,exports) {
 var Buffer = require("buffer").Buffer;
@@ -7084,7 +7084,7 @@ WS.prototype.check = function () {
   return !!WebSocketImpl && !('__initialize' in WebSocketImpl && this.name === WS.prototype.name);
 };
 
-},{"../transport":"node_modules/engine.io-client/lib/transport.js","engine.io-parser":"node_modules/engine.io-parser/lib/browser.js","parseqs":"node_modules/parseqs/index.js","component-inherit":"node_modules/component-inherit/index.js","yeast":"node_modules/yeast/index.js","debug":"node_modules/debug/src/browser.js","ws":"../../../nvm/v13.9.0/node_modules/parcel-bundler/src/builtins/_empty.js","buffer":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/buffer/index.js"}],"node_modules/engine.io-client/lib/transports/index.js":[function(require,module,exports) {
+},{"../transport":"node_modules/engine.io-client/lib/transport.js","engine.io-parser":"node_modules/engine.io-parser/lib/browser.js","parseqs":"node_modules/parseqs/index.js","component-inherit":"node_modules/component-inherit/index.js","yeast":"node_modules/yeast/index.js","debug":"node_modules/debug/src/browser.js","ws":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/_empty.js","buffer":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/buffer/index.js"}],"node_modules/engine.io-client/lib/transports/index.js":[function(require,module,exports) {
 /**
  * Module dependencies
  */
@@ -9176,7 +9176,7 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./url":"node_modules/socket.io-client/lib/url.js","socket.io-parser":"node_modules/socket.io-client/node_modules/socket.io-parser/index.js","./manager":"node_modules/socket.io-client/lib/manager.js","debug":"node_modules/debug/src/browser.js","./socket":"node_modules/socket.io-client/lib/socket.js"}],"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/events/events.js":[function(require,module,exports) {
+},{"./url":"node_modules/socket.io-client/lib/url.js","socket.io-parser":"node_modules/socket.io-client/node_modules/socket.io-parser/index.js","./manager":"node_modules/socket.io-client/lib/manager.js","debug":"node_modules/debug/src/browser.js","./socket":"node_modules/socket.io-client/lib/socket.js"}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/events/events.js":[function(require,module,exports) {
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9598,6 +9598,7 @@ var pause;
 var stop;
 var left;
 var right;
+var audio = [new Audio('beep-22.mp3'), new Audio('beep-23.mp3')];
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 canvas.width = 650;
@@ -9751,18 +9752,27 @@ function ballBounce() {
   ballCollision();
 }
 
+function playBeeps() {
+  if (Math.round(Math.random() * 1) == 0) {
+    document.getElementsByTagName('audio')[0].play().then(function () {});
+  } else {
+    document.getElementsByTagName('audio')[1].play().then(function () {});
+  }
+}
+
 function ballCollision() {
   if (theBall.x + theBall.speed <= player1.x + player1.width && theBall.y + theBall.gravity > player1.y && theBall.y + theBall.gravity <= player1.y + player1.height || theBall.x + theBall.width + theBall.speed >= player2.x && theBall.y + theBall.gravity > player2.y && theBall.y + theBall.gravity <= player2.y + player2.height) {
     theBall.speed = theBall.speed * -1;
+    playBeeps();
   } else if (theBall.x + theBall.speed < player1.x) {
-    EventEmitter.emit('add_score', 2); // score2 += 1;
-
+    EventEmitter.emit('add_score', 2);
+    playBeeps();
     theBall.speed = theBall.speed * -1;
     theBall.x = 100 + theBall.speed;
     theBall.y += theBall.gravity;
   } else if (theBall.x + theBall.speed > player2.x + player2.width) {
-    EventEmitter.emit('add_score', 1); // score1 += 1;
-
+    EventEmitter.emit('add_score', 1);
+    playBeeps();
     theBall.speed = theBall.speed * -1;
     theBall.x = 500 + theBall.speed;
     theBall.y += theBall.gravity;
@@ -9806,8 +9816,13 @@ document.getElementById('chatSendButton').onclick = sendMessage;
 
 function sendMessage() {
   if (document.getElementById('chatInput').value) {
-    if (document.getElementById('chatInput').value.match('connect \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b')) {
-      socketAddress = document.getElementById('chatInput').value.match('\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b')[0] + ':3253';
+    // if (document.getElementById('chatInput').value.match('connect \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b')) {
+    //     socketAddress = document.getElementById('chatInput').value.match('\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b')[0] + ':3253';
+    //     gameStart();
+    // }
+    if (document.getElementById('chatInput').value.includes('connect ')) {
+      // socketAddress = document.getElementById('chatInput').value.substr(8) + ':3253';
+      socketAddress = document.getElementById('chatInput').value.substr(8);
       gameStart();
     }
 
@@ -9873,7 +9888,8 @@ function connect(address) {
         gameStart();
       }, 3000);
     });
-    socket.on('connected', function () {
+    socket.on('connected', function (res) {
+      console.log(res);
       EventEmitter.emit('connected');
     });
     socket.on('server_cords', function (res) {
@@ -9948,7 +9964,7 @@ function connect(address) {
 }
 
 gameStart();
-},{"socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"../../../nvm/v13.9.0/node_modules/parcel-bundler/node_modules/events/events.js"}],"../../../nvm/v13.9.0/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/events/events.js"}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -9976,7 +9992,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49415" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58232" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -10152,5 +10168,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../nvm/v13.9.0/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","pong-game.js"], null)
+},{}]},{},["../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","pong-game.js"], null)
 //# sourceMappingURL=/pong-game.9bb14e38.js.map
