@@ -9674,8 +9674,13 @@ var theBall = new Box({
 
 function input() {
   if (server_cords) {
-    player1 = server_cords.player1;
-    player2 = server_cords.player2;
+    if (right) {
+      player1 = server_cords.player1;
+    }
+
+    if (left) {
+      player2 = server_cords.player2;
+    }
   }
 
   var player;
@@ -9818,12 +9823,7 @@ document.getElementById('chatSendButton').onclick = sendMessage;
 
 function sendMessage() {
   if (document.getElementById('chatInput').value) {
-    // if (document.getElementById('chatInput').value.match('connect \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b')) {
-    //     socketAddress = document.getElementById('chatInput').value.match('\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b')[0] + ':3253';
-    //     gameStart();
-    // }
     if (document.getElementById('chatInput').value.includes('connect ')) {
-      // socketAddress = document.getElementById('chatInput').value.substr(8) + ':3253';
       socketAddress = document.getElementById('chatInput').value.substr(8);
       gameStart();
     }
@@ -9839,6 +9839,10 @@ function sendMessage() {
 }
 
 function gameStart() {
+  if (window.mobileAndTabletCheck()) {
+    socketAddress = 'https://pong-game-host-diploma.herokuapp.com/';
+  }
+
   if (socketAddress) {
     connect(socketAddress);
   } else {
@@ -9874,6 +9878,58 @@ function clearChat() {
   document.getElementById('chat').innerHTML = '';
 }
 
+function definePlayerSideVisualisation() {
+  if (left && !mobileAndTabletCheck()) {
+    var e = document.getElementById('canvas-wrapper').getElementsByTagName('p');
+
+    for (i = 0; i < e.length; i++) {
+      if (i == 0) {
+        e[i].style.display = 'block';
+      } else {
+        e[i].style.display = 'none';
+      }
+    }
+  } else if (left && mobileAndTabletCheck()) {
+    var _e = document.getElementById('canvas-wrapper').getElementsByTagName('p');
+
+    for (i = 0; i < _e.length; i++) {
+      if (i == 1) {
+        _e[i].style.display = 'block';
+      } else {
+        _e[i].style.display = 'none';
+      }
+    }
+  } else if (right && !mobileAndTabletCheck()) {
+    var _e2 = document.getElementById('canvas-wrapper').getElementsByTagName('p');
+
+    for (i = 0; i < _e2.length; i++) {
+      if (i == 2) {
+        _e2[i].style.display = 'block';
+      } else {
+        _e2[i].style.display = 'none';
+      }
+    }
+  } else if (right && mobileAndTabletCheck()) {
+    var _e3 = document.getElementById('canvas-wrapper').getElementsByTagName('p');
+
+    for (i = 0; i < _e3.length; i++) {
+      if (i == 3) {
+        _e3[i].style.display = 'block';
+      } else {
+        _e3[i].style.display = 'none';
+      }
+    }
+  }
+}
+
+function clearPlayerSideVisualisation() {
+  var e = document.getElementById('canvas-wrapper').getElementsByTagName('p');
+
+  for (i = 0; i < e.length; i++) {
+    e[i].style.display = 'none';
+  }
+}
+
 function connect(address) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   displayInfo("Connecting to ".concat(address));
@@ -9886,13 +9942,22 @@ function connect(address) {
       socket.disconnect();
       socketAddress = undefined;
       clearChat();
+      clearPlayerSideVisualisation();
       setTimeout(function () {
         gameStart();
       }, 3000);
     });
     socket.on('connected', function (res) {
-      console.log(res);
       EventEmitter.emit('connected');
+    });
+    socket.on('full_server', function () {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      displayInfo('Sorry but server is full, try again later!');
+      socket.disconnect();
+      clearChat();
+      setTimeout(function () {
+        gameStart();
+      }, 3000);
     });
     socket.on('server_cords', function (res) {
       server_cords = res;
@@ -9911,6 +9976,8 @@ function connect(address) {
       } else if (res == 'right') {
         right = true;
       }
+
+      definePlayerSideVisualisation();
     });
     socket.on('start', function () {
       EventEmitter.emit('start');
@@ -9938,6 +10005,7 @@ function connect(address) {
       socket.disconnect();
       socketAddress = undefined;
       clearChat();
+      clearPlayerSideVisualisation();
       setTimeout(function () {
         gameStart();
       }, 3000);
@@ -9965,6 +10033,7 @@ function connect(address) {
   });
 }
 
+clearPlayerSideVisualisation();
 gameStart();
 },{"socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/events/events.js"}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -9994,7 +10063,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61320" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62867" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
