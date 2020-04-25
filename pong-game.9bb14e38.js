@@ -9598,7 +9598,6 @@ var pause;
 var stop;
 var left;
 var right;
-var audio = [new Audio('beep-22.mp3'), new Audio('beep-23.mp3')];
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 canvas.width = 650;
@@ -9688,7 +9687,7 @@ function input() {
   }
 
   if (accelerometerGamma) {
-    var futurePlayerPos = canvas.height / 2 - player.height / 2 + accelerometerGamma * 2.5;
+    var futurePlayerPos = canvas.height / 2 - player.height / 2 + accelerometerGamma * 4;
 
     if (futurePlayerPos > 0) {
       if (futurePlayerPos + player.height < canvas.height) {
@@ -9772,23 +9771,11 @@ function playBeeps() {
 
 function ballCollision() {
   if (theBall.x + theBall.speed <= player1.x + player1.width && theBall.y + theBall.gravity > player1.y && theBall.y + theBall.gravity <= player1.y + player1.height || theBall.x + theBall.width + theBall.speed >= player2.x && theBall.y + theBall.gravity > player2.y && theBall.y + theBall.gravity <= player2.y + player2.height) {
-    theBall.speed = theBall.speed * -1;
     playBeeps();
   } else if (theBall.x + theBall.speed < player1.x) {
-    EventEmitter.emit('add_score', 2);
     playBeeps();
-    theBall.speed = theBall.speed * -1;
-    theBall.x = 100 + theBall.speed;
-    theBall.y += theBall.gravity;
   } else if (theBall.x + theBall.speed > player2.x + player2.width) {
-    EventEmitter.emit('add_score', 1);
     playBeeps();
-    theBall.speed = theBall.speed * -1;
-    theBall.x = 500 + theBall.speed;
-    theBall.y += theBall.gravity;
-  } else {
-    theBall.x += theBall.speed;
-    theBall.y += theBall.gravity;
   }
 
   draw();
@@ -9807,13 +9794,18 @@ function draw() {
 function loop() {
   if (!pause && !stop) {
     ballBounce();
-    input(player1);
-    input(player2);
-    EventEmitter.emit('sendCords', {
-      theBall: theBall,
-      player1: player1,
-      player2: player2
-    });
+    input();
+
+    if (left) {
+      EventEmitter.emit('sendCords', {
+        player1: player1
+      });
+    } else if (right) {
+      EventEmitter.emit('sendCords', {
+        player2: player2
+      });
+    }
+
     window.requestAnimationFrame(loop);
   } else {
     if (pause) {
@@ -10002,7 +9994,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61446" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60221" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
