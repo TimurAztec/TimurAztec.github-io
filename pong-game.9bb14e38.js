@@ -9598,6 +9598,8 @@ var pause;
 var stop;
 var left;
 var right;
+var soundState = true;
+var soundTrackLink;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 canvas.width = 650;
@@ -9692,7 +9694,7 @@ function input() {
   }
 
   if (accelerometerGamma && window.mobileAndTabletCheck()) {
-    var futurePlayerPos = canvas.height / 2 - player.height / 2 + accelerometerGamma * 4;
+    var futurePlayerPos = canvas.height / 2 - player.height / 2 + accelerometerGamma * 5;
 
     if (futurePlayerPos > 0) {
       if (futurePlayerPos + player.height < canvas.height) {
@@ -9866,6 +9868,11 @@ function gameStart() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             displayInfo('start');
             stop = false;
+            document.getElementsByTagName('audio')[2].play().then(function () {
+              setTimeout(function () {
+                playSoundtrack();
+              }, 350);
+            });
             loop();
           }, 1000);
         }, 1000);
@@ -9930,6 +9937,49 @@ function clearPlayerSideVisualisation() {
   }
 }
 
+function playSoundtrack() {
+  if (soundState) {
+    document.getElementById('canvas-wrapper').getElementsByTagName('img')[0].style.display = 'block';
+    document.getElementsByTagName('audio')[3].volume = 0.15;
+    document.getElementsByTagName('audio')[3].play().then(function () {
+      playSoundtrack();
+    });
+  } else {
+    document.getElementById('canvas-wrapper').getElementsByTagName('img')[1].style.display = 'block';
+  }
+}
+
+document.getElementById('canvas-wrapper').getElementsByTagName('img')[0].onclick = changeSoundState;
+document.getElementById('canvas-wrapper').getElementsByTagName('img')[1].onclick = changeSoundState;
+
+function changeSoundState(clear) {
+  soundState = !soundState;
+
+  if (!soundState) {
+    var audio = document.getElementsByTagName('audio')[3];
+    audio.pause();
+    audio.currentTime = 0;
+    document.getElementById('canvas-wrapper').getElementsByTagName('img')[0].style.display = 'none';
+    document.getElementById('canvas-wrapper').getElementsByTagName('img')[1].style.display = 'block';
+  } else {
+    playSoundtrack();
+    document.getElementById('canvas-wrapper').getElementsByTagName('img')[0].style.display = 'block';
+    document.getElementById('canvas-wrapper').getElementsByTagName('img')[1].style.display = 'none';
+  }
+
+  if (clear) {
+    soundState = false;
+    var _audio = document.getElementsByTagName('audio')[3];
+
+    _audio.pause();
+
+    _audio.currentTime = 0;
+    buttons = document.getElementById('canvas-wrapper').getElementsByTagName('img');
+    buttons[0].style.display = 'none';
+    buttons[1].style.display = 'none';
+  }
+}
+
 function connect(address) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   displayInfo("Connecting to ".concat(address));
@@ -9942,6 +9992,7 @@ function connect(address) {
       socket.disconnect();
       socketAddress = undefined;
       clearChat();
+      changeSoundState(true);
       clearPlayerSideVisualisation();
       setTimeout(function () {
         gameStart();
@@ -9955,6 +10006,7 @@ function connect(address) {
       displayInfo('Sorry but server is full, try again later!');
       socket.disconnect();
       clearChat();
+      changeSoundState(true);
       setTimeout(function () {
         gameStart();
       }, 3000);
@@ -10005,6 +10057,7 @@ function connect(address) {
       socket.disconnect();
       socketAddress = undefined;
       clearChat();
+      changeSoundState(true);
       clearPlayerSideVisualisation();
       setTimeout(function () {
         gameStart();
@@ -10033,7 +10086,6 @@ function connect(address) {
   });
 }
 
-clearPlayerSideVisualisation();
 gameStart();
 },{"socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/node_modules/events/events.js"}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -10063,7 +10115,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62867" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56066" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -128,21 +128,13 @@ window.mobileAndTabletCheck = function () {
   return check;
 };
 
-function fullScreen(element) {
-  if (element.requestFullscreen) {
-    element.requestFullscreen();
-  } else if (element.webkitrequestFullscreen) {
-    element.webkitRequestFullscreen();
-  } else if (element.mozRequestFullscreen) {
-    element.mozRequestFullScreen();
-  }
-}
-
 if (window.mobileAndTabletCheck()) {
   document.getElementById('ping').style.display = 'none';
   document.getElementById('chat').style.display = 'none';
   document.getElementById('chatInputBox').style.display = 'none';
-  fullScreen(document.getElementById('canvas'));
+  document.getElementById('canvas').style.height = '100%';
+  document.getElementById('canvas').style.width = 'auto';
+  window.screen.lockOrientation('landscape');
 }
 },{}],"../../../../Users/PING LORD/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -172,7 +164,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62867" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56066" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
