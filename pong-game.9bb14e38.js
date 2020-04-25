@@ -9686,7 +9686,7 @@ function input() {
     player = player2;
   }
 
-  if (accelerometerGamma) {
+  if (accelerometerGamma && window.mobileAndTabletCheck()) {
     var futurePlayerPos = canvas.height / 2 - player.height / 2 + accelerometerGamma * 4;
 
     if (futurePlayerPos > 0) {
@@ -9994,7 +9994,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60221" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61320" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
