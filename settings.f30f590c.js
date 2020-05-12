@@ -117,79 +117,136 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
+})({"music-player.js":[function(require,module,exports) {
+"use strict";
 
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.playMainMenuMusic = playMainMenuMusic;
+exports.playGameMusic = playGameMusic;
+exports.stopMusic = stopMusic;
+exports.setSettings = setSettings;
+var playerState = {
+  soundVolume: 1,
+  musicVolume: 1,
+  currentTrack: undefined
+};
+
+function playMainMenuMusic() {
+  if (playerState.currentTrack !== undefined) {
+    stopMusic();
   }
 
-  return bundleURL;
-}
+  var trackNumber = Math.round(Math.random() * document.getElementsByClassName('music-menu').length);
 
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
+  if (trackNumber > 0) {
+    trackNumber -= 1;
   }
 
-  return '/';
-}
+  playerState.currentTrack = document.getElementsByClassName('music-menu')[trackNumber];
 
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
+  playerState.currentTrack.onended = function () {
+    playMainMenuMusic();
   };
 
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
+  playerState.currentTrack.play();
 }
 
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
+function playGameMusic() {
+  if (playerState.currentTrack !== undefined) {
+    stopMusic();
   }
 
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
+  var trackNumber = Math.round(Math.random() * document.getElementsByClassName('music-game').length);
 
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
+  if (trackNumber > 0) {
+    trackNumber -= 1;
+  }
 
-    cssTimeout = null;
-  }, 50);
+  playerState.currentTrack = document.getElementsByClassName('music-game')[trackNumber];
+
+  playerState.currentTrack.onended = function () {
+    playGameMusic();
+  };
+
+  playerState.currentTrack.play();
 }
 
-module.exports = reloadCSS;
-},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"screen-game.scss":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
+function stopMusic() {
+  if (playerState.currentTrack !== undefined) {
+    playerState.currentTrack.pause();
+    playerState.currentTrack.currentTime = 0;
+  }
+}
 
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+document.getElementById('music-volume').onchange = function (e) {
+  playerState.musicVolume = e.target.value * 0.1;
+  var elements = document.getElementsByClassName('music');
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].volume = playerState.musicVolume;
+  }
+
+  localStorage.setItem('musicVolume', JSON.stringify(playerState.musicVolume));
+  localStorage.setItem('soundVolume', JSON.stringify(playerState.musicVolume));
+};
+
+document.getElementById('sound-volume').onchange = function (e) {
+  playerState.soundVolume = e.target.value * 0.1;
+  var elements = document.getElementsByClassName('sound');
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].volume = playerState.soundVolume;
+  }
+
+  document.getElementById('audio-hit1').play();
+  localStorage.setItem('musicVolume', JSON.stringify(playerState.musicVolume));
+  localStorage.setItem('soundVolume', JSON.stringify(playerState.soundVolume));
+};
+
+function setSettings(musicVolume, soundVolume) {
+  playerState.musicVolume = musicVolume;
+  playerState.soundVolume = soundVolume;
+  var elements = document.getElementsByClassName('music');
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].volume = playerState.soundVolume;
+  }
+
+  document.getElementById('music-volume').value = playerState.musicVolume * 10;
+  elements = document.getElementsByClassName('sound');
+
+  for (var _i = 0; _i < elements.length; _i++) {
+    elements[_i].volume = playerState.soundVolume;
+  }
+
+  document.getElementById('sound-volume').value = playerState.soundVolume * 10;
+}
+},{}],"settings.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.loadSettings = loadSettings;
+
+var _musicPlayer = require("./music-player");
+
+document.getElementById('name-input').onchange = function (e) {
+  localStorage.setItem('name', e.target.value);
+};
+
+function loadSettings() {
+  if (localStorage.getItem('name')) {
+    document.getElementById('name-input').value = localStorage.getItem('name');
+  }
+
+  if (localStorage.getItem('musicVolume') && localStorage.getItem('soundVolume')) {
+    (0, _musicPlayer.setSettings)(JSON.parse(localStorage.getItem('musicVolume')), JSON.parse(localStorage.getItem('soundVolume')));
+  }
+}
+},{"./music-player":"music-player.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -393,5 +450,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
-//# sourceMappingURL=/screen-game.7bb74261.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","settings.js"], null)
+//# sourceMappingURL=/settings.f30f590c.js.map

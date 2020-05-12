@@ -295,11 +295,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.playMainMenuMusic = playMainMenuMusic;
 exports.playGameMusic = playGameMusic;
 exports.stopMusic = stopMusic;
+exports.setSettings = setSettings;
 var playerState = {
   soundVolume: 1,
   musicVolume: 1,
-  soundOn: true,
-  musicOn: true,
   currentTrack: undefined
 };
 
@@ -308,21 +307,19 @@ function playMainMenuMusic() {
     stopMusic();
   }
 
-  if (playerState.musicOn) {
-    var trackNumber = Math.round(Math.random() * document.getElementsByClassName('music-menu').length);
+  var trackNumber = Math.round(Math.random() * document.getElementsByClassName('music-menu').length);
 
-    if (trackNumber > 0) {
-      trackNumber -= 1;
-    }
-
-    playerState.currentTrack = document.getElementsByClassName('music-menu')[trackNumber];
-
-    playerState.currentTrack.onended = function () {
-      playMainMenuMusic();
-    };
-
-    playerState.currentTrack.play();
+  if (trackNumber > 0) {
+    trackNumber -= 1;
   }
+
+  playerState.currentTrack = document.getElementsByClassName('music-menu')[trackNumber];
+
+  playerState.currentTrack.onended = function () {
+    playMainMenuMusic();
+  };
+
+  playerState.currentTrack.play();
 }
 
 function playGameMusic() {
@@ -330,21 +327,19 @@ function playGameMusic() {
     stopMusic();
   }
 
-  if (playerState.musicOn) {
-    var trackNumber = Math.round(Math.random() * document.getElementsByClassName('music-game').length);
+  var trackNumber = Math.round(Math.random() * document.getElementsByClassName('music-game').length);
 
-    if (trackNumber > 0) {
-      trackNumber -= 1;
-    }
-
-    playerState.currentTrack = document.getElementsByClassName('music-game')[trackNumber];
-
-    playerState.currentTrack.onended = function () {
-      playGameMusic();
-    };
-
-    playerState.currentTrack.play();
+  if (trackNumber > 0) {
+    trackNumber -= 1;
   }
+
+  playerState.currentTrack = document.getElementsByClassName('music-game')[trackNumber];
+
+  playerState.currentTrack.onended = function () {
+    playGameMusic();
+  };
+
+  playerState.currentTrack.play();
 }
 
 function stopMusic() {
@@ -352,6 +347,50 @@ function stopMusic() {
     playerState.currentTrack.pause();
     playerState.currentTrack.currentTime = 0;
   }
+}
+
+document.getElementById('music-volume').onchange = function (e) {
+  playerState.musicVolume = e.target.value * 0.1;
+  var elements = document.getElementsByClassName('music');
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].volume = playerState.musicVolume;
+  }
+
+  localStorage.setItem('musicVolume', JSON.stringify(playerState.musicVolume));
+  localStorage.setItem('soundVolume', JSON.stringify(playerState.musicVolume));
+};
+
+document.getElementById('sound-volume').onchange = function (e) {
+  playerState.soundVolume = e.target.value * 0.1;
+  var elements = document.getElementsByClassName('sound');
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].volume = playerState.soundVolume;
+  }
+
+  document.getElementById('audio-hit1').play();
+  localStorage.setItem('musicVolume', JSON.stringify(playerState.musicVolume));
+  localStorage.setItem('soundVolume', JSON.stringify(playerState.soundVolume));
+};
+
+function setSettings(musicVolume, soundVolume) {
+  playerState.musicVolume = musicVolume;
+  playerState.soundVolume = soundVolume;
+  var elements = document.getElementsByClassName('music');
+
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].volume = playerState.soundVolume;
+  }
+
+  document.getElementById('music-volume').value = playerState.musicVolume * 10;
+  elements = document.getElementsByClassName('sound');
+
+  for (var _i = 0; _i < elements.length; _i++) {
+    elements[_i].volume = playerState.soundVolume;
+  }
+
+  document.getElementById('sound-volume').value = playerState.soundVolume * 10;
 }
 },{}],"screens-changer.js":[function(require,module,exports) {
 "use strict";
@@ -361,24 +400,31 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = goToMainMenu;
 
-var _pongGame = _interopRequireDefault(require("./pong-game"));
+var _pongGame = require("./pong-game");
 
 var _musicPlayer = require("./music-player");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // document.getElementById('screen-game').style.display = 'none';
 document.getElementById('play-online').onclick = function () {
   document.getElementById('screen-menu').style.display = 'none';
   document.getElementById('screen-game').style.display = 'flex';
-  (0, _pongGame.default)('https://pong-game-host-diploma.herokuapp.com/');
+  (0, _pongGame.gameStart)('https://pong-game-host-diploma.herokuapp.com/');
+};
+
+document.getElementById('settings').onclick = function () {
+  document.getElementById('screen-menu').style.display = 'none';
+  document.getElementById('screen-setting').style.display = 'flex';
 };
 
 function goToMainMenu() {
   (0, _musicPlayer.playMainMenuMusic)();
   document.getElementById('screen-menu').style.display = 'flex';
   document.getElementById('screen-game').style.display = 'none';
+  document.getElementById('screen-setting').style.display = 'none';
 }
+
+document.getElementsByClassName('to-main-menu')[0].onclick = goToMainMenu;
+document.getElementsByClassName('to-main-menu')[1].onclick = _pongGame.gameEnd;
 },{"./pong-game":"pong-game.js","./music-player":"music-player.js"}],"node_modules/parseuri/index.js":[function(require,module,exports) {
 /**
  * Parses an URI
@@ -9852,7 +9898,8 @@ function unwrapListeners(arr) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = gameStart;
+exports.gameStart = gameStart;
+exports.gameEnd = gameEnd;
 
 var _ball = _interopRequireDefault(require("./ball"));
 
@@ -10144,7 +10191,9 @@ document.getElementById('chatSendButton').onclick = sendMessage;
 
 function sendMessage() {
   if (document.getElementById('chatInput').value) {
-    if (left) {
+    if (localStorage.getItem('name')) {
+      EventEmitter.emit('sendMessage', "".concat(localStorage.getItem('name'), " says: ").concat(document.getElementById('chatInput').value));
+    } else if (left) {
       EventEmitter.emit('sendMessage', "player 1 says: ".concat(document.getElementById('chatInput').value));
     } else if (right) {
       EventEmitter.emit('sendMessage', "player 2 says: ".concat(document.getElementById('chatInput').value));
@@ -10204,6 +10253,14 @@ function definePlayerSide() {
     document.getElementById('chat').appendChild(_message);
 
     _message.scrollIntoView();
+  }
+}
+
+function gameEnd() {
+  if (!stop) {
+    EventEmitter.emit('end_game');
+  } else {
+    (0, _screensChanger.default)();
   }
 }
 
@@ -10309,6 +10366,15 @@ function connect(address) {
     EventEmitter.on('sendMessage', function (data) {
       socket.emit('chat_message', data);
     });
+    EventEmitter.on('end_game', function () {
+      stop = true;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      socket.disconnect();
+      socketAddress = undefined;
+      (0, _musicPlayer.stopMusic)();
+      clearChat();
+      (0, _screensChanger.default)();
+    });
   });
 }
 },{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","./music-player":"music-player.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -10339,7 +10405,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60655" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64679" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
