@@ -1,0 +1,2 @@
+@font-face{font-family:retro;src:url(/PixelTimes.ab33fe06.ttf) format("truetype")}@font-face{font-family:connections;src:url(/Connections.a24b4d1a.otf) format("truetype")}body{align-items:center;justify-content:center;font-family:retro,sans-serif;background:#000}#devs,body{display:flex;flex-direction:column}#devs{position:absolute;bottom:0;right:0;font-size:.6em}#devs,#devs a{color:#fff}
+/*# sourceMappingURL=/style.727f8c6a.css.map */

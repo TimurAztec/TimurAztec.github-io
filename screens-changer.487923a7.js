@@ -286,31 +286,7 @@ var Particle = /*#__PURE__*/function () {
 
   return Particle;
 }();
-},{}],"screens-changer.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = goToMainMenu;
-
-var _pongGame = _interopRequireDefault(require("./pong-game"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-document.getElementById('screen-game').style.display = 'none';
-
-document.getElementById('play-online').onclick = function () {
-  document.getElementById('screen-menu').style.display = 'none';
-  document.getElementById('screen-game').style.display = 'flex';
-  (0, _pongGame.default)('https://pong-game-host-diploma.herokuapp.com/');
-};
-
-function goToMainMenu() {
-  document.getElementById('screen-menu').style.display = 'flex';
-  document.getElementById('screen-game').style.display = 'none';
-}
-},{"./pong-game":"pong-game.js"}],"node_modules/parseuri/index.js":[function(require,module,exports) {
+},{}],"node_modules/parseuri/index.js":[function(require,module,exports) {
 /**
  * Parses an URI
  *
@@ -10230,7 +10206,31 @@ function connect(address) {
     });
   });
 }
-},{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"screens-changer.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = goToMainMenu;
+
+var _pongGame = _interopRequireDefault(require("./pong-game"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+document.getElementById('screen-game').style.display = 'none';
+
+document.getElementById('play-online').onclick = function () {
+  document.getElementById('screen-menu').style.display = 'none';
+  document.getElementById('screen-game').style.display = 'flex';
+  (0, _pongGame.default)('https://pong-game-host-diploma.herokuapp.com/');
+};
+
+function goToMainMenu() {
+  document.getElementById('screen-menu').style.display = 'flex';
+  document.getElementById('screen-game').style.display = 'none';
+}
+},{"./pong-game":"pong-game.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -10434,5 +10434,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","pong-game.js"], null)
-//# sourceMappingURL=/pong-game.9bb14e38.js.map
+},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","screens-changer.js"], null)
+//# sourceMappingURL=/screens-changer.487923a7.js.map
