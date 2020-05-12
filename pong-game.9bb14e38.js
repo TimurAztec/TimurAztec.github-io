@@ -286,6 +286,68 @@ var Particle = /*#__PURE__*/function () {
 
   return Particle;
 }();
+},{}],"music-player.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.playMainMenuMusic = playMainMenuMusic;
+exports.playGameMusic = playGameMusic;
+exports.stopMusic = stopMusic;
+var playerState = {
+  soundVolume: 1,
+  musicVolume: 1,
+  soundOn: true,
+  musicOn: true,
+  currentTrack: undefined
+};
+
+function playMainMenuMusic() {
+  if (playerState.currentTrack !== undefined) {
+    stopMusic();
+  }
+
+  if (playerState.musicOn) {
+    var trackNumber = Math.round(Math.random() * document.getElementsByClassName('music-menu').length);
+
+    if (trackNumber > 0) {
+      trackNumber -= 1;
+    }
+
+    console.log(trackNumber);
+    playerState.currentTrack = document.getElementsByClassName('music-menu')[trackNumber]; // playerState.currentTrack.onended = () => { playMainMenuMusic(); }
+
+    playerState.currentTrack.play();
+    console.log(playerState.currentTrack);
+  }
+}
+
+function playGameMusic() {
+  if (playerState.currentTrack !== undefined) {
+    stopMusic();
+  }
+
+  if (playerState.musicOn) {
+    var trackNumber = Math.round(Math.random() * document.getElementsByClassName('music-game').length);
+
+    if (trackNumber > 0) {
+      trackNumber -= 1;
+    }
+
+    playerState.currentTrack = document.getElementsByClassName('music-game')[trackNumber]; // playerState.currentTrack.onended = () => { playGameMusic(); }
+
+    playerState.currentTrack.play();
+    console.log(playerState.currentTrack);
+  }
+}
+
+function stopMusic() {
+  if (playerState.currentTrack !== undefined) {
+    playerState.currentTrack.pause();
+    playerState.currentTrack.currentTime = 0;
+  }
+}
 },{}],"screens-changer.js":[function(require,module,exports) {
 "use strict";
 
@@ -296,10 +358,11 @@ exports.default = goToMainMenu;
 
 var _pongGame = _interopRequireDefault(require("./pong-game"));
 
+var _musicPlayer = require("./music-player");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-document.getElementById('screen-game').style.display = 'none';
-
+// document.getElementById('screen-game').style.display = 'none';
 document.getElementById('play-online').onclick = function () {
   document.getElementById('screen-menu').style.display = 'none';
   document.getElementById('screen-game').style.display = 'flex';
@@ -307,10 +370,13 @@ document.getElementById('play-online').onclick = function () {
 };
 
 function goToMainMenu() {
+  (0, _musicPlayer.playMainMenuMusic)();
   document.getElementById('screen-menu').style.display = 'flex';
   document.getElementById('screen-game').style.display = 'none';
 }
-},{"./pong-game":"pong-game.js"}],"node_modules/parseuri/index.js":[function(require,module,exports) {
+
+goToMainMenu();
+},{"./pong-game":"pong-game.js","./music-player":"music-player.js"}],"node_modules/parseuri/index.js":[function(require,module,exports) {
 /**
  * Parses an URI
  *
@@ -9791,6 +9857,8 @@ var _particlesGenerator = _interopRequireDefault(require("./particles-generator"
 
 var _screensChanger = _interopRequireDefault(require("./screens-changer"));
 
+var _musicPlayer = require("./music-player");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var io = require('socket.io-client');
@@ -10100,7 +10168,14 @@ function gameStart(address) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       displayInfo('start');
       stop = false;
-      ;
+      (0, _musicPlayer.stopMusic)();
+      setTimeout(function () {
+        document.getElementById('audio-beep3').play().then(function () {
+          setTimeout(function () {
+            return (0, _musicPlayer.playGameMusic)();
+          }, 250);
+        });
+      }, 250);
       loop();
     });
   });
@@ -10140,10 +10215,11 @@ function connect(address) {
       displayInfo('Sorry but other player left the game!');
       socket.disconnect();
       socketAddress = undefined;
+      (0, _musicPlayer.stopMusic)();
       setTimeout(function () {
         clearChat();
         (0, _screensChanger.default)();
-      }, 3000);
+      }, 5000);
     });
     socket.on('connected', function (res) {
       EventEmitter.emit('connected');
@@ -10152,10 +10228,11 @@ function connect(address) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       displayInfo('Sorry but server is full, try again later!');
       socket.disconnect();
+      (0, _musicPlayer.stopMusic)();
       setTimeout(function () {
         clearChat();
         (0, _screensChanger.default)();
-      }, 3000);
+      }, 5000);
     });
     socket.on('server_cords', function (res) {
       server_cords = res;
@@ -10203,10 +10280,11 @@ function connect(address) {
       displayInfo(res);
       socket.disconnect();
       socketAddress = undefined;
+      (0, _musicPlayer.stopMusic)();
       setTimeout(function () {
         clearChat();
         (0, _screensChanger.default)();
-      }, 3000);
+      }, 5000);
     });
     EventEmitter.on('sendCords', function (data) {
       startTime = Date.now();
@@ -10230,7 +10308,7 @@ function connect(address) {
     });
   });
 }
-},{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","./music-player":"music-player.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -10258,7 +10336,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51635" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58912" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
