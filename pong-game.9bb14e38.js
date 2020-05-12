@@ -315,11 +315,13 @@ function playMainMenuMusic() {
       trackNumber -= 1;
     }
 
-    console.log(trackNumber);
-    playerState.currentTrack = document.getElementsByClassName('music-menu')[trackNumber]; // playerState.currentTrack.onended = () => { playMainMenuMusic(); }
+    playerState.currentTrack = document.getElementsByClassName('music-menu')[trackNumber];
+
+    playerState.currentTrack.onended = function () {
+      playMainMenuMusic();
+    };
 
     playerState.currentTrack.play();
-    console.log(playerState.currentTrack);
   }
 }
 
@@ -335,10 +337,13 @@ function playGameMusic() {
       trackNumber -= 1;
     }
 
-    playerState.currentTrack = document.getElementsByClassName('music-game')[trackNumber]; // playerState.currentTrack.onended = () => { playGameMusic(); }
+    playerState.currentTrack = document.getElementsByClassName('music-game')[trackNumber];
+
+    playerState.currentTrack.onended = function () {
+      playGameMusic();
+    };
 
     playerState.currentTrack.play();
-    console.log(playerState.currentTrack);
   }
 }
 
@@ -374,8 +379,6 @@ function goToMainMenu() {
   document.getElementById('screen-menu').style.display = 'flex';
   document.getElementById('screen-game').style.display = 'none';
 }
-
-goToMainMenu();
 },{"./pong-game":"pong-game.js","./music-player":"music-player.js"}],"node_modules/parseuri/index.js":[function(require,module,exports) {
 /**
  * Parses an URI
@@ -10336,7 +10339,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58912" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60655" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
