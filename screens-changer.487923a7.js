@@ -10419,11 +10419,12 @@ document.getElementById('settings').onclick = function () {
 function loadSplashes() {
   var num = Math.round(Math.random() * _splashes.default.splashes.length);
 
-  if (num > 0) {
-    num--;
+  if (num > _splashes.default.splashes.length - 1) {
+    document.getElementById('title').innerText = 'KINGPONG';
+    document.getElementById('splash').innerText = '';
+  } else {
+    document.getElementById('splash').innerText = _splashes.default.splashes[num];
   }
-
-  document.getElementById('splash').innerText = _splashes.default.splashes[num];
 }
 
 function goToMainMenu(changeMusic) {
@@ -10471,7 +10472,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53417" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56276" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
