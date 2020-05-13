@@ -150,8 +150,8 @@ var Ball = /*#__PURE__*/function () {
       this.block1 = {
         x: this.x + (this.width / 2 - (this.width - this.width / 3) / 2),
         y: this.y + (this.height / 2 - (this.height - this.height / 3) / 2),
-        width: this.width - this.width / 3,
-        height: this.height - this.height / 3
+        width: this.width - this.width / 3 + 1,
+        height: this.height - this.height / 3 + 1
       };
       this.block2 = {
         x: this.x,
@@ -9887,6 +9887,7 @@ var EventEmitterCreator = require('events');
 var EventEmitter = new EventEmitterCreator();
 var server_cords;
 var startTime;
+var pingTimeout;
 var pause;
 var stop;
 var left;
@@ -9921,7 +9922,7 @@ window.addEventListener('keydown', function (e) {
     switch (e.keyCode) {
       case 80:
         {
-          if (!stop) {
+          if (!stop && document.getElementById('chatInput') != document.activeElement) {
             EventEmitter.emit('pause');
           }
 
@@ -10265,6 +10266,16 @@ function gameEnd() {
   }
 }
 
+function pingDisplay(latency) {
+  if (!pingTimeout) {
+    document.getElementById('ping').innerText = "ping: ".concat(latency);
+    pingTimeout = true;
+    setTimeout(function () {
+      return pingTimeout = false;
+    }, 500);
+  }
+}
+
 function connect(address) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   displayInfo("Connecting to ".concat(address));
@@ -10299,7 +10310,8 @@ function connect(address) {
       server_cords = res;
     });
     socket.on('pong', function (res) {
-      var latency = Date.now() - startTime; // document.getElementById('ping').innerText = `ping: ${latency}`;
+      var latency = Date.now() - startTime;
+      pingDisplay(latency);
     });
     socket.on('score', function (res) {
       score1 = res.score1;
@@ -10380,7 +10392,7 @@ function connect(address) {
 }
 },{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","./music-player":"music-player.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"splashes.json":[function(require,module,exports) {
 module.exports = {
-  "splashes": ["Just a regular pong game, but with a little bit of jazz", "ポンスピリッツはあなたに連絡したいです", "Продам гараж +380954857572", "Бесплатный понг без смс и регистрации", "Oh, ricochet?! More like rico... you gonna loose dude!", "This is a 10 gauge pong ball! They are using this for road blocks!", "サスケはピンポンクラブに戻ってきます", "54 года как пажилой пингпонист", "All the other kids with the pumped up paddles. You'd better run, better run, out run my ball", "2020, stay home, stay cool", "This will sharpen you up and make you ready for a bit of the old good ultrapong", "Ай мля, я маслину отбил!", "Try to catch a Spin Ball", "Do you pay taxes? Huh?", "Better visit your parents", "Don`t forget fork in microwave!", "Здоровенькі були!", "Слава Україні!", "Kilroy was here", "Behind you!", "The only thing they fear is you!"]
+  "splashes": ["Just a regular pong game, but with a little bit of jazz", "ポンスピリッツはあなたに連絡したいです", "Продам гараж +380954857572", "Бесплатный pong без смс и регистрации", "Oh, ricochet?! More like rico... you gonna loose dude!", "This is a 10 gauge pong ball! They are using this for road blocks!", "サスケはピンポンクラブに戻ってきます", "54 года как пажилой пингпонист", "All the other kids with the pumped up paddles. You'd better run, better run, out run my ball", "2020, stay home, stay cool", "This will sharpen you up and make you ready for a bit of the old good ultrapong", "Ай мля, я маслину отбил!", "Try to catch a Spin Ball", "Do you pay taxes? Huh?", "Better visit your parents", "Don`t forget fork in microwave!", "Здоровенькі були!", "Слава Україні!", "Kilroy was here", "Behind you!", "The only thing they fear is you!", "Только не ешь желтый снег", "Слышишь тут эта у Султана разговор к те есть", "12 из 10 - Антон Логвинов", "Горшок жив!", "Yep, we are back in 70`s", "Disco time", "Сегодня не каждый может в завтрашний день смотреть", "Время 3 утра, pong ногой!", "Charlie Don't Surf", "Charlie Play Ping-Pong", "Go home GI", "Волк хоть и слабее Вьетнамца, но в Pong не играет", "Трус не играет в Pong", "Do you like ponging other people?", "Houston, we have a problem", "Эээ, куда прешь, не видиш таджик в pong играет?", "Why we still here? Just to suffer?", "Kojima - Genius", "Мистер Сальери передаёт вам pong"]
 };
 },{}],"screens-changer.js":[function(require,module,exports) {
 "use strict";
@@ -10531,7 +10543,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56276" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60818" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

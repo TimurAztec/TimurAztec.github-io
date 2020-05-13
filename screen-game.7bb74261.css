@@ -48,4 +48,12 @@
   outline: none;
 }
 
+#ping {
+  position: absolute;
+  top: 5px;
+  left: 128px;
+  font-family: "retro", sans-serif;
+  color: white;
+}
+
 /*# sourceMappingURL=/screen-game.7bb74261.css.map */
