@@ -10,6 +10,11 @@
   font-size: 5em;
   cursor: default;
 }
+#screen-menu label {
+  color: white;
+  font-family: "retro", sans-serif;
+  cursor: default;
+}
 #screen-menu button {
   width: 256px;
   height: 48px;

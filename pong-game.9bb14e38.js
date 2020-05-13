@@ -392,6 +392,10 @@ function setSettings(musicVolume, soundVolume) {
 
   document.getElementById('sound-volume').value = playerState.soundVolume * 10;
 }
+},{}],"splashes.json":[function(require,module,exports) {
+module.exports = {
+  "splashes": ["Just a regular pong game, but with a little bit of jazz", "ポンスピリッツはあなたに連絡したいです", "Продам гараж +380954857572", "Бесплатный понг без смс и регистрации", "Oh, ricochet?! More like rico... you gonna loose dude!", "This is a 10 gauge pong ball! They are use this for a road blocks!", "サスケはピンポンクラブに戻ってきます", "54 года как пажилой пингпонист", "All the other kids with the pumped up paddles. You'd better run, better run, out run my ball", "2020, stay home, stay cool", "This will sharpen you up and make you ready for a bit of the old good ultrapong", "Ай мля, я маслину отбил!"]
+};
 },{}],"screens-changer.js":[function(require,module,exports) {
 "use strict";
 
@@ -404,6 +408,10 @@ var _pongGame = require("./pong-game");
 
 var _musicPlayer = require("./music-player");
 
+var _splashes = _interopRequireDefault(require("./splashes.json"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // document.getElementById('screen-game').style.display = 'none';
 document.getElementById('play-online').onclick = function () {
   document.getElementById('screen-menu').style.display = 'none';
@@ -411,21 +419,45 @@ document.getElementById('play-online').onclick = function () {
   (0, _pongGame.gameStart)('https://pong-game-host-diploma.herokuapp.com/');
 };
 
+document.getElementById('play-lan').onclick = function () {
+  document.getElementById('screen-menu').style.display = 'none';
+  document.getElementById('screen-game').style.display = 'flex';
+  (0, _pongGame.gameStart)('localhost:80');
+};
+
 document.getElementById('settings').onclick = function () {
   document.getElementById('screen-menu').style.display = 'none';
   document.getElementById('screen-setting').style.display = 'flex';
 };
 
-function goToMainMenu() {
-  (0, _musicPlayer.playMainMenuMusic)();
+function loadSplashes() {
+  var num = Math.round(Math.random() * _splashes.default.splashes.length);
+
+  if (num > 0) {
+    num--;
+  }
+
+  document.getElementById('splash').innerText = _splashes.default.splashes[num];
+}
+
+function goToMainMenu(changeMusic) {
+  loadSplashes();
+
+  if (changeMusic) {
+    (0, _musicPlayer.playMainMenuMusic)();
+  }
+
   document.getElementById('screen-menu').style.display = 'flex';
   document.getElementById('screen-game').style.display = 'none';
   document.getElementById('screen-setting').style.display = 'none';
 }
 
-document.getElementsByClassName('to-main-menu')[0].onclick = goToMainMenu;
+document.getElementsByClassName('to-main-menu')[0].onclick = function () {
+  goToMainMenu(false);
+};
+
 document.getElementsByClassName('to-main-menu')[1].onclick = _pongGame.gameEnd;
-},{"./pong-game":"pong-game.js","./music-player":"music-player.js"}],"node_modules/parseuri/index.js":[function(require,module,exports) {
+},{"./pong-game":"pong-game.js","./music-player":"music-player.js","./splashes.json":"splashes.json"}],"node_modules/parseuri/index.js":[function(require,module,exports) {
 /**
  * Parses an URI
  *
@@ -10222,11 +10254,15 @@ function gameStart(address) {
       stop = false;
       (0, _musicPlayer.stopMusic)();
       setTimeout(function () {
-        document.getElementById('audio-beep3').play().then(function () {
+        var beep = document.getElementById('audio-beep3');
+
+        beep.onended = function () {
           setTimeout(function () {
             return (0, _musicPlayer.playGameMusic)();
           }, 250);
-        });
+        };
+
+        beep.play();
       }, 250);
       loop();
     });
@@ -10258,9 +10294,9 @@ function definePlayerSide() {
 
 function gameEnd() {
   if (!stop) {
-    EventEmitter.emit('end_game');
+    EventEmitter.emit('end_game', true);
   } else {
-    (0, _screensChanger.default)();
+    EventEmitter.emit('end_game', false);
   }
 }
 
@@ -10278,7 +10314,7 @@ function connect(address) {
       (0, _musicPlayer.stopMusic)();
       setTimeout(function () {
         clearChat();
-        (0, _screensChanger.default)();
+        (0, _screensChanger.default)(true);
       }, 5000);
     });
     socket.on('connected', function (res) {
@@ -10291,7 +10327,7 @@ function connect(address) {
       (0, _musicPlayer.stopMusic)();
       setTimeout(function () {
         clearChat();
-        (0, _screensChanger.default)();
+        (0, _screensChanger.default)(true);
       }, 5000);
     });
     socket.on('server_cords', function (res) {
@@ -10343,7 +10379,7 @@ function connect(address) {
       (0, _musicPlayer.stopMusic)();
       setTimeout(function () {
         clearChat();
-        (0, _screensChanger.default)();
+        (0, _screensChanger.default)(true);
       }, 5000);
     });
     EventEmitter.on('sendCords', function (data) {
@@ -10366,14 +10402,14 @@ function connect(address) {
     EventEmitter.on('sendMessage', function (data) {
       socket.emit('chat_message', data);
     });
-    EventEmitter.on('end_game', function () {
+    EventEmitter.on('end_game', function (changeMusic) {
       stop = true;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       socket.disconnect();
       socketAddress = undefined;
       (0, _musicPlayer.stopMusic)();
       clearChat();
-      (0, _screensChanger.default)();
+      (0, _screensChanger.default)(changeMusic);
     });
   });
 }
@@ -10405,7 +10441,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64679" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64694" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
