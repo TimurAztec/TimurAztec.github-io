@@ -142,6 +142,7 @@ var Ball = /*#__PURE__*/function () {
     this.color = options.color || '#FFFFFF';
     this.speed = options.speed || 2;
     this.gravity = options.gravity || 2;
+    this.speedUp = options.speedUp || 1;
   }
 
   _createClass(Ball, [{
@@ -9892,8 +9893,6 @@ var pause;
 var stop;
 var left;
 var right;
-var soundState = true;
-var soundTrackLink;
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var ParticlesGenerator = new _particlesGenerator.default(ctx);
@@ -10202,6 +10201,7 @@ function sendMessage() {
 }
 
 function gameStart(address) {
+  init();
   socketAddress = address;
 
   if (socketAddress) {
@@ -10390,11 +10390,561 @@ function connect(address) {
     });
   });
 }
+
+function init() {
+  window.addEventListener('keydown', function (e) {
+    keys[e.keyCode] = true; // e.preventDefault();
+  });
+  window.addEventListener('deviceorientation', function (ev) {
+    if (ev.gamma) {
+      accelerometerGamma = ev.gamma;
+    }
+  }, true);
+  window.addEventListener('keyup', function (e) {
+    delete keys[e.keyCode];
+  });
+  window.addEventListener('keydown', function (e) {
+    if (!stop) {
+      switch (e.keyCode) {
+        case 80:
+          {
+            if (!stop && document.getElementById('chatInput') != document.activeElement) {
+              EventEmitter.emit('pause');
+            }
+
+            break;
+          }
+
+        case 13:
+          {
+            document.getElementById('chatSendButton').click();
+          }
+      }
+    }
+  });
+
+  canvas.onmousemove = function (e) {
+    mouseCords.y = e.clientY;
+  };
+}
 },{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","./music-player":"music-player.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"splashes.json":[function(require,module,exports) {
 module.exports = {
   "splashes": ["Just a regular pong game, but with a little bit of jazz", "ポンスピリッツはあなたに連絡したいです", "Продам гараж +380954857572", "Бесплатный pong без смс и регистрации", "Oh, ricochet?! More like rico... you gonna loose dude!", "This is a 10 gauge pong ball! They are using this for road blocks!", "サスケはピンポンクラブに戻ってきます", "54 года как пажилой пингпонист", "All the other kids with the pumped up paddles. You'd better run, better run, out run my ball", "2020, stay home, stay cool", "This will sharpen you up and make you ready for a bit of the old good ultrapong", "Ай мля, я маслину отбил!", "Try to catch a Spin Ball", "Do you pay taxes? Huh?", "Better visit your parents", "Don`t forget fork in microwave!", "Здоровенькі були!", "Слава Україні!", "Kilroy was here", "Behind you!", "The only thing they fear is you!", "Только не ешь желтый снег", "Слышишь тут эта у Султана разговор к те есть", "12 из 10 - Антон Логвинов", "Горшок жив!", "Yep, we are back in 70`s", "Disco time", "Сегодня не каждый может в завтрашний день смотреть", "Время 3 утра, pong ногой!", "Charlie Don't Surf", "Charlie Play Ping-Pong", "Go home GI", "Волк хоть и слабее Вьетнамца, но в Pong не играет", "Трус не играет в Pong", "Do you like ponging other people?", "Houston, we have a problem", "Эээ, куда прешь, не видиш таджик в pong играет?", "Why we still here? Just to suffer?", "Kojima - Genius", "Мистер Сальери передаёт вам pong"]
 };
-},{}],"screens-changer.js":[function(require,module,exports) {
+},{}],"pong-game-single.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.gameStartSingle = gameStartSingle;
+exports.gameEndSingle = gameEndSingle;
+
+var _ball = _interopRequireDefault(require("./ball"));
+
+var _particlesGenerator = _interopRequireDefault(require("./particles-generator"));
+
+var _screensChanger = _interopRequireDefault(require("./screens-changer"));
+
+var _musicPlayer = require("./music-player");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var startTime;
+var pingTimeout;
+var pause;
+var stop;
+var left;
+var right;
+var soundState = true;
+var soundTrackLink;
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var ParticlesGenerator = new _particlesGenerator.default(ctx);
+canvas.width = 650;
+canvas.height = 400;
+var score = {
+  score1: 0,
+  score2: 0
+};
+var keys = {};
+var mouseCords = {
+  y: 0
+};
+var accelerometerGamma;
+window.addEventListener('keydown', function (e) {
+  keys[e.keyCode] = true; // e.preventDefault();
+});
+window.addEventListener('deviceorientation', function (ev) {
+  if (ev.gamma) {
+    accelerometerGamma = ev.gamma;
+  }
+}, true);
+window.addEventListener('keyup', function (e) {
+  delete keys[e.keyCode];
+});
+window.addEventListener('keydown', function (e) {
+  if (!stop) {
+    switch (e.keyCode) {
+      case 80:
+        {
+          if (!stop && document.getElementById('chatInput') != document.activeElement) {}
+
+          break;
+        }
+
+      case 13:
+        {
+          document.getElementById('chatSendButton').click();
+        }
+    }
+  }
+});
+document.getElementsByClassName('to-main-menu')[1].onclick = gameEndSingle;
+
+canvas.onmousemove = function (e) {
+  mouseCords.y = e.clientY;
+};
+
+function Box(options) {
+  this.x = options.x || 10;
+  this.y = options.y || 10;
+  this.width = options.width || 40;
+  this.height = options.height || 50;
+  this.color = options.color || '#FFFFFF';
+  this.speed = options.speed || 2;
+  this.gravity = options.gravity || 2;
+}
+
+var player1 = new Box({
+  x: 10,
+  y: 200,
+  width: 15,
+  height: 80,
+  color: '#FFFFFF',
+  gravity: 2
+});
+var player2 = new Box({
+  x: 625,
+  y: 100,
+  width: 15,
+  height: 80,
+  color: '#FFFFFF',
+  gravity: 2
+});
+var midLine = new Box({
+  x: canvas.width / 2 - 2.5,
+  y: -1,
+  width: 5,
+  height: canvas.height + 1,
+  color: '#FFFFFF'
+});
+var theBall = new _ball.default({
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  width: 15,
+  height: 15,
+  color: '#FFFFFF',
+  speed: 1,
+  gravity: 1
+});
+var particlesArray = new Array();
+
+function input() {
+  var player;
+
+  if (left) {
+    player = player1;
+    botMovement(player2);
+  } else if (right) {
+    player = player2;
+    botMovement(player1);
+  }
+
+  switch (localStorage.getItem('controls')) {
+    case '0':
+      {
+        if (38 in keys) {
+          if (player.y - player.gravity > 0) {
+            player.y -= player.gravity;
+          }
+        } else if (40 in keys) {
+          if (player.y + player.height + player.gravity < canvas.height) {
+            player.y += player.gravity;
+          }
+        }
+
+        break;
+      }
+
+    case '1':
+      {
+        var futurePlayerPos = mouseCords.y - player.height / 2;
+
+        if (futurePlayerPos > 0) {
+          if (futurePlayerPos + player.height < canvas.height) {
+            player.y = futurePlayerPos;
+          }
+        }
+
+        break;
+      }
+
+    case '2':
+      {
+        var _futurePlayerPos = canvas.height / 2 - player.height / 2 + accelerometerGamma * 5;
+
+        if (_futurePlayerPos > 0) {
+          if (_futurePlayerPos + player.height < canvas.height) {
+            player.y = _futurePlayerPos;
+          }
+        }
+
+        break;
+      }
+  }
+}
+
+function botMovement(player) {
+  var futurePlayerPos = theBall.y - player.height / 2;
+
+  if (futurePlayerPos > 0) {
+    if (futurePlayerPos + player.height < canvas.height) {
+      player.y = futurePlayerPos;
+    }
+  }
+}
+
+function drawBox(box) {
+  ctx.fillStyle = box.color;
+  ctx.fillRect(box.x, box.y, box.width, box.height);
+}
+
+function drawBall(ball) {
+  ctx.fillStyle = ball.color;
+  ball.rebuildBlocks();
+  ctx.fillRect(ball.block1.x, ball.block1.y, ball.block1.width, ball.block1.height);
+  ctx.fillRect(ball.block2.x, ball.block2.y, ball.block2.width, ball.block2.height);
+  ctx.fillRect(ball.block3.x, ball.block3.y, ball.block3.width, ball.block3.height);
+}
+
+function drawParticles() {
+  particlesArray.forEach(function (item) {
+    item.draw();
+  });
+}
+
+function displayScore1() {
+  ctx.font = "20px retro";
+  ctx.fillStyle = "rgb(255,255,255)";
+  var str; // if (server_cords) { str = server_cords.score1 } else { str = score1 };
+
+  str = score.score1;
+  ctx.fillText(str, canvas.width / 2 - 50, 30);
+}
+
+function displayScore2() {
+  ctx.font = "20px retro";
+  ctx.fillStyle = "rgb(255,255,255)";
+  var str; // if (server_cords) { str = server_cords.score2 } else { str = score2 };
+
+  str = score.score2;
+  ctx.fillText(str, canvas.width / 2 + 50, 30);
+}
+
+function displayInfo(info) {
+  ctx.font = "24px retro";
+  ctx.fillStyle = "rgb(255,255,255)";
+  var str = info;
+  ctx.fillText(str, canvas.width / 2 - 175, canvas.height / 2);
+}
+
+function displayNumbers(info) {
+  ctx.font = "34px Arial";
+  ctx.fillStyle = "rgb(255,255,255)";
+  var str = info;
+  ctx.fillText(str, canvas.width / 2 - 10, canvas.height / 2);
+}
+
+function playBeeps() {
+  if (Math.round(Math.random() * 1) == 0) {
+    document.getElementsByTagName('audio')[0].play().then(function () {});
+  } else {
+    document.getElementsByTagName('audio')[1].play().then(function () {});
+  }
+}
+
+function playHit() {
+  if (Math.round(Math.random() * 1) == 0) {
+    document.getElementById('audio-hit1').play().then(function () {});
+  } else {
+    document.getElementById('audio-hit2').play().then(function () {});
+  }
+}
+
+function ballBounce() {
+  if (theBall.y + theBall.gravity + theBall.height >= canvas.height) {
+    playHit();
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'up');
+    theBall.gravity = theBall.gravity * -1;
+    theBall.y += theBall.gravity;
+    theBall.x += theBall.speed;
+  } else if (theBall.y + theBall.gravity <= 0) {
+    playHit();
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'down');
+    theBall.gravity = theBall.gravity * -1;
+    theBall.y += theBall.gravity;
+    theBall.x += theBall.speed;
+  }
+
+  ballCollision();
+}
+
+function ballCollision() {
+  if (theBall.x + theBall.speed <= player1.x + player1.width && theBall.y + theBall.gravity > player1.y && theBall.y + theBall.gravity <= player1.y + player1.height) {
+    playHit();
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'rht');
+    theBall.speed = theBall.speed * -1;
+    theBall.speed = theBall.speed * theBall.speedUp;
+
+    if (theBall.speedUp < 2.5) {
+      theBall.speedUp = theBall.speedUp + 0.1;
+    }
+  } else if (theBall.x + theBall.width + theBall.speed >= player2.x && theBall.y + theBall.gravity > player2.y && theBall.y + theBall.gravity <= player2.y + player2.height) {
+    playHit();
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'lft');
+    theBall.speed = theBall.speed * -1;
+    theBall.speed = theBall.speed * theBall.speedUp;
+
+    if (theBall.speedUp < 2.5) {
+      theBall.speedUp = theBall.speedUp + 0.1;
+    }
+  } else if (theBall.x - theBall.speed < player1.x) {
+    score.score2++; // this.theBall.speed = this.theBall.speed * -1;
+
+    theBall.speed = 1;
+    theBall.speedUp = 1;
+    theBall.x = 100 + theBall.speed;
+    theBall.y += theBall.gravity;
+    playBeeps();
+  } else if (theBall.x + theBall.speed > player2.x + player2.width / 2) {
+    score.score1++; // this.theBall.speed = this.theBall.speed * -1;
+
+    theBall.speed = -1;
+    theBall.speedUp = 1;
+    theBall.x = 500 + theBall.speed;
+    theBall.y += theBall.gravity;
+    playBeeps();
+  } else {
+    if (theBall.speedUp > 2.5) {
+      theBall.speedUp = 2.5;
+    }
+
+    theBall.x += theBall.speed;
+    theBall.y += theBall.gravity;
+  }
+
+  draw();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  displayScore1();
+  displayScore2();
+  drawBox(player1);
+  drawBox(player2);
+  drawBox(midLine);
+  drawBall(theBall);
+  drawParticles();
+}
+
+function scoreCheck() {
+  if (score.score1 >= 10) {} else if (score.score2 >= 10) {}
+}
+
+function clearScore() {
+  score = {
+    score1: 0,
+    score2: 0
+  };
+}
+
+function loop() {
+  if (!pause && !stop) {
+    ballBounce();
+    scoreCheck();
+    input();
+    window.requestAnimationFrame(loop);
+  } else {
+    if (pause) {
+      var message = document.createElement('span');
+      message.innerText = "Game paused (Press 'P' to continue)";
+      document.getElementById('chat').appendChild(message);
+      message.scrollIntoView();
+    }
+  }
+}
+
+document.getElementById('chatSendButton').onclick = sendMessage;
+
+function sendMessage() {
+  if (document.getElementById('chatInput').value) {
+    if (localStorage.getItem('name')) {
+      var message = document.createElement('span');
+      message.innerText = "".concat(localStorage.getItem('name'), " says: ").concat(document.getElementById('chatInput').value);
+      document.getElementById('chat').appendChild(message);
+      message.scrollIntoView();
+    } else if (left) {
+      var _message = document.createElement('span');
+
+      _message.innerText = "player 1 says: ".concat(document.getElementById('chatInput').value);
+      document.getElementById('chat').appendChild(_message);
+
+      _message.scrollIntoView();
+    } else if (right) {
+      var _message2 = document.createElement('span');
+
+      _message2.innerText = "player 2 says: ".concat(document.getElementById('chatInput').value);
+      document.getElementById('chat').appendChild(_message2);
+
+      _message2.scrollIntoView();
+    }
+
+    document.getElementById('chatInput').value = '';
+  }
+}
+
+function gameStartSingle() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  init();
+  document.getElementById('ping').innerText = '';
+  createPlayers();
+  createBall();
+  displayInfo('start');
+  stop = false;
+  (0, _musicPlayer.stopMusic)();
+  definePlayerSide();
+  setTimeout(function () {
+    var beep = document.getElementById('audio-beep3');
+
+    beep.onended = function () {
+      setTimeout(function () {
+        return (0, _musicPlayer.playGameMusic)();
+      }, 250);
+    };
+
+    beep.play();
+  }, 250);
+  loop();
+}
+
+function gameEndSingle() {
+  stop = true;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  (0, _musicPlayer.stopMusic)();
+  clearChat();
+  clearScore();
+  (0, _screensChanger.default)(true);
+}
+
+function clearChat() {
+  document.getElementById('chat').innerHTML = '';
+}
+
+function createPlayers() {
+  player1 = new Box({
+    x: 10,
+    y: 200,
+    width: 15,
+    height: 80,
+    color: '#FFFFFF',
+    gravity: 2
+  });
+  player2 = new Box({
+    x: 625,
+    y: 100,
+    width: 15,
+    height: 80,
+    color: '#FFFFFF',
+    gravity: 2
+  });
+}
+
+function createBall() {
+  theBall = new _ball.default({
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    width: 15,
+    height: 15,
+    color: '#FFFFFF',
+    speed: 1,
+    gravity: 1
+  });
+}
+
+function definePlayerSide() {
+  ctx.font = "16px retro";
+  ctx.fillStyle = "rgb(255,255,255)";
+
+  if (Math.round(Math.random() * 1) == 0) {
+    left = true;
+  } else {
+    right = true;
+  }
+
+  if (left) {
+    var message = document.createElement('span');
+    message.innerText = "You are from the LEFT side, use 'up' and 'down' to control your paddle.";
+    document.getElementById('chat').appendChild(message);
+    message.scrollIntoView(); // player2.y = 0; player2.height = canvas.height;
+  } else if (right) {
+    var _message3 = document.createElement('span');
+
+    _message3.innerText = "You are from the RIGHT side, use 'up' and 'down' to control your paddle.";
+    document.getElementById('chat').appendChild(_message3);
+
+    _message3.scrollIntoView(); // player1.y = 0; player1.height = canvas.height;
+
+  }
+}
+
+function init() {
+  window.addEventListener('keydown', function (e) {
+    keys[e.keyCode] = true; // e.preventDefault();
+  });
+  window.addEventListener('deviceorientation', function (ev) {
+    if (ev.gamma) {
+      accelerometerGamma = ev.gamma;
+    }
+  }, true);
+  window.addEventListener('keyup', function (e) {
+    delete keys[e.keyCode];
+  });
+  window.addEventListener('keydown', function (e) {
+    if (!stop) {
+      switch (e.keyCode) {
+        case 80:
+          {
+            if (!stop && document.getElementById('chatInput') != document.activeElement) {
+              EventEmitter.emit('pause');
+            }
+
+            break;
+          }
+
+        case 13:
+          {
+            document.getElementById('chatSendButton').click();
+          }
+      }
+    }
+  });
+
+  canvas.onmousemove = function (e) {
+    mouseCords.y = e.clientY;
+  };
+}
+},{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","./music-player":"music-player.js"}],"screens-changer.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10408,20 +10958,29 @@ var _musicPlayer = require("./music-player");
 
 var _splashes = _interopRequireDefault(require("./splashes.json"));
 
+var _pongGameSingle = require("./pong-game-single");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // document.getElementById('screen-game').style.display = 'none';
+document.getElementById('play-single').onclick = function () {
+  document.getElementById('screen-menu').style.display = 'none';
+  document.getElementById('screen-game').style.display = 'flex';
+  document.getElementsByClassName('to-main-menu')[1].onclick = _pongGameSingle.gameEndSingle;
+  (0, _pongGameSingle.gameStartSingle)();
+};
+
 document.getElementById('play-online').onclick = function () {
   document.getElementById('screen-menu').style.display = 'none';
   document.getElementById('screen-game').style.display = 'flex';
+  document.getElementsByClassName('to-main-menu')[1].onclick = _pongGame.gameEnd;
   (0, _pongGame.gameStart)('https://pong-game-host-diploma.herokuapp.com/');
-};
+}; // document.getElementById('play-lan').onclick = () => {
+//     document.getElementById('screen-menu').style.display = 'none';
+//     document.getElementById('screen-game').style.display = 'flex';
+//     gameStart('localhost:80');
+// }
 
-document.getElementById('play-lan').onclick = function () {
-  document.getElementById('screen-menu').style.display = 'none';
-  document.getElementById('screen-game').style.display = 'flex';
-  (0, _pongGame.gameStart)('localhost:80');
-};
 
 document.getElementById('settings').onclick = function () {
   document.getElementById('screen-menu').style.display = 'none';
@@ -10454,9 +11013,7 @@ function goToMainMenu(changeMusic) {
 document.getElementsByClassName('to-main-menu')[0].onclick = function () {
   goToMainMenu(false);
 };
-
-document.getElementsByClassName('to-main-menu')[1].onclick = _pongGame.gameEnd;
-},{"./pong-game":"pong-game.js","./music-player":"music-player.js","./splashes.json":"splashes.json"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./pong-game":"pong-game.js","./music-player":"music-player.js","./splashes.json":"splashes.json","./pong-game-single":"pong-game-single.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -10484,7 +11041,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60818" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50650" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
