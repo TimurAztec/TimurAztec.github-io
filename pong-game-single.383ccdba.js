@@ -10422,6 +10422,7 @@ function init() {
       }
     }
   });
+  document.getElementById('chatSendButton').onclick = sendMessage;
 
   canvas.onmousemove = function (e) {
     mouseCords.y = e.clientY;
@@ -10770,43 +10771,71 @@ function ballBounce() {
 }
 
 function ballCollision() {
-  if (theBall.x + theBall.speed <= player1.x + player1.width && theBall.y + theBall.gravity > player1.y && theBall.y + theBall.gravity <= player1.y + player1.height) {
+  if (theBall.x + theBall.speed <= player1.x + player1.width && theBall.x > player1.x + player1.width && theBall.y + theBall.height > player1.y && theBall.y < player1.y + player1.height) {
     playHit();
     particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'rht');
     theBall.speed = theBall.speed * -1;
-    theBall.speed = theBall.speed * theBall.speedUp;
+    theBall.speed = theBall.speed * theBall.speedUp; // let num = (Math.random() * 1) + 0.75;
+    // console.log(num);
+    // theBall.gravity = theBall.gravity * num;
 
-    if (theBall.speedUp < 2.5) {
+    if (theBall.speedUp < 2) {
       theBall.speedUp = theBall.speedUp + 0.1;
     }
-  } else if (theBall.x + theBall.width + theBall.speed >= player2.x && theBall.y + theBall.gravity > player2.y && theBall.y + theBall.gravity <= player2.y + player2.height) {
+  } else if (theBall.y + theBall.height > player1.y && theBall.y < player1.y + player1.height && (theBall.x + theBall.width / 2 || theBall.x) < player1.x + player1.width && (theBall.x + theBall.width / 2 || theBall.x) > player1.x) {
     playHit();
-    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'lft');
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'up');
+    theBall.gravity = theBall.gravity * -1;
+    theBall.y += theBall.gravity;
+    theBall.x += theBall.speed;
+  } else if (theBall.y < player1.y + player1.height && theBall.y > player1.y && (theBall.x + theBall.width / 2 || theBall.x) < player1.x + player1.width && (theBall.x + theBall.width / 2 || theBall.x) > player1.x) {
+    playHit();
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'down');
+    theBall.gravity = theBall.gravity * -1;
+    theBall.y += theBall.gravity;
+    theBall.x += theBall.speed;
+  } else if (theBall.x + theBall.width + theBall.speed / 2 >= player2.x && theBall.x < player2.x && theBall.y + theBall.height > player2.y && theBall.y < player2.y + player2.height) {
+    playHit();
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x + theBall.width, theBall.y + theBall.height / 2, 10, 'lft');
     theBall.speed = theBall.speed * -1;
-    theBall.speed = theBall.speed * theBall.speedUp;
+    theBall.speed = theBall.speed * theBall.speedUp; // let num = (Math.random() * 1) + 0.75;
+    // console.log(num);
+    // theBall.gravity = theBall.gravity * num;
 
-    if (theBall.speedUp < 2.5) {
+    if (theBall.speedUp < 2) {
       theBall.speedUp = theBall.speedUp + 0.1;
     }
-  } else if (theBall.x - theBall.speed < player1.x) {
+  } else if (theBall.y + theBall.height > player2.y && theBall.y < player2.y + player2.height && (theBall.x + theBall.width / 2 || theBall.x) < player2.x + player2.width && (theBall.x + theBall.width / 2 || theBall.x) > player2.x) {
+    playHit();
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'up');
+    theBall.gravity = theBall.gravity * -1;
+    theBall.y += theBall.gravity;
+    theBall.x += theBall.speed;
+  } else if (theBall.y < player2.y + player2.height && theBall.y > player2.y && (theBall.x + theBall.width / 2 || theBall.x) < player2.x + player2.width && (theBall.x + theBall.width / 2 || theBall.x) > player2.x) {
+    playHit();
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'up');
+    theBall.gravity = theBall.gravity * -1;
+    theBall.y += theBall.gravity;
+    theBall.x += theBall.speed;
+  } else if (theBall.x + theBall.width < 0) {
     score.score2++; // this.theBall.speed = this.theBall.speed * -1;
 
     theBall.speed = 1;
     theBall.speedUp = 1;
-    theBall.x = 100 + theBall.speed;
+    theBall.x = 50 + theBall.speed;
     theBall.y += theBall.gravity;
     playBeeps();
-  } else if (theBall.x + theBall.speed > player2.x + player2.width / 2) {
+  } else if (theBall.x > canvas.width) {
     score.score1++; // this.theBall.speed = this.theBall.speed * -1;
 
     theBall.speed = -1;
     theBall.speedUp = 1;
-    theBall.x = 500 + theBall.speed;
+    theBall.x = 550 + theBall.speed;
     theBall.y += theBall.gravity;
     playBeeps();
   } else {
-    if (theBall.speedUp > 2.5) {
-      theBall.speedUp = 2.5;
+    if (theBall.speed > 3) {
+      theBall.speed = 3;
     }
 
     theBall.x += theBall.speed;
@@ -11008,6 +11037,7 @@ function init() {
       }
     }
   });
+  document.getElementById('chatSendButton').onclick = sendMessage;
 
   canvas.onmousemove = function (e) {
     mouseCords.y = e.clientY;
@@ -11041,7 +11071,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50650" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59294" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
