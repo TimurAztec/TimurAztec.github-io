@@ -9905,40 +9905,6 @@ var mouseCords = {
   y: 0
 };
 var accelerometerGamma;
-window.addEventListener('keydown', function (e) {
-  keys[e.keyCode] = true; // e.preventDefault();
-});
-window.addEventListener('deviceorientation', function (ev) {
-  if (ev.gamma) {
-    accelerometerGamma = ev.gamma;
-  }
-}, true);
-window.addEventListener('keyup', function (e) {
-  delete keys[e.keyCode];
-});
-window.addEventListener('keydown', function (e) {
-  if (!stop) {
-    switch (e.keyCode) {
-      case 80:
-        {
-          if (!stop && document.getElementById('chatInput') != document.activeElement) {
-            EventEmitter.emit('pause');
-          }
-
-          break;
-        }
-
-      case 13:
-        {
-          document.getElementById('chatSendButton').click();
-        }
-    }
-  }
-});
-
-canvas.onmousemove = function (e) {
-  mouseCords.y = e.clientY;
-};
 
 function Box(options) {
   this.x = options.x || 10;
@@ -10430,7 +10396,7 @@ function init() {
 }
 },{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","./music-player":"music-player.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"splashes.json":[function(require,module,exports) {
 module.exports = {
-  "splashes": ["Just a regular pong game, but with a little bit of jazz", "ポンスピリッツはあなたに連絡したいです", "Продам гараж +380954857572", "Бесплатный pong без смс и регистрации", "Oh, ricochet?! More like rico... you gonna loose dude!", "This is a 10 gauge pong ball! They are using this for road blocks!", "サスケはピンポンクラブに戻ってきます", "54 года как пажилой пингпонист", "All the other kids with the pumped up paddles. You'd better run, better run, out run my ball", "2020, stay home, stay cool", "This will sharpen you up and make you ready for a bit of the old good ultrapong", "Ай мля, я маслину отбил!", "Try to catch a Spin Ball", "Do you pay taxes? Huh?", "Better visit your parents", "Don`t forget fork in microwave!", "Здоровенькі були!", "Слава Україні!", "Kilroy was here", "Behind you!", "The only thing they fear is you!", "Только не ешь желтый снег", "Слышишь тут эта у Султана разговор к те есть", "12 из 10 - Антон Логвинов", "Горшок жив!", "Yep, we are back in 70`s", "Disco time", "Сегодня не каждый может в завтрашний день смотреть", "Время 3 утра, pong ногой!", "Charlie Don't Surf", "Charlie Play Ping-Pong", "Go home GI", "Волк хоть и слабее Вьетнамца, но в Pong не играет", "Трус не играет в Pong", "Do you like ponging other people?", "Houston, we have a problem", "Эээ, куда прешь, не видиш таджик в pong играет?", "Why we still here? Just to suffer?", "Kojima - Genius", "Мистер Сальери передаёт вам pong"]
+  "splashes": ["Just a regular pong game, but with a little bit of jazz", "ポンスピリッツはあなたに連絡したいです", "Продам гараж +380954857572", "Бесплатный pong без смс и регистрации", "Oh, ricochet?! More like rico... you gonna loose dude!", "This is a 10 gauge pong ball! They are using this for road blocks!", "Just a regular pong game, but with a little bit of jazz", "サスケはピンポンクラブに戻ってきます", "54 года как пажилой пингпонист", "All the other kids with the pumped up paddles. You'd better run, better run, out run my ball", "2020, stay home, stay cool", "This will sharpen you up and make you ready for a bit of the old good ultrapong", "Ай мля, я маслину отбил!", "Just a regular pong game, but with a little bit of jazz", "Try to catch a Spin Ball", "Do you pay taxes? Huh?", "Better visit your parents", "Don`t forget fork in microwave!", "Здоровенькі були!", "Just a regular pong game, but with a little bit of jazz", "Слава Україні!", "Kilroy was here", "Behind you!", "The only thing they fear is you!", "Только не ешь желтый снег", "Just a regular pong game, but with a little bit of jazz", "Слышишь тут эта у Султана разговор к те есть", "12 из 10 - Антон Логвинов", "Горшок жив!", "Yep, we are back in 70`s", "Disco time", "Just a regular pong game, but with a little bit of jazz", "Сегодня не каждый может в завтрашний день смотреть", "Время 3 утра, pong ногой!", "Charlie Don't Surf", "Charlie Play Ping-Pong", "Go home GI", "Just a regular pong game, but with a little bit of jazz", "Волк хоть и слабее Вьетнамца, но в Pong не играет", "Трус не играет в Pong", "Do you like ponging other people?", "Houston, we have a problem", "Эээ, куда прешь, не видиш таджик в pong играет?", "Just a regular pong game, but with a little bit of jazz", "Why we still here? Just to suffer?", "Kojima - Genius", "Мистер Сальери передаёт вам pong"]
 };
 },{}],"pong-game-single.js":[function(require,module,exports) {
 "use strict";
@@ -10473,39 +10439,6 @@ var mouseCords = {
   y: 0
 };
 var accelerometerGamma;
-window.addEventListener('keydown', function (e) {
-  keys[e.keyCode] = true; // e.preventDefault();
-});
-window.addEventListener('deviceorientation', function (ev) {
-  if (ev.gamma) {
-    accelerometerGamma = ev.gamma;
-  }
-}, true);
-window.addEventListener('keyup', function (e) {
-  delete keys[e.keyCode];
-});
-window.addEventListener('keydown', function (e) {
-  if (!stop) {
-    switch (e.keyCode) {
-      case 80:
-        {
-          if (!stop && document.getElementById('chatInput') != document.activeElement) {}
-
-          break;
-        }
-
-      case 13:
-        {
-          document.getElementById('chatSendButton').click();
-        }
-    }
-  }
-});
-document.getElementsByClassName('to-main-menu')[1].onclick = gameEndSingle;
-
-canvas.onmousemove = function (e) {
-  mouseCords.y = e.clientY;
-};
 
 function Box(options) {
   this.x = options.x || 10;
@@ -10921,19 +10854,47 @@ function definePlayerSide() {
     right = true;
   }
 
+  var sideStr;
+
   if (left) {
-    var message = document.createElement('span');
-    message.innerText = "You are from the LEFT side, use 'up' and 'down' to control your paddle.";
-    document.getElementById('chat').appendChild(message);
-    message.scrollIntoView(); // player2.y = 0; player2.height = canvas.height;
+    sideStr = 'LEFT';
   } else if (right) {
-    var _message3 = document.createElement('span');
+    sideStr = 'RIGHT';
+  }
 
-    _message3.innerText = "You are from the RIGHT side, use 'up' and 'down' to control your paddle.";
-    document.getElementById('chat').appendChild(_message3);
+  switch (localStorage.getItem('controls')) {
+    case '0':
+      {
+        var message = document.createElement('span');
+        message.innerText = "You are from the ".concat(sideStr, " side, use 'up' and 'down' on keyboard to control your paddle.");
+        document.getElementById('chat').appendChild(message);
+        message.scrollIntoView();
+        break;
+      }
 
-    _message3.scrollIntoView(); // player1.y = 0; player1.height = canvas.height;
+    case '1':
+      {
+        var _message3 = document.createElement('span');
 
+        _message3.innerText = "You are from the ".concat(sideStr, " side, use your mouse to control your paddle.");
+        document.getElementById('chat').appendChild(_message3);
+
+        _message3.scrollIntoView();
+
+        break;
+      }
+
+    case '2':
+      {
+        var _message4 = document.createElement('span');
+
+        _message4.innerText = "You are from the ".concat(sideStr, " side, use your device rotation to control your paddle.");
+        document.getElementById('chat').appendChild(_message4);
+
+        _message4.scrollIntoView();
+
+        break;
+      }
   }
 }
 
@@ -11130,7 +11091,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59294" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49797" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
