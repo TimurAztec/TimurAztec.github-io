@@ -10644,10 +10644,10 @@ function playHit() {
 }
 
 function ballBounce() {
-  if (theBall.speed > 13) {
-    theBall.speed = 13;
-  } else if (theBall.speed < -13) {
-    theBall.speed = -13;
+  if (theBall.speed > 12) {
+    theBall.speed = 12;
+  } else if (theBall.speed < -12) {
+    theBall.speed = -12;
   }
 
   if (theBall.y + theBall.gravity + theBall.height >= canvas.height) {
@@ -10675,9 +10675,9 @@ function ballCollision() {
     theBall.speed = theBall.speed * -1;
 
     if (theBall.gravity > 0) {
-      theBall.gravity = Math.random() * 1.5 + 0.5;
+      theBall.gravity = Math.random() * 2 + 0.5;
     } else {
-      theBall.gravity = (Math.random() * 1.5 + 0.5) * -1;
+      theBall.gravity = (Math.random() * 2 + 0.5) * -1;
     }
   } else if (theBall.y + theBall.height > player1.y && theBall.y < player1.y + player1.height && (theBall.x + theBall.width / 2 || theBall.x) < player1.x + player1.width && (theBall.x + theBall.width / 2 || theBall.x) > player1.x) {
     playHit();
@@ -10698,9 +10698,9 @@ function ballCollision() {
     theBall.speed = theBall.speed * -1;
 
     if (theBall.gravity > 0) {
-      theBall.gravity = Math.random() * 1.5 + 0.5;
+      theBall.gravity = Math.random() * 2 + 0.5;
     } else {
-      theBall.gravity = (Math.random() * 1.5 + 0.5) * -1;
+      theBall.gravity = (Math.random() * 2 + 0.5) * -1;
     }
   } else if (theBall.y + theBall.height > player2.y && theBall.y < player2.y + player2.height && (theBall.x + theBall.width / 2 || theBall.x) < player2.x + player2.width && (theBall.x + theBall.width / 2 || theBall.x) > player2.x) {
     playHit();
@@ -10733,7 +10733,6 @@ function ballCollision() {
     theBall.y += theBall.gravity;
   }
 
-  console.log(theBall.gravity);
   draw();
 }
 
@@ -11010,6 +11009,19 @@ document.getElementById('settings').onclick = function () {
   document.getElementById('screen-setting').style.display = 'flex';
 };
 
+document.getElementById('game-fullscreen-button').onclick = changeGameScreenMode;
+
+function changeGameScreenMode() {
+  document.getElementById('canvas').requestFullscreen();
+  document.getElementById('canvas').style.borderBottom = '4px solid white';
+}
+
+document.onfullscreenchange = function (e) {
+  if (!document.fullscreen) {
+    document.getElementById('canvas').style.borderBottom = 'none';
+  }
+};
+
 function loadSplashes() {
   var num = Math.round(Math.random() * _splashes.default.splashes.length);
 
@@ -11064,7 +11076,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58512" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63146" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

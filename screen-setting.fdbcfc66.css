@@ -12,6 +12,7 @@
   cursor: default;
 }
 #screen-setting div {
+  padding: 6px 0px 6px 0px;
   width: 100%;
   display: flex;
   align-items: center;
