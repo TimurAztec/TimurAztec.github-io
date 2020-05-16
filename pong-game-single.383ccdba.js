@@ -142,7 +142,6 @@ var Ball = /*#__PURE__*/function () {
     this.color = options.color || '#FFFFFF';
     this.speed = options.speed || 2;
     this.gravity = options.gravity || 2;
-    this.speedUp = options.speedUp || 1;
   }
 
   _createClass(Ball, [{
@@ -10208,19 +10207,47 @@ function clearChat() {
 function definePlayerSide() {
   ctx.font = "16px retro";
   ctx.fillStyle = "rgb(255,255,255)";
+  var sideStr;
 
   if (left) {
-    var message = document.createElement('span');
-    message.innerText = "You are from the LEFT side, use 'up' and 'down' to control your paddle.";
-    document.getElementById('chat').appendChild(message);
-    message.scrollIntoView();
+    sideStr = 'LEFT';
   } else if (right) {
-    var _message = document.createElement('span');
+    sideStr = 'RIGHT';
+  }
 
-    _message.innerText = "You are from the RIGHT side, use 'up' and 'down' to control your paddle.";
-    document.getElementById('chat').appendChild(_message);
+  switch (localStorage.getItem('controls')) {
+    case '0':
+      {
+        var message = document.createElement('span');
+        message.innerText = "You are from the ".concat(sideStr, " side, use 'up' and 'down' on keyboard to control your paddle.");
+        document.getElementById('chat').appendChild(message);
+        message.scrollIntoView();
+        break;
+      }
 
-    _message.scrollIntoView();
+    case '1':
+      {
+        var _message = document.createElement('span');
+
+        _message.innerText = "You are from the ".concat(sideStr, " side, use your mouse to control your paddle.");
+        document.getElementById('chat').appendChild(_message);
+
+        _message.scrollIntoView();
+
+        break;
+      }
+
+    case '2':
+      {
+        var _message2 = document.createElement('span');
+
+        _message2.innerText = "You are from the ".concat(sideStr, " side, use your device rotation to control your paddle.");
+        document.getElementById('chat').appendChild(_message2);
+
+        _message2.scrollIntoView();
+
+        break;
+      }
   }
 }
 
@@ -10686,6 +10713,12 @@ function playHit() {
 }
 
 function ballBounce() {
+  if (theBall.speed > 13) {
+    theBall.speed = 13;
+  } else if (theBall.speed < -13) {
+    theBall.speed = -13;
+  }
+
   if (theBall.y + theBall.gravity + theBall.height >= canvas.height) {
     playHit();
     particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'up');
@@ -10707,13 +10740,13 @@ function ballCollision() {
   if (theBall.x + theBall.speed <= player1.x + player1.width && theBall.x > player1.x + player1.width && theBall.y + theBall.height > player1.y && theBall.y < player1.y + player1.height) {
     playHit();
     particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'rht');
+    theBall.speed = theBall.speed - 0.5;
     theBall.speed = theBall.speed * -1;
-    theBall.speed = theBall.speed * theBall.speedUp; // let num = (Math.random() * 1) + 0.75;
-    // console.log(num);
-    // theBall.gravity = theBall.gravity * num;
 
-    if (theBall.speedUp < 2) {
-      theBall.speedUp = theBall.speedUp + 0.1;
+    if (theBall.gravity > 0) {
+      theBall.gravity = Math.random() * 1.5 + 0.5;
+    } else {
+      theBall.gravity = (Math.random() * 1.5 + 0.5) * -1;
     }
   } else if (theBall.y + theBall.height > player1.y && theBall.y < player1.y + player1.height && (theBall.x + theBall.width / 2 || theBall.x) < player1.x + player1.width && (theBall.x + theBall.width / 2 || theBall.x) > player1.x) {
     playHit();
@@ -10730,13 +10763,13 @@ function ballCollision() {
   } else if (theBall.x + theBall.width + theBall.speed / 2 >= player2.x && theBall.x < player2.x && theBall.y + theBall.height > player2.y && theBall.y < player2.y + player2.height) {
     playHit();
     particlesArray = ParticlesGenerator.generateParticles(theBall.x + theBall.width, theBall.y + theBall.height / 2, 10, 'lft');
+    theBall.speed = theBall.speed + 0.5;
     theBall.speed = theBall.speed * -1;
-    theBall.speed = theBall.speed * theBall.speedUp; // let num = (Math.random() * 1) + 0.75;
-    // console.log(num);
-    // theBall.gravity = theBall.gravity * num;
 
-    if (theBall.speedUp < 2) {
-      theBall.speedUp = theBall.speedUp + 0.1;
+    if (theBall.gravity > 0) {
+      theBall.gravity = Math.random() * 1.5 + 0.5;
+    } else {
+      theBall.gravity = (Math.random() * 1.5 + 0.5) * -1;
     }
   } else if (theBall.y + theBall.height > player2.y && theBall.y < player2.y + player2.height && (theBall.x + theBall.width / 2 || theBall.x) < player2.x + player2.width && (theBall.x + theBall.width / 2 || theBall.x) > player2.x) {
     playHit();
@@ -10753,28 +10786,23 @@ function ballCollision() {
   } else if (theBall.x + theBall.width < 0) {
     score.score2++; // this.theBall.speed = this.theBall.speed * -1;
 
-    theBall.speed = 1;
-    theBall.speedUp = 1;
+    theBall.speed = 2;
     theBall.x = 50 + theBall.speed;
     theBall.y += theBall.gravity;
     playBeeps();
   } else if (theBall.x > canvas.width) {
     score.score1++; // this.theBall.speed = this.theBall.speed * -1;
 
-    theBall.speed = -1;
-    theBall.speedUp = 1;
+    theBall.speed = -2;
     theBall.x = 550 + theBall.speed;
     theBall.y += theBall.gravity;
     playBeeps();
   } else {
-    if (theBall.speed > 3) {
-      theBall.speed = 3;
-    }
-
     theBall.x += theBall.speed;
     theBall.y += theBall.gravity;
   }
 
+  console.log(theBall.gravity);
   draw();
 }
 
@@ -10908,7 +10936,7 @@ function createBall() {
     width: 15,
     height: 15,
     color: '#FFFFFF',
-    speed: 1,
+    speed: 2,
     gravity: 1
   });
 }
@@ -10985,7 +11013,11 @@ function init() {
         case 80:
           {
             if (!stop && document.getElementById('chatInput') != document.activeElement) {
-              EventEmitter.emit('pause');
+              pause = !pause;
+
+              if (!pause) {
+                loop();
+              }
             }
 
             break;
@@ -11032,7 +11064,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49797" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58512" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
