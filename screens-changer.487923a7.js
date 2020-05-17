@@ -137,6 +137,7 @@ var Ball = /*#__PURE__*/function () {
 
     this.x = options.x || 10;
     this.y = options.y || 10;
+    this.oldY = options.oldY || 0;
     this.width = options.width || 15;
     this.height = options.height || 15;
     this.color = options.color || '#FFFFFF';
@@ -10063,6 +10064,22 @@ function displayNumbers(info) {
   ctx.fillText(str, canvas.width / 2 - 10, canvas.height / 2);
 }
 
+function playBeeps() {
+  if (Math.round(Math.random() * 1) == 0) {
+    document.getElementsByTagName('audio')[0].play().then(function () {});
+  } else {
+    document.getElementsByTagName('audio')[1].play().then(function () {});
+  }
+}
+
+function playHit() {
+  if (Math.round(Math.random() * 1) == 0) {
+    document.getElementById('audio-hit1').play().then(function () {});
+  } else {
+    document.getElementById('audio-hit2').play().then(function () {});
+  }
+}
+
 function ballBounce() {
   if (server_cords) {
     theBall.x = server_cords.theBall.x;
@@ -10078,22 +10095,6 @@ function ballBounce() {
   }
 
   ballCollision();
-}
-
-function playBeeps() {
-  if (Math.round(Math.random() * 1) == 0) {
-    document.getElementsByTagName('audio')[0].play().then(function () {});
-  } else {
-    document.getElementsByTagName('audio')[1].play().then(function () {});
-  }
-}
-
-function playHit() {
-  if (Math.round(Math.random() * 1) == 0) {
-    document.getElementById('audio-hit1').play().then(function () {});
-  } else {
-    document.getElementById('audio-hit2').play().then(function () {});
-  }
 }
 
 function ballCollision() {
@@ -10271,7 +10272,7 @@ function pingDisplay(latency) {
 
 function connect(address) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  displayInfo("Connecting to ".concat(address));
+  displayInfo("Connecting to server");
   var socket = io.connect(address);
   socket.on('connect', function () {
     socket.on('player_left_game', function (res) {
@@ -10483,7 +10484,7 @@ var player1 = new Box({
   width: 15,
   height: 80,
   color: '#FFFFFF',
-  gravity: 2
+  gravity: 10
 });
 var player2 = new Box({
   x: 625,
@@ -10491,7 +10492,7 @@ var player2 = new Box({
   width: 15,
   height: 80,
   color: '#FFFFFF',
-  gravity: 2
+  gravity: 10
 });
 var midLine = new Box({
   x: canvas.width / 2 - 2.5,
@@ -10503,6 +10504,7 @@ var midLine = new Box({
 var theBall = new _ball.default({
   x: canvas.width / 2,
   y: canvas.height / 2,
+  oldY: 0,
   width: 15,
   height: 15,
   color: '#FFFFFF',
@@ -10567,11 +10569,23 @@ function input() {
 }
 
 function botMovement(player) {
-  var futurePlayerPos = theBall.y - player.height / 2;
+  if (theBall.oldY + 25 > theBall.y || theBall.oldY - 25 < theBall.y) {
+    theBall.oldY = theBall.y;
+    var target;
+    var futurePlayerPos;
+    target = theBall.y + theBall.height / 2 + theBall.gravity * theBall.speed;
+    console.log(target);
 
-  if (futurePlayerPos > 0) {
-    if (futurePlayerPos + player.height < canvas.height) {
-      player.y = futurePlayerPos;
+    if (player.y + player.height / 2 > target) {
+      futurePlayerPos = player.y - player.gravity;
+    } else if (player.y + player.height / 2 < target) {
+      futurePlayerPos = player.y + player.gravity;
+    }
+
+    if (futurePlayerPos > 0) {
+      if (futurePlayerPos + player.height < canvas.height) {
+        player.y = futurePlayerPos;
+      }
     }
   }
 }
@@ -10644,10 +10658,10 @@ function playHit() {
 }
 
 function ballBounce() {
-  if (theBall.speed > 12) {
-    theBall.speed = 12;
-  } else if (theBall.speed < -12) {
-    theBall.speed = -12;
+  if (theBall.speed > 20) {
+    theBall.speed = 20;
+  } else if (theBall.speed < -20) {
+    theBall.speed = -20;
   }
 
   if (theBall.y + theBall.gravity + theBall.height >= canvas.height) {
@@ -10670,14 +10684,14 @@ function ballBounce() {
 function ballCollision() {
   if (theBall.x + theBall.speed <= player1.x + player1.width && theBall.x > player1.x + player1.width && theBall.y + theBall.height > player1.y && theBall.y < player1.y + player1.height) {
     playHit();
-    particlesArray = ParticlesGenerator.generateParticles(theBall.x, theBall.y, 10, 'rht');
+    particlesArray = ParticlesGenerator.generateParticles(theBall.x + theBall.speed, theBall.y + theBall.height / 2, 10, 'rht');
     theBall.speed = theBall.speed - 0.5;
     theBall.speed = theBall.speed * -1;
 
     if (theBall.gravity > 0) {
-      theBall.gravity = Math.random() * 2 + 0.5;
+      theBall.gravity = Math.random() * 3 + 0.5;
     } else {
-      theBall.gravity = (Math.random() * 2 + 0.5) * -1;
+      theBall.gravity = (Math.random() * 3 + 0.5) * -1;
     }
   } else if (theBall.y + theBall.height > player1.y && theBall.y < player1.y + player1.height && (theBall.x + theBall.width / 2 || theBall.x) < player1.x + player1.width && (theBall.x + theBall.width / 2 || theBall.x) > player1.x) {
     playHit();
@@ -10698,9 +10712,9 @@ function ballCollision() {
     theBall.speed = theBall.speed * -1;
 
     if (theBall.gravity > 0) {
-      theBall.gravity = Math.random() * 2 + 0.5;
+      theBall.gravity = Math.random() * 3 + 0.5;
     } else {
-      theBall.gravity = (Math.random() * 2 + 0.5) * -1;
+      theBall.gravity = (Math.random() * 3 + 0.5) * -1;
     }
   } else if (theBall.y + theBall.height > player2.y && theBall.y < player2.y + player2.height && (theBall.x + theBall.width / 2 || theBall.x) < player2.x + player2.width && (theBall.x + theBall.width / 2 || theBall.x) > player2.x) {
     playHit();
@@ -10997,12 +11011,13 @@ document.getElementById('play-online').onclick = function () {
   document.getElementById('screen-game').style.display = 'flex';
   document.getElementsByClassName('to-main-menu')[1].onclick = _pongGame.gameEnd;
   (0, _pongGame.gameStart)('https://pong-game-host-diploma.herokuapp.com/');
-}; // document.getElementById('play-lan').onclick = () => {
-//     document.getElementById('screen-menu').style.display = 'none';
-//     document.getElementById('screen-game').style.display = 'flex';
-//     gameStart('localhost:80');
-// }
+};
 
+document.getElementById('play-lan').onclick = function () {
+  document.getElementById('screen-menu').style.display = 'none';
+  document.getElementById('screen-game').style.display = 'flex';
+  (0, _pongGame.gameStart)('localhost:80');
+};
 
 document.getElementById('settings').onclick = function () {
   document.getElementById('screen-menu').style.display = 'none';
@@ -11076,7 +11091,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63146" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51444" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
