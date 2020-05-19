@@ -10424,7 +10424,7 @@ function init() {
 }
 },{"./ball":"ball.js","./particles-generator":"particles-generator.js","./screens-changer":"screens-changer.js","./music-player":"music-player.js","socket.io-client":"node_modules/socket.io-client/lib/index.js","events":"node_modules/events/events.js"}],"splashes.json":[function(require,module,exports) {
 module.exports = {
-  "splashes": ["Just a regular pong game, but with a little bit of jazz", "ポンスピリッツはあなたに連絡したいです", "Продам гараж +380954857572", "Бесплатный pong без смс и регистрации", "Oh, ricochet?! More like rico... you gonna loose dude!", "This is a 10 gauge pong ball! They are using this for road blocks!", "Just a regular pong game, but with a little bit of jazz", "サスケはピンポンクラブに戻ってきます", "54 года как пажилой пингпонист", "All the other kids with the pumped up paddles. You'd better run, better run, out run my ball", "2020, stay home, stay cool", "This will sharpen you up and make you ready for a bit of the old good ultrapong", "Ай мля, я маслину отбил!", "Just a regular pong game, but with a little bit of jazz", "Try to catch a Spin Ball", "Do you pay taxes? Huh?", "Better visit your parents", "Don`t forget fork in microwave!", "Здоровенькі були!", "Just a regular pong game, but with a little bit of jazz", "Слава Україні!", "Kilroy was here", "Behind you!", "The only thing they fear is you!", "Только не ешь желтый снег", "Just a regular pong game, but with a little bit of jazz", "Слышишь тут эта у Султана разговор к те есть", "12 из 10 - Антон Логвинов", "Горшок жив!", "Yep, we are back in 70`s", "Disco time", "Just a regular pong game, but with a little bit of jazz", "Сегодня не каждый может в завтрашний день смотреть", "Время 3 утра, pong ногой!", "Charlie Don't Surf", "Charlie Play Ping-Pong", "Go home GI", "Just a regular pong game, but with a little bit of jazz", "Волк хоть и слабее Вьетнамца, но в Pong не играет", "Трус не играет в Pong", "Do you like ponging other people?", "Houston, we have a problem", "Эээ, куда прешь, не видиш таджик в pong играет?", "Just a regular pong game, but with a little bit of jazz", "Why we still here? Just to suffer?", "Kojima - Genius", "Мистер Сальери передаёт вам pong"]
+  "splashes": ["Just a regular pong game, but with a little bit of jazz", "ポンスピリッツはあなたに連絡したいです", "Продам гараж +380954857572", "Бесплатный pong без смс и регистрации", "Oh, ricochet?! More like rico... you gonna loose dude!", "This is a 10 gauge pong ball! They are using this for road blocks!", "Just a regular pong game, but with a little bit of jazz", "サスケはピンポンクラブに戻ってきます", "54 года как пажилой пингпонист", "2020, stay home, stay cool", "This will sharpen you up and make you ready for a bit of the old good ultrapong", "Ай мля, я маслину отбил!", "Just a regular pong game, but with a little bit of jazz", "Try to catch a Spin Ball", "Do you pay taxes? Huh?", "Better visit your parents", "Don`t forget fork in microwave!", "Здоровенькі були!", "Just a regular pong game, but with a little bit of jazz", "Слава Україні!", "Kilroy was here", "Behind you!", "The only thing they fear is you!", "Just a regular pong game, but with a little bit of jazz", "12 из 10 - Антон Логвинов", "Горшок жив!", "Yep, we are back in 70`s", "Disco time", "Just a regular pong game, but with a little bit of jazz", "Сегодня не каждый может в завтрашний день смотреть", "Время 3 утра, pong ногой!", "Charlie Don't Surf", "Charlie Play Ping-Pong", "Go home GI", "Just a regular pong game, but with a little bit of jazz", "Волк хоть и слабее Вьетнамца, но в Pong не играет", "Трус не играет в Pong", "Do you like ponging other people?", "Houston, we have a problem", "Эээ, куда прешь, не видиш таджик в pong играет?", "Just a regular pong game, but with a little bit of jazz", "Why we still here? Just to suffer?", "Kojima - Genius", "Мистер Сальери передаёт вам pong", "The Last Of Balls", "The Last Of Balls 2", "Old but gold", "Back In The White-Black", "Just a regular pong game, but with a little bit of jazz", "Pong mother f***er, do you play it?", "Do I feel lucky? Well, do ya, punk?", "Ball curve is never a straight line.", "I hate myself for playing pong with you", "Run Sally, Run!", "No pong, son!", "jazzt pong - beats to relax/study to"]
 };
 },{}],"pong-game-single.js":[function(require,module,exports) {
 "use strict";
@@ -10574,7 +10574,6 @@ function botMovement(player) {
     var target;
     var futurePlayerPos;
     target = theBall.y + theBall.height / 2 + theBall.gravity * theBall.speed;
-    console.log(target);
 
     if (player.y + player.height / 2 > target) {
       futurePlayerPos = player.y - player.gravity;
@@ -11011,13 +11010,12 @@ document.getElementById('play-online').onclick = function () {
   document.getElementById('screen-game').style.display = 'flex';
   document.getElementsByClassName('to-main-menu')[1].onclick = _pongGame.gameEnd;
   (0, _pongGame.gameStart)('https://pong-game-host-diploma.herokuapp.com/');
-};
+}; // document.getElementById('play-lan').onclick = () => {
+//     document.getElementById('screen-menu').style.display = 'none';
+//     document.getElementById('screen-game').style.display = 'flex';
+//     gameStart('localhost:80');
+// }
 
-document.getElementById('play-lan').onclick = function () {
-  document.getElementById('screen-menu').style.display = 'none';
-  document.getElementById('screen-game').style.display = 'flex';
-  (0, _pongGame.gameStart)('localhost:80');
-};
 
 document.getElementById('settings').onclick = function () {
   document.getElementById('screen-menu').style.display = 'none';
@@ -11091,7 +11089,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51444" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53644" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
