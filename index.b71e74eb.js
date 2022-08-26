@@ -620,7 +620,7 @@ class SceneManager {
     }
 }
 
-},{"@pixi/app":"3i5UU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin"}],"3i5UU":[function(require,module,exports) {
+},{"@pixi/app":"3i5UU","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3i5UU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Application", ()=>Application);
@@ -38392,7 +38392,7 @@ class LoaderScene extends (0, _scene.Scene) {
     }
 }
 
-},{"pixi.js":"1pSin","../scene":"aOCet","../../scene-manager":"2FQ8z","../menu/menu-scene":"4nuFJ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-list":"9ftod","../../assets-vars":"cBooq"}],"aOCet":[function(require,module,exports) {
+},{"pixi.js":"1pSin","../scene":"aOCet","../../scene-manager":"2FQ8z","../menu/menu-scene":"4nuFJ","../../assets-list":"9ftod","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aOCet":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Scene", ()=>Scene);
@@ -38423,9 +38423,9 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MenuScene", ()=>MenuScene);
 var _scene = require("../scene");
 var _sceneManager = require("../../scene-manager");
-var _gameScene = require("../game/game-scene");
 var _pixiJs = require("pixi.js");
 var _assetsVars = require("../../assets-vars");
+var _level1 = require("../game/levels/level1/level1");
 class MenuScene extends (0, _scene.Scene) {
     constructor(){
         super();
@@ -38460,23 +38460,153 @@ class MenuScene extends (0, _scene.Scene) {
         });
     }
     startGame() {
-        (0, _sceneManager.SceneManager).changeScene(new (0, _gameScene.GameScene)());
+        (0, _sceneManager.SceneManager).changeScene(new (0, _level1.Level1Scene)());
         this.destroy();
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","../game/game-scene":"eoY4A","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"eoY4A":[function(require,module,exports) {
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../game/levels/level1/level1":"bMsfR"}],"cBooq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Assets", ()=>Assets);
+parcelHelpers.export(exports, "LoaderAssets", ()=>LoaderAssets);
+let Assets;
+(function(Assets1) {
+    class Tiles {
+        static SMALL_WALL = "small_wall";
+        static WALL = "wall";
+        static WATER = "water";
+        static DIRT = "dirt";
+        static LAEVES = "leaves";
+        static EAGLE = "eagle";
+    }
+    Assets1.Tiles = Tiles;
+    class Bonuses {
+        static BONUS_IMMORTAL = "bonus_immortal";
+        static BONUS_LIVE = "bonus_live";
+        static BONUS_SLOW = "bonus_slow";
+        static BONUS_SPEED = "bonus_speed";
+        static BONUS_TRACTOR = "bonus_tractor";
+        static BUFF_TYPES = [
+            this.BONUS_IMMORTAL,
+            this.BONUS_LIVE,
+            this.BONUS_SLOW,
+            this.BONUS_SPEED,
+            this.BONUS_TRACTOR
+        ];
+    }
+    Assets1.Bonuses = Bonuses;
+    class Buttons {
+        static BUTTON = "button";
+        static BUTTON_SCORES = "button_scores";
+    }
+    Assets1.Buttons = Buttons;
+    class Bullets {
+        static BULLET = "bullet";
+        static BULLET_ENEMY = "enemy_bullet";
+    }
+    Assets1.Bullets = Bullets;
+    class FX {
+        static EXPLODE = "explode";
+        static EXPLODE_SMALL = "explode_small";
+        static APPEAR = "appear";
+    }
+    Assets1.FX = FX;
+    class Tanks {
+        static TANK_PLAYER = "tank_player";
+        static TANK_BLUE = "tank_blue";
+        static TANK_RED = "tank_red";
+        static TANK_WHITE = "tank_white";
+    }
+    Assets1.Tanks = Tanks;
+})(Assets || (Assets = {}));
+let LoaderAssets;
+(function(LoaderAssets1) {
+    class Loaders {
+        static LOADER_BACKGROUND = "loader_bg";
+        static LOADER_BAR = "loader_bar";
+    }
+    LoaderAssets1.Loaders = Loaders;
+})(LoaderAssets || (LoaderAssets = {}));
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bMsfR":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Level1Scene", ()=>Level1Scene);
+var _eventManager = require("../../../../event-manager");
+var _sceneManager = require("../../../../scene-manager");
+var _menuScene = require("../../../menu/menu-scene");
+var _gameScene = require("../../game-scene");
+var _level2 = require("../level2/level2");
+var _level1Json = require("./level1.json");
+class Level1Scene extends (0, _gameScene.GameScene) {
+    constructor(){
+        super();
+        this.loadLevel(_level1Json);
+        (0, _eventManager.EventManager).subscribe("team_lost", this);
+        (0, _eventManager.EventManager).subscribe("team_won", this);
+    }
+    onEvent(event, data) {
+        if (this.paused) return;
+        super.onEvent(event, data);
+        if (event == "team_lost") this._preUpdateAction = ()=>{
+            this.pause();
+            this.dynamicChildren.length = 0;
+            this.tileMap.length = 0;
+            (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
+            this.destroy();
+            this._preUpdateAction = ()=>{};
+        };
+        if (event == "team_won" && data == "player1") this._preUpdateAction = ()=>{
+            this.pause();
+            this.dynamicChildren.length = 0;
+            this.tileMap.length = 0;
+            (0, _sceneManager.SceneManager).changeScene(new (0, _level2.Level2Scene)());
+            this.destroy();
+            this._preUpdateAction = ()=>{};
+        };
+    }
+}
+
+},{"../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","../level2/level2":"6JDuJ","./level1.json":"1SXu6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l75gk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "EventManager", ()=>EventManager);
+class EventManager {
+    constructor(){}
+    static _listeners = new Map();
+    static subscribe(event, listener) {
+        const listeners = EventManager._listeners.get(event);
+        EventManager._listeners.set(event, listeners ? [
+            ...listeners,
+            listener
+        ] : [
+            listener
+        ]);
+    }
+    static unsubscribe(event, listener) {
+        const listeners = EventManager._listeners.get(event);
+        if (listeners && listeners.indexOf(listener)) {
+            listeners.splice(listeners.indexOf(listener), 1);
+            EventManager._listeners.set(event, listeners);
+        }
+    }
+    static notify(event, data) {
+        const listeners = EventManager._listeners.get(event);
+        if (listeners) for (let listener of listeners)listener.onEvent(event, data);
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eoY4A":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "GameScene", ()=>GameScene);
 var _scene = require("../scene");
-var _level1Json = require("./levels/level1.json");
 var _eventManager = require("../../event-manager");
 var _sceneManager = require("../../scene-manager");
 var _pauseScene = require("../menu/pause-scene");
 var _entityFactory = require("../../entities/entity-factory");
 var _pixiJs = require("pixi.js");
-var _menuScene = require("../menu/menu-scene");
 var _abstractMovementComponent = require("../../entities/behaviors/movement/abstract-movement-component");
 var _utils = require("../../utils/utils");
 class GameScene extends (0, _scene.Scene) {
@@ -38486,8 +38616,6 @@ class GameScene extends (0, _scene.Scene) {
     constructor(){
         super();
         (0, _eventManager.EventManager).subscribe("keydown", this);
-        (0, _eventManager.EventManager).subscribe("team_lost", this);
-        this.loadLevel(_level1Json);
     }
     loadLevel(level) {
         this.tileMap.length = 0;
@@ -38516,17 +38644,8 @@ class GameScene extends (0, _scene.Scene) {
     }
     onEvent(event, data) {
         if (!this.paused) {
-            if (event == "keydown" && typeof data == "string" && data == "Escape") this._preUpdateAction = ()=>{
-                console.log(this.tileMap);
+            if (event == "keydown" && data == "Escape") this._preUpdateAction = ()=>{
                 (0, _sceneManager.SceneManager).changeScene(new (0, _pauseScene.PauseScene)().setParentScene(this));
-                this._preUpdateAction = ()=>{};
-            };
-            if (event == "team_lost") this._preUpdateAction = ()=>{
-                this.pause();
-                this.dynamicChildren.length = 0;
-                this.tileMap.length = 0;
-                (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
-                this.destroy();
                 this._preUpdateAction = ()=>{};
             };
         }
@@ -38623,39 +38742,7 @@ class GameScene extends (0, _scene.Scene) {
     }
 }
 
-},{"../scene":"aOCet","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../event-manager":"l75gk","../../scene-manager":"2FQ8z","./levels/level1.json":"i58Yp","../menu/pause-scene":"iGHCP","../../entities/entity-factory":"dTnZv","pixi.js":"1pSin","../menu/menu-scene":"4nuFJ","../../entities/behaviors/movement/abstract-movement-component":"4Zsay","../../utils/utils":"ea5wt"}],"l75gk":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "EventManager", ()=>EventManager);
-class EventManager {
-    constructor(){}
-    static _listeners = new Map();
-    static subscribe(event, listener) {
-        const listeners = EventManager._listeners.get(event);
-        EventManager._listeners.set(event, listeners ? [
-            ...listeners,
-            listener
-        ] : [
-            listener
-        ]);
-    }
-    static unsubscribe(event, listener) {
-        const listeners = EventManager._listeners.get(event);
-        if (listeners && listeners.indexOf(listener)) {
-            listeners.splice(listeners.indexOf(listener), 1);
-            EventManager._listeners.set(event, listeners);
-        }
-    }
-    static notify(event, data) {
-        const listeners = EventManager._listeners.get(event);
-        if (listeners) for (let listener of listeners)listener.onEvent(event, data);
-    }
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"i58Yp":[function(require,module,exports) {
-module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,211,211,102,211,211,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
-
-},{}],"iGHCP":[function(require,module,exports) {
+},{"../scene":"aOCet","../../event-manager":"l75gk","../../scene-manager":"2FQ8z","../menu/pause-scene":"iGHCP","../../entities/entity-factory":"dTnZv","pixi.js":"1pSin","../../entities/behaviors/movement/abstract-movement-component":"4Zsay","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iGHCP":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "PauseScene", ()=>PauseScene);
@@ -38711,7 +38798,7 @@ class PauseScene extends (0, _scene.Scene) {
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../event-manager":"l75gk"}],"dTnZv":[function(require,module,exports) {
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dTnZv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EntityFactory", ()=>EntityFactory);
@@ -38727,7 +38814,6 @@ var _utils = require("../utils/utils");
 var _randomControlComponent = require("./behaviors/control/random-control-component");
 var _enemyBulletWeaponComponent = require("./behaviors/weapon/enemy-bullet-weapon-component");
 var _wanderingAmountBasedSpawner = require("./interactive/spawners/wandering-amount-based-spawner");
-var _amountBasedSpawner = require("./interactive/spawners/amount-based-spawner");
 var _buff = require("./interactive/buff");
 var _base = require("./interactive/base");
 var _bulletWeaponComponent = require("./behaviors/weapon/bullet-weapon-component");
@@ -38774,7 +38860,7 @@ class EntityFactory {
                     });
                     playerTank.setComponent(new (0, _playerControlComponent.PlayerControlComponent)());
                     const weapon = new (0, _bulletWeaponComponent.BulletWeaponComponent)();
-                    weapon.setReloadTime(1);
+                    weapon.setReloadTime(50);
                     playerTank.setComponent(weapon);
                     playerTank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player1"));
                     playerTank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
@@ -38820,9 +38906,9 @@ class EntityFactory {
                 }
             case 912:
                 {
-                    const spawner = new (0, _amountBasedSpawner.AmountBasedSpawner)().setPrototypeEntity(EntityFactory.getTile(902)).setTimeBetweenSpawns(250).setCollisionGroup([
+                    const spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(EntityFactory.getTile(902)).setTimeBetweenSpawns(250).setCollisionGroup([
                         "Tank"
-                    ]).setTimesToSpawn(12).setMaxAmountPerTime(3);
+                    ]).setTimesToSpawn(12).setMaxAmountPerTime(1);
                     spawner.setSkin({
                         assetName: "empty",
                         hitboxWidth: 32,
@@ -38835,16 +38921,16 @@ class EntityFactory {
                     const counter = new (0, _inWorldEventCounter.InWorldEventCounter)();
                     counter.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
                     counter.timesToCount(12).setEventToCount("entity_destroyed_player2").onCountEnded(()=>{
-                        (0, _eventManager.EventManager).notify("team_lost", counter.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+                        (0, _eventManager.EventManager).notify("team_won", "player1");
                     });
                     return counter;
                 }
             case 921:
                 {
                     const buff = new (0, _buff.Buff)();
-                    let spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(buff).setTimeBetweenSpawns(1200).setCollisionGroup([
+                    let spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(buff).setTimeBetweenSpawns(600).setCollisionGroup([
                         "Tank"
-                    ]).setTimesToSpawn(1000).setMaxAmountPerTime(1);
+                    ]).setTimesToSpawn(9999).setMaxAmountPerTime(1);
                     spawner.setSkin({
                         assetName: "empty",
                         hitboxWidth: 32,
@@ -38867,7 +38953,118 @@ class EntityFactory {
     }
 }
 
-},{"./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","./behaviors/control/player-control-component":"eT9lB","./tiles/wall":"4V1eD","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/base":"dC7wV","./interactive/spawners/amount-based-spawner":"lpKso","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/tractor":"hc7Oq","./interactive/buff":"8zU8G","./behaviors/destroy/basic-destroy-component":"7tCQV","../event-manager":"l75gk","./behaviors/team/abstract-team-component":"9vUi2","./interactive/in-world-event-counter":"e82Po"}],"M0rnZ":[function(require,module,exports) {
+},{"./behaviors/control/player-control-component":"eT9lB","./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/wall":"4V1eD","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/buff":"8zU8G","./interactive/base":"dC7wV","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/tractor":"hc7Oq","./behaviors/destroy/basic-destroy-component":"7tCQV","../event-manager":"l75gk","./behaviors/team/abstract-team-component":"9vUi2","./interactive/in-world-event-counter":"e82Po","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eT9lB":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "PlayerControlComponent", ()=>PlayerControlComponent);
+var _abstractControlComponent = require("./abstract-control-component");
+var _eventManager = require("../../../event-manager");
+class PlayerControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
+    action = ()=>{};
+    constructor(source){
+        super(source);
+        (0, _eventManager.EventManager).subscribe("keydown", this);
+        (0, _eventManager.EventManager).subscribe("keyup", this);
+    }
+    onEvent(event, data) {
+        if (event == "keydown") switch(data){
+            case "ArrowUp":
+                this.action = this.triggerActionUp;
+                break;
+            case "w":
+                this.action = this.triggerActionUp;
+                break;
+            case "ArrowDown":
+                this.action = this.triggerActionDown;
+                break;
+            case "s":
+                this.action = this.triggerActionDown;
+                break;
+            case "ArrowLeft":
+                this.action = this.triggerActionLeft;
+                break;
+            case "a":
+                this.action = this.triggerActionLeft;
+                break;
+            case "ArrowRight":
+                this.action = this.triggerActionRight;
+                break;
+            case "d":
+                this.action = this.triggerActionRight;
+                break;
+            case " ":
+                this.action = this.triggerActionSpace;
+                break;
+        }
+        if (event == "keyup") this.action = ()=>{};
+    }
+    update(dt) {
+        super.update(dt);
+        this.action();
+    }
+    clone() {
+        return new PlayerControlComponent(this);
+    }
+}
+
+},{"./abstract-control-component":"8sX8j","../../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8sX8j":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractControlComponent", ()=>AbstractControlComponent);
+var _abstractComponent = require("../AbstractComponent");
+class AbstractControlComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "control";
+    onActionDown(callback) {
+        this.actionDownCallback = callback;
+    }
+    onActionLeft(callback) {
+        this.actionLeftCallback = callback;
+    }
+    onActionRight(callback) {
+        this.actionRightCallback = callback;
+    }
+    onActionSpace(callback) {
+        this.actionSpaceCallback = callback;
+    }
+    onActionUp(callback) {
+        this.actionUpCallback = callback;
+    }
+    triggerActionDown() {
+        if (this.actionDownCallback) this.actionDownCallback();
+    }
+    triggerActionLeft() {
+        if (this.actionLeftCallback) this.actionLeftCallback();
+    }
+    triggerActionRight() {
+        if (this.actionRightCallback) this.actionRightCallback();
+    }
+    triggerActionSpace() {
+        if (this.actionSpaceCallback) this.actionSpaceCallback();
+    }
+    triggerActionUp() {
+        if (this.actionUpCallback) this.actionUpCallback();
+    }
+    update(dt) {}
+}
+
+},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2LLYT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractComponent", ()=>AbstractComponent);
+class AbstractComponent {
+    _typeID = "";
+    constructor(source){}
+    get typeID() {
+        return this._typeID;
+    }
+    setEntity(entity) {
+        this._entity = entity;
+        return this;
+    }
+    update(dt) {}
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"M0rnZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BasicTeamComponent", ()=>BasicTeamComponent);
@@ -38904,24 +39101,7 @@ class AbstractTeamComponent extends (0, _abstractComponent.AbstractComponent) {
     }
 }
 
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2LLYT":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractComponent", ()=>AbstractComponent);
-class AbstractComponent {
-    _typeID = "";
-    constructor(source){}
-    get typeID() {
-        return this._typeID;
-    }
-    setEntity(entity) {
-        this._entity = entity;
-        return this;
-    }
-    update(dt) {}
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bJjwP":[function(require,module,exports) {
+},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bJjwP":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Tank", ()=>Tank);
@@ -38953,9 +39133,9 @@ class Tank extends (0, _entity.Entity) {
                 case "SmallWall":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
-                case "Water":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
+                // case 'Water':
+                //     this.getComponent(AbstractMovementComponent).collides();
+                //     break;
                 case "Tank":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
@@ -39063,7 +39243,7 @@ class Tank extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../fx/big-explosion":"4vaID","../../utils/utils":"ea5wt","../behaviors/buffs/immortal-buff-component":"85AQc"}],"5vwA6":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5vwA6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Entity", ()=>Entity);
@@ -39185,7 +39365,7 @@ class Entity extends (0, _pixiJs.Container) {
     }
 }
 
-},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./behaviors/destroy/abstract-destroy-component":"8IMJl"}],"8IMJl":[function(require,module,exports) {
+},{"pixi.js":"1pSin","./behaviors/destroy/abstract-destroy-component":"8IMJl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8IMJl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AbstractDestroyComponent", ()=>AbstractDestroyComponent);
@@ -39329,46 +39509,6 @@ class AbstractWeaponComponent extends (0, _abstractComponent.AbstractComponent) 
     }
 }
 
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8sX8j":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractControlComponent", ()=>AbstractControlComponent);
-var _abstractComponent = require("../AbstractComponent");
-class AbstractControlComponent extends (0, _abstractComponent.AbstractComponent) {
-    _typeID = "control";
-    onActionDown(callback) {
-        this.actionDownCallback = callback;
-    }
-    onActionLeft(callback) {
-        this.actionLeftCallback = callback;
-    }
-    onActionRight(callback) {
-        this.actionRightCallback = callback;
-    }
-    onActionSpace(callback) {
-        this.actionSpaceCallback = callback;
-    }
-    onActionUp(callback) {
-        this.actionUpCallback = callback;
-    }
-    triggerActionDown() {
-        if (this.actionDownCallback) this.actionDownCallback();
-    }
-    triggerActionLeft() {
-        if (this.actionLeftCallback) this.actionLeftCallback();
-    }
-    triggerActionRight() {
-        if (this.actionRightCallback) this.actionRightCallback();
-    }
-    triggerActionSpace() {
-        if (this.actionSpaceCallback) this.actionSpaceCallback();
-    }
-    triggerActionUp() {
-        if (this.actionUpCallback) this.actionUpCallback();
-    }
-    update(dt) {}
-}
-
 },{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j2Wc6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -39394,71 +39534,7 @@ class AppearFX extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"cBooq":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Assets", ()=>Assets);
-parcelHelpers.export(exports, "LoaderAssets", ()=>LoaderAssets);
-let Assets;
-(function(Assets1) {
-    class Tiles {
-        static SMALL_WALL = "small_wall";
-        static WALL = "wall";
-        static WATER = "water";
-        static DIRT = "dirt";
-        static LAEVES = "leaves";
-        static EAGLE = "eagle";
-    }
-    Assets1.Tiles = Tiles;
-    class Bonuses {
-        static BONUS_IMMORTAL = "bonus_immortal";
-        static BONUS_LIVE = "bonus_live";
-        static BONUS_SLOW = "bonus_slow";
-        static BONUS_SPEED = "bonus_speed";
-        static BONUS_TRACTOR = "bonus_tractor";
-        static BUFF_TYPES = [
-            this.BONUS_IMMORTAL,
-            this.BONUS_LIVE,
-            this.BONUS_SLOW,
-            this.BONUS_SPEED,
-            this.BONUS_TRACTOR
-        ];
-    }
-    Assets1.Bonuses = Bonuses;
-    class Buttons {
-        static BUTTON = "button";
-        static BUTTON_SCORES = "button_scores";
-    }
-    Assets1.Buttons = Buttons;
-    class Bullets {
-        static BULLET = "bullet";
-        static BULLET_ENEMY = "enemy_bullet";
-    }
-    Assets1.Bullets = Bullets;
-    class FX {
-        static EXPLODE = "explode";
-        static EXPLODE_SMALL = "explode_small";
-        static APPEAR = "appear";
-    }
-    Assets1.FX = FX;
-    class Tanks {
-        static TANK_PLAYER = "tank_player";
-        static TANK_BLUE = "tank_blue";
-        static TANK_RED = "tank_red";
-        static TANK_WHITE = "tank_white";
-    }
-    Assets1.Tanks = Tanks;
-})(Assets || (Assets = {}));
-let LoaderAssets;
-(function(LoaderAssets1) {
-    class Loaders {
-        static LOADER_BACKGROUND = "loader_bg";
-        static LOADER_BAR = "loader_bar";
-    }
-    LoaderAssets1.Loaders = Loaders;
-})(LoaderAssets || (LoaderAssets = {}));
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iix3J":[function(require,module,exports) {
+},{"../entity":"5vwA6","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iix3J":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BasicAabbCollisionComponent", ()=>BasicAabbCollisionComponent);
@@ -39483,7 +39559,7 @@ class BasicAabbCollisionComponent extends (0, _abstractCollisionComponent.Abstra
     }
 }
 
-},{"./abstract-collision-component":"6rzC8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../utils/utils":"ea5wt"}],"6rzC8":[function(require,module,exports) {
+},{"./abstract-collision-component":"6rzC8","../../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6rzC8":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AbstractCollisionComponent", ()=>AbstractCollisionComponent);
@@ -39526,7 +39602,7 @@ function AABB(a, b) {
     return a.x - a.width / 2 < b.x + b.width / 2 && a.x + a.width / 2 > b.x - b.width / 2 && a.y - a.height / 2 < b.y + b.height / 2 && a.y + a.height / 2 > b.y - b.height / 2;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin"}],"4vaID":[function(require,module,exports) {
+},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4vaID":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BigExplosionFX", ()=>BigExplosionFX);
@@ -39556,7 +39632,7 @@ class BigExplosionFX extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq"}],"5Vjgk":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Vjgk":[function(require,module,exports) {
 var global = arguments[3];
 /*!
  *  howler.js v2.2.3
@@ -42105,7 +42181,7 @@ class HardWall extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"gs9Hp":[function(require,module,exports) {
+},{"../../assets-vars":"cBooq","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gs9Hp":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Leaves", ()=>Leaves);
@@ -42125,22 +42201,119 @@ class Leaves extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"h4MBW":[function(require,module,exports) {
+},{"../entity":"5vwA6","../../utils/utils":"ea5wt","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4V1eD":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Wall", ()=>Wall);
+var _entity = require("../entity");
+var _smallWall = require("./small-wall");
+var _sceneManager = require("../../scene-manager");
+var _assetsVars = require("../../assets-vars");
+var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
+class Wall extends (0, _entity.Entity) {
+    update(dt) {
+        super.update(dt);
+        for(let i = 0; i < 2; i++)for(let j = 0; j < 2; j++){
+            let swall = new (0, _smallWall.SmallWall)();
+            swall.setSkin({
+                assetName: (0, _assetsVars.Assets).Tiles.SMALL_WALL
+            });
+            swall.x = this.x - swall.width / 2 + swall.width * j;
+            swall.y = this.y - swall.height / 2 + swall.height * i;
+            (0, _sceneManager.SceneManager).currentScene.addChild(swall);
+        }
+        this.destroy();
+    }
+    constructor(){
+        super();
+        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+    }
+}
+
+},{"../entity":"5vwA6","./small-wall":"ckGaW","../../scene-manager":"2FQ8z","../../assets-vars":"cBooq","../behaviors/movement/projectile-movement-component":"25Jss","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ckGaW":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SmallWall", ()=>SmallWall);
+var _entity = require("../entity");
+class SmallWall extends (0, _entity.Entity) {
+}
+
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"25Jss":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ProjectileMovementComponent", ()=>ProjectileMovementComponent);
+var _abstractMovementComponent = require("./abstract-movement-component");
+class ProjectileMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
+    setMovementVector(vector) {
+        this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
+        return super.setMovementVector(vector);
+    }
+    clone() {
+        return new ProjectileMovementComponent(this);
+    }
+}
+
+},{"./abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h4MBW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Water", ()=>Water);
 var _assetsVars = require("../../assets-vars");
+var _utils = require("../../utils/utils");
+var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
+var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
+var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
+var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
 var _entity = require("../entity");
 class Water extends (0, _entity.Entity) {
-    constructor(){
-        super();
+    constructor(source){
+        super(source);
         this.setSkin({
             assetName: (0, _assetsVars.Assets).Tiles.WATER
         });
+        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+        this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
+            if (object == this) return;
+            switch(object.entityType){
+                case "Tank":
+                    this.drown(object);
+                    break;
+                case "Tractor":
+                    this.drown(object);
+                    break;
+            }
+        }));
+    }
+    drown(object) {
+        if (this._objectToDrown !== object && this._objectToDrown && !this._objectToDrown.destroyed) {
+            this._objectToDrown.destroy();
+            return;
+        }
+        this._objectToDrown = object;
+        this._objectToDrown.x = this.x;
+        this._objectToDrown.y = this.y;
+        this._objectToDrown.removeComponent((0, _abstractControlComponent.AbstractControlComponent));
+    }
+    updateTilingData(tileMap, tileSize) {
+        const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
+        if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos)) return;
+        let collisionGroup = [
+            ...tileMap[tilePos.y][tilePos.x]
+        ];
+        this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
+    }
+    update(dt) {
+        super.update(dt);
+        if (this._objectToDrown && !this._objectToDrown.destroyed) {
+            this._objectToDrown.scale.x = this._objectToDrown.scale.y -= 0.01;
+            if (this._objectToDrown.scale.x <= 0) this._objectToDrown.destroy();
+        }
+    }
+    clone() {
+        return new Water(this);
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"9oAyj":[function(require,module,exports) {
+},{"../../assets-vars":"cBooq","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/movement/projectile-movement-component":"25Jss","../../utils/utils":"ea5wt","../behaviors/collision/abstract-collision-component":"6rzC8","../behaviors/control/abstract-control-component":"8sX8j"}],"9oAyj":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "RandomControlComponent", ()=>RandomControlComponent);
@@ -42150,6 +42323,10 @@ class RandomControlComponent extends (0, _abstractControlComponent.AbstractContr
     _actionChangeTimer = 0;
     _actionChangeDelay = 50;
     _nextAction = "";
+    constructor(source){
+        super(source);
+        this._actionChangeDelay = (0, _utils.randNum)(100, 10);
+    }
     update(dt) {
         super.update(dt);
         this._actionChangeTimer += dt;
@@ -42213,7 +42390,7 @@ class EnemyBulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWe
     }
 }
 
-},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../assets-vars":"cBooq"}],"6c7ss":[function(require,module,exports) {
+},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","../../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6c7ss":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Bullet", ()=>Bullet);
@@ -42319,22 +42496,7 @@ class Bullet extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/projectile-movement-component":"25Jss","../../scene-manager":"2FQ8z","../behaviors/movement/abstract-movement-component":"4Zsay","../behaviors/team/basic-team-component":"M0rnZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../fx/small-explosion":"hcHEv","../fx/big-explosion":"4vaID","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../vars":"7QgFK","../../utils/utils":"ea5wt"}],"25Jss":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "ProjectileMovementComponent", ()=>ProjectileMovementComponent);
-var _abstractMovementComponent = require("./abstract-movement-component");
-class ProjectileMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
-    setMovementVector(vector) {
-        this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
-        return super.setMovementVector(vector);
-    }
-    clone() {
-        return new ProjectileMovementComponent(this);
-    }
-}
-
-},{"./abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hcHEv":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/projectile-movement-component":"25Jss","../../scene-manager":"2FQ8z","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/small-explosion":"hcHEv","../fx/big-explosion":"4vaID","../behaviors/team/basic-team-component":"M0rnZ","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../vars":"7QgFK","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hcHEv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SmallExplosionFX", ()=>SmallExplosionFX);
@@ -42364,7 +42526,7 @@ class SmallExplosionFX extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq"}],"7QgFK":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7QgFK":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Vars", ()=>Vars);
@@ -42384,98 +42546,7 @@ let Vars;
     Vars1.GameObjects = GameObjects;
 })(Vars || (Vars = {}));
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eT9lB":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "PlayerControlComponent", ()=>PlayerControlComponent);
-var _abstractControlComponent = require("./abstract-control-component");
-var _eventManager = require("../../../event-manager");
-class PlayerControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
-    action = ()=>{};
-    constructor(source){
-        super(source);
-        (0, _eventManager.EventManager).subscribe("keydown", this);
-        (0, _eventManager.EventManager).subscribe("keyup", this);
-    }
-    onEvent(event, data) {
-        if (event == "keydown") switch(data){
-            case "ArrowUp":
-                this.action = this.triggerActionUp;
-                break;
-            case "w":
-                this.action = this.triggerActionUp;
-                break;
-            case "ArrowDown":
-                this.action = this.triggerActionDown;
-                break;
-            case "s":
-                this.action = this.triggerActionDown;
-                break;
-            case "ArrowLeft":
-                this.action = this.triggerActionLeft;
-                break;
-            case "a":
-                this.action = this.triggerActionLeft;
-                break;
-            case "ArrowRight":
-                this.action = this.triggerActionRight;
-                break;
-            case "d":
-                this.action = this.triggerActionRight;
-                break;
-            case " ":
-                this.action = this.triggerActionSpace;
-                break;
-        }
-        if (event == "keyup") this.action = ()=>{};
-    }
-    update(dt) {
-        super.update(dt);
-        this.action();
-    }
-    clone() {
-        return new PlayerControlComponent(this);
-    }
-}
-
-},{"./abstract-control-component":"8sX8j","../../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4V1eD":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Wall", ()=>Wall);
-var _entity = require("../entity");
-var _smallWall = require("./small-wall");
-var _sceneManager = require("../../scene-manager");
-var _assetsVars = require("../../assets-vars");
-var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
-class Wall extends (0, _entity.Entity) {
-    update(dt) {
-        super.update(dt);
-        for(let i = 0; i < 2; i++)for(let j = 0; j < 2; j++){
-            let swall = new (0, _smallWall.SmallWall)();
-            swall.setSkin({
-                assetName: (0, _assetsVars.Assets).Tiles.SMALL_WALL
-            });
-            swall.x = this.x - swall.width / 2 + swall.width * j;
-            swall.y = this.y - swall.height / 2 + swall.height * i;
-            (0, _sceneManager.SceneManager).currentScene.addChild(swall);
-        }
-        this.destroy();
-    }
-    constructor(){
-        super();
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
-    }
-}
-
-},{"../entity":"5vwA6","./small-wall":"ckGaW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../scene-manager":"2FQ8z","../../assets-vars":"cBooq","../behaviors/movement/projectile-movement-component":"25Jss"}],"ckGaW":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SmallWall", ()=>SmallWall);
-var _entity = require("../entity");
-class SmallWall extends (0, _entity.Entity) {
-}
-
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lUX9i":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lUX9i":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "WanderingAmountBasedSpawner", ()=>WanderingAmountBasedSpawner);
@@ -42559,7 +42630,7 @@ class WanderingAmountBasedSpawner extends (0, _amountBasedSpawner.AmountBasedSpa
     }
 }
 
-},{"../../behaviors/control/random-control-component":"9oAyj","../../behaviors/movement/direct-walk-movement-component":"4jmrJ","./amount-based-spawner":"lpKso","../../behaviors/control/abstract-control-component":"8sX8j","../../behaviors/movement/abstract-movement-component":"4Zsay","pixi.js":"1pSin","../../behaviors/collision/basic-aabb-collision-component":"iix3J","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../utils/utils":"ea5wt","../../behaviors/collision/abstract-collision-component":"6rzC8"}],"lpKso":[function(require,module,exports) {
+},{"../../behaviors/control/random-control-component":"9oAyj","../../behaviors/movement/direct-walk-movement-component":"4jmrJ","./amount-based-spawner":"lpKso","../../behaviors/control/abstract-control-component":"8sX8j","../../behaviors/movement/abstract-movement-component":"4Zsay","pixi.js":"1pSin","../../behaviors/collision/basic-aabb-collision-component":"iix3J","../../../utils/utils":"ea5wt","../../behaviors/collision/abstract-collision-component":"6rzC8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lpKso":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AmountBasedSpawner", ()=>AmountBasedSpawner);
@@ -42628,7 +42699,7 @@ class AmountBasedSpawner extends (0, _spawner.Spawner) {
     }
 }
 
-},{"./spawner":"4Uxgq","../../behaviors/collision/basic-aabb-collision-component":"iix3J","../../behaviors/collision/abstract-collision-component":"6rzC8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../utils/utils":"ea5wt","../../behaviors/movement/projectile-movement-component":"25Jss"}],"4Uxgq":[function(require,module,exports) {
+},{"./spawner":"4Uxgq","../../behaviors/collision/basic-aabb-collision-component":"iix3J","../../behaviors/collision/abstract-collision-component":"6rzC8","../../../utils/utils":"ea5wt","../../behaviors/movement/projectile-movement-component":"25Jss","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Uxgq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Spawner", ()=>Spawner);
@@ -42654,75 +42725,135 @@ class Spawner extends (0, _entity.Entity) {
     }
 }
 
-},{"../../entity":"5vwA6","../../../scene-manager":"2FQ8z","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dC7wV":[function(require,module,exports) {
+},{"../../entity":"5vwA6","../../../scene-manager":"2FQ8z","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8zU8G":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Base", ()=>Base);
+parcelHelpers.export(exports, "Buff", ()=>Buff);
+var _assetsVars = require("../../assets-vars");
+var _utils = require("../../utils/utils");
+var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
+var _liveBuffComponent = require("../behaviors/buffs/live-buff-component");
+var _slowBuffComponent = require("../behaviors/buffs/slow-buff-component");
+var _spawnTractorBuffComponentCopy = require("../behaviors/buffs/spawn-tractor-buff-component copy");
+var _speedBuffComponentCopy = require("../behaviors/buffs/speed-buff-component copy");
+var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
 var _entity = require("../entity");
-var _sceneManager = require("../../scene-manager");
-var _appear = require("../fx/appear");
-var _eventManager = require("../../event-manager");
-var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
-class Base extends (0, _entity.Entity) {
+class Buff extends (0, _entity.Entity) {
     constructor(source){
         super(source);
+        this.type = source?._type || "";
+        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
     }
-    clone() {
-        return new Base(this);
+    set type(value) {
+        this._type = value;
     }
-    onEvent(event, data) {}
-    destroy(options) {
-        super.destroy(options);
-        if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) (0, _eventManager.EventManager).notify("team_lost", this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+    get type() {
+        return this._type;
+    }
+    getBuff() {
+        switch(this._type){
+            case (0, _assetsVars.Assets).Bonuses.BONUS_SPEED:
+                return new (0, _speedBuffComponentCopy.SpeedBuffComponent)().applyBuff(180);
+            case (0, _assetsVars.Assets).Bonuses.BONUS_IMMORTAL:
+                return new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(180);
+            case (0, _assetsVars.Assets).Bonuses.BONUS_LIVE:
+                return new (0, _liveBuffComponent.LiveBuffComponent)().applyBuff(0);
+            case (0, _assetsVars.Assets).Bonuses.BONUS_SLOW:
+                return new (0, _slowBuffComponent.SlowBuffComponent)().applyBuff(180);
+            case (0, _assetsVars.Assets).Bonuses.BONUS_TRACTOR:
+                return new (0, _spawnTractorBuffComponentCopy.SpawnTractorBuffComponent)().applyBuff(0);
+            default:
+                break;
+        }
     }
     update(dt) {
         if (this._initOnUpdate) {
-            const fx = new (0, _appear.AppearFX)();
-            fx.x = this.x;
-            fx.y = this.y;
-            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+            this.type = (0, _assetsVars.Assets).Bonuses.BUFF_TYPES[Math.floor((0, _utils.randNum)((0, _assetsVars.Assets).Bonuses.BUFF_TYPES.length))];
+            this.setSkin({
+                assetName: this.type
+            });
         }
         super.update(dt);
     }
+    clone() {
+        return new Buff(this);
+    }
 }
 
-},{"../entity":"5vwA6","../../scene-manager":"2FQ8z","../fx/appear":"j2Wc6","../../event-manager":"l75gk","../behaviors/team/abstract-team-component":"9vUi2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jb7yn":[function(require,module,exports) {
+},{"../../assets-vars":"cBooq","../../utils/utils":"ea5wt","../behaviors/buffs/immortal-buff-component":"85AQc","../behaviors/buffs/live-buff-component":"2TMKl","../behaviors/buffs/slow-buff-component":"9mnDN","../behaviors/buffs/spawn-tractor-buff-component copy":"fxhye","../behaviors/buffs/speed-buff-component copy":"ertEe","../behaviors/movement/projectile-movement-component":"25Jss","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2TMKl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BulletWeaponComponent", ()=>BulletWeaponComponent);
-var _abstractWeaponComponent = require("./abstract-weapon-component");
-var _bullet = require("../../interactive/bullet");
-var _sceneManager = require("../../../scene-manager");
-var _abstractTeamComponent = require("../team/abstract-team-component");
-var _basicTeamComponent = require("../team/basic-team-component");
-var _assetsVars = require("../../../assets-vars");
-var _abstractMovementComponent = require("../movement/abstract-movement-component");
-class BulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWeaponComponent) {
-    fire() {
-        if (!this._reloaded) return;
-        super.fire();
-        const bullet = new (0, _bullet.Bullet)();
-        bullet.setSkin({
-            assetName: (0, _assetsVars.Assets).Bullets.BULLET
-        });
-        if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) bullet.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
-        if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
-            const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
-            bullet.x = (this._entity.x + vec.x) / 2;
-            bullet.y = (this._entity.y + vec.y) / 2;
-        } else {
-            bullet.x = this._entity.x;
-            bullet.y = this._entity.y;
-        }
-        (0, _sceneManager.SceneManager).currentScene.addChild(bullet);
-        bullet.launch(this._entity.angle);
+parcelHelpers.export(exports, "LiveBuffComponent", ()=>LiveBuffComponent);
+var _abstractBuffComponent = require("./abstract-buff-component");
+class LiveBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
+    _typeID = "buff-live";
+    firstUpdate() {
+        this._propToChange = "health";
+        this._changeTo = this._entity[this._propToChange] + 1;
+        super.firstUpdate();
     }
     clone() {
-        return new BulletWeaponComponent(this);
+        return new LiveBuffComponent(this);
     }
 }
 
-},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../assets-vars":"cBooq","../movement/abstract-movement-component":"4Zsay"}],"hc7Oq":[function(require,module,exports) {
+},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9mnDN":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SlowBuffComponent", ()=>SlowBuffComponent);
+var _abstractBuffComponent = require("./abstract-buff-component");
+class SlowBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
+    _typeID = "buff-speed";
+    firstUpdate() {
+        this._propToChange = "speed";
+        this._changeTo = 1;
+        super.firstUpdate();
+    }
+    clone() {
+        return new SlowBuffComponent(this);
+    }
+}
+
+},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fxhye":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SpawnTractorBuffComponent", ()=>SpawnTractorBuffComponent);
+var _sceneManager = require("../../../scene-manager");
+var _tractor = require("../../interactive/tractor");
+var _randomControlComponent = require("../control/random-control-component");
+var _abstractMovementComponent = require("../movement/abstract-movement-component");
+var _abstractTeamComponent = require("../team/abstract-team-component");
+var _basicTeamComponent = require("../team/basic-team-component");
+var _abstractBuffComponent = require("./abstract-buff-component");
+class SpawnTractorBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
+    _typeID = "buff-spawn";
+    firstUpdate() {
+        const tractor = new (0, _tractor.Tractor)();
+        tractor.setSkin({
+            assetName: "tractor",
+            scaleX: 1.2,
+            numberOfFrames: 4
+        });
+        tractor.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+        if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) tractor.setComponent(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).clone());
+        else tractor.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("wild-tractor"));
+        if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
+            const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
+            tractor.x = this._entity.x * (this._entity.x / vec.x);
+            tractor.y = this._entity.y * (this._entity.y / vec.y);
+        } else {
+            tractor.x = this._entity.x;
+            tractor.y = this._entity.y;
+        }
+        (0, _sceneManager.SceneManager).currentScene.addChild(tractor);
+        super.firstUpdate();
+    }
+    clone() {
+        return new SpawnTractorBuffComponent(this);
+    }
+}
+
+},{"../../../scene-manager":"2FQ8z","../../interactive/tractor":"hc7Oq","../control/random-control-component":"9oAyj","../movement/abstract-movement-component":"4Zsay","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hc7Oq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Tractor", ()=>Tractor);
@@ -42869,135 +43000,7 @@ class Tractor extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8zU8G":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Buff", ()=>Buff);
-var _assetsVars = require("../../assets-vars");
-var _utils = require("../../utils/utils");
-var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
-var _liveBuffComponent = require("../behaviors/buffs/live-buff-component");
-var _slowBuffComponent = require("../behaviors/buffs/slow-buff-component");
-var _spawnTractorBuffComponentCopy = require("../behaviors/buffs/spawn-tractor-buff-component copy");
-var _speedBuffComponentCopy = require("../behaviors/buffs/speed-buff-component copy");
-var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
-var _entity = require("../entity");
-class Buff extends (0, _entity.Entity) {
-    constructor(source){
-        super(source);
-        this.type = source?._type || "";
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
-    }
-    set type(value) {
-        this._type = value;
-    }
-    get type() {
-        return this._type;
-    }
-    getBuff() {
-        switch(this._type){
-            case (0, _assetsVars.Assets).Bonuses.BONUS_SPEED:
-                return new (0, _speedBuffComponentCopy.SpeedBuffComponent)().applyBuff(180);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_IMMORTAL:
-                return new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(180);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_LIVE:
-                return new (0, _liveBuffComponent.LiveBuffComponent)().applyBuff(0);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_SLOW:
-                return new (0, _slowBuffComponent.SlowBuffComponent)().applyBuff(180);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_TRACTOR:
-                return new (0, _spawnTractorBuffComponentCopy.SpawnTractorBuffComponent)().applyBuff(0);
-            default:
-                break;
-        }
-    }
-    update(dt) {
-        if (this._initOnUpdate) {
-            this.type = (0, _assetsVars.Assets).Bonuses.BUFF_TYPES[Math.floor((0, _utils.randNum)((0, _assetsVars.Assets).Bonuses.BUFF_TYPES.length))];
-            this.setSkin({
-                assetName: this.type
-            });
-        }
-        super.update(dt);
-    }
-    clone() {
-        return new Buff(this);
-    }
-}
-
-},{"../../assets-vars":"cBooq","../behaviors/buffs/immortal-buff-component":"85AQc","../behaviors/buffs/live-buff-component":"2TMKl","../behaviors/buffs/slow-buff-component":"9mnDN","../behaviors/buffs/spawn-tractor-buff-component copy":"fxhye","../behaviors/buffs/speed-buff-component copy":"ertEe","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/movement/projectile-movement-component":"25Jss","../../utils/utils":"ea5wt"}],"2TMKl":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "LiveBuffComponent", ()=>LiveBuffComponent);
-var _abstractBuffComponent = require("./abstract-buff-component");
-class LiveBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
-    _typeID = "buff-live";
-    firstUpdate() {
-        this._propToChange = "health";
-        this._changeTo = this._entity[this._propToChange] + 1;
-        super.firstUpdate();
-    }
-    clone() {
-        return new LiveBuffComponent(this);
-    }
-}
-
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9mnDN":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SlowBuffComponent", ()=>SlowBuffComponent);
-var _abstractBuffComponent = require("./abstract-buff-component");
-class SlowBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
-    _typeID = "buff-speed";
-    firstUpdate() {
-        this._propToChange = "speed";
-        this._changeTo = this._entity[this._propToChange] / 2;
-        super.firstUpdate();
-    }
-    clone() {
-        return new SlowBuffComponent(this);
-    }
-}
-
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fxhye":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SpawnTractorBuffComponent", ()=>SpawnTractorBuffComponent);
-var _sceneManager = require("../../../scene-manager");
-var _tractor = require("../../interactive/tractor");
-var _randomControlComponent = require("../control/random-control-component");
-var _abstractMovementComponent = require("../movement/abstract-movement-component");
-var _abstractTeamComponent = require("../team/abstract-team-component");
-var _basicTeamComponent = require("../team/basic-team-component");
-var _abstractBuffComponent = require("./abstract-buff-component");
-class SpawnTractorBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
-    _typeID = "buff-spawn";
-    firstUpdate() {
-        const tractor = new (0, _tractor.Tractor)();
-        tractor.setSkin({
-            assetName: "tractor",
-            scaleX: 1.2,
-            numberOfFrames: 4
-        });
-        tractor.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
-        if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) tractor.setComponent(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).clone());
-        else tractor.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("wild-tractor"));
-        if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
-            const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
-            tractor.x = this._entity.x * (this._entity.x / vec.x);
-            tractor.y = this._entity.y * (this._entity.y / vec.y);
-        } else {
-            tractor.x = this._entity.x;
-            tractor.y = this._entity.y;
-        }
-        (0, _sceneManager.SceneManager).currentScene.addChild(tractor);
-        super.firstUpdate();
-    }
-    clone() {
-        return new SpawnTractorBuffComponent(this);
-    }
-}
-
-},{"../../../scene-manager":"2FQ8z","../../interactive/tractor":"hc7Oq","../control/random-control-component":"9oAyj","../movement/abstract-movement-component":"4Zsay","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ertEe":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ertEe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SpeedBuffComponent", ()=>SpeedBuffComponent);
@@ -43006,7 +43009,7 @@ class SpeedBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponen
     _typeID = "buff-speed";
     firstUpdate() {
         this._propToChange = "speed";
-        this._changeTo = this._entity[this._propToChange] * 2;
+        this._changeTo = 4;
         super.firstUpdate();
     }
     clone() {
@@ -43014,7 +43017,75 @@ class SpeedBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponen
     }
 }
 
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7tCQV":[function(require,module,exports) {
+},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dC7wV":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Base", ()=>Base);
+var _entity = require("../entity");
+var _sceneManager = require("../../scene-manager");
+var _appear = require("../fx/appear");
+var _eventManager = require("../../event-manager");
+var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
+class Base extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+    }
+    clone() {
+        return new Base(this);
+    }
+    onEvent(event, data) {}
+    destroy(options) {
+        super.destroy(options);
+        if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) (0, _eventManager.EventManager).notify("team_lost", this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+    }
+    update(dt) {
+        if (this._initOnUpdate) {
+            const fx = new (0, _appear.AppearFX)();
+            fx.x = this.x;
+            fx.y = this.y;
+            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+        }
+        super.update(dt);
+    }
+}
+
+},{"../entity":"5vwA6","../../scene-manager":"2FQ8z","../fx/appear":"j2Wc6","../../event-manager":"l75gk","../behaviors/team/abstract-team-component":"9vUi2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jb7yn":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BulletWeaponComponent", ()=>BulletWeaponComponent);
+var _abstractWeaponComponent = require("./abstract-weapon-component");
+var _bullet = require("../../interactive/bullet");
+var _sceneManager = require("../../../scene-manager");
+var _abstractTeamComponent = require("../team/abstract-team-component");
+var _basicTeamComponent = require("../team/basic-team-component");
+var _assetsVars = require("../../../assets-vars");
+var _abstractMovementComponent = require("../movement/abstract-movement-component");
+class BulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWeaponComponent) {
+    fire() {
+        if (!this._reloaded) return;
+        super.fire();
+        const bullet = new (0, _bullet.Bullet)();
+        bullet.setSkin({
+            assetName: (0, _assetsVars.Assets).Bullets.BULLET
+        });
+        if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) bullet.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
+        if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
+            const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
+            bullet.x = (this._entity.x + vec.x) / 2;
+            bullet.y = (this._entity.y + vec.y) / 2;
+        } else {
+            bullet.x = this._entity.x;
+            bullet.y = this._entity.y;
+        }
+        (0, _sceneManager.SceneManager).currentScene.addChild(bullet);
+        bullet.launch(this._entity.angle);
+    }
+    clone() {
+        return new BulletWeaponComponent(this);
+    }
+}
+
+},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","../../../assets-vars":"cBooq","../movement/abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7tCQV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BasicDestroyComponent", ()=>BasicDestroyComponent);
@@ -43075,7 +43146,51 @@ class InWorldEventCounter extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../behaviors/movement/projectile-movement-component":"25Jss","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9ftod":[function(require,module,exports) {
+},{"../entity":"5vwA6","../behaviors/movement/projectile-movement-component":"25Jss","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6JDuJ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Level2Scene", ()=>Level2Scene);
+var _eventManager = require("../../../../event-manager");
+var _sceneManager = require("../../../../scene-manager");
+var _menuScene = require("../../../menu/menu-scene");
+var _gameScene = require("../../game-scene");
+var _level2Json = require("./level2.json");
+class Level2Scene extends (0, _gameScene.GameScene) {
+    constructor(){
+        super();
+        this.loadLevel(_level2Json);
+        (0, _eventManager.EventManager).subscribe("team_lost", this);
+        (0, _eventManager.EventManager).subscribe("team_won", this);
+    }
+    onEvent(event, data) {
+        if (this.paused) return;
+        super.onEvent(event, data);
+        if (event == "team_lost") this._preUpdateAction = ()=>{
+            this.pause();
+            this.dynamicChildren.length = 0;
+            this.tileMap.length = 0;
+            (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
+            this.destroy();
+            this._preUpdateAction = ()=>{};
+        };
+        if (event == "team_won" && data == "player1") this._preUpdateAction = ()=>{
+            this.pause();
+            this.dynamicChildren.length = 0;
+            this.tileMap.length = 0;
+            (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
+            this.destroy();
+            this._preUpdateAction = ()=>{};
+        };
+    }
+}
+
+},{"../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","./level2.json":"fP5rd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fP5rd":[function(require,module,exports) {
+module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
+
+},{}],"1SXu6":[function(require,module,exports) {
+module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,211,211,102,211,211,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,211,211,102,211,211,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,912,999,999,999,999,999,912,999,999,999,999,912,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,202,999,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,999,202,999,201],[201,999,999,999,999,999,999,999,999,202,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,201,999,999,999,202,201,202,999,999,202,201,202,999,202,201,202,999,999,999,999,201,999,999,999,201],[201,999,999,999,999,999,999,999,999,202,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,202,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,202,999,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
+
+},{}],"9ftod":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loaderAssets", ()=>loaderAssets);
