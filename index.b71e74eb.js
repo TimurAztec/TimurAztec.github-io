@@ -606,8 +606,8 @@ class SceneManager {
         let deltaTime = newTick - this._lastTick;
         this._lastTick = newTick;
         if (deltaTime < 0) deltaTime = 0;
-        if (deltaTime > 1000) deltaTime = 1000;
-        let deltaFrame = deltaTime * 60 / 1000; //1.0 is for single frame
+        if (deltaTime > 100) deltaTime = 100;
+        let deltaFrame = deltaTime * 60 / 1000;
         SceneManager.update(deltaFrame);
         requestAnimationFrame(this.tick.bind(this));
     }
@@ -620,7 +620,7 @@ class SceneManager {
     }
 }
 
-},{"@pixi/app":"3i5UU","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3i5UU":[function(require,module,exports) {
+},{"@pixi/app":"3i5UU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin"}],"3i5UU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Application", ()=>Application);
@@ -38392,7 +38392,7 @@ class LoaderScene extends (0, _scene.Scene) {
     }
 }
 
-},{"pixi.js":"1pSin","../scene":"aOCet","../../scene-manager":"2FQ8z","../menu/menu-scene":"4nuFJ","../../assets-list":"9ftod","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aOCet":[function(require,module,exports) {
+},{"pixi.js":"1pSin","../scene":"aOCet","../../scene-manager":"2FQ8z","../menu/menu-scene":"4nuFJ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-list":"9ftod","../../assets-vars":"cBooq"}],"aOCet":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Scene", ()=>Scene);
@@ -38465,7 +38465,7 @@ class MenuScene extends (0, _scene.Scene) {
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","../game/game-scene":"eoY4A","pixi.js":"1pSin","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eoY4A":[function(require,module,exports) {
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","../game/game-scene":"eoY4A","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"eoY4A":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "GameScene", ()=>GameScene);
@@ -38536,13 +38536,14 @@ class GameScene extends (0, _scene.Scene) {
     // Так и с кодом ниже
     update(dt) {
         super.update(dt);
-        // console.log(dt);
+        console.log(dt);
         this.dynamicChildren = this.dynamicChildren.filter((entity)=>{
             return !entity.destroyed;
         });
         let i = this.dynamicChildren.length;
         while(i--){
             const dynamicEntity = this.dynamicChildren[i];
+            if (dynamicEntity.destroyed) continue;
             if (dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && !dynamicEntity.position.equals(dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).previousPosition)) {
                 const prevTilePos = (0, _utils.getTitlePosition)(dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).previousPosition, this.tileSize);
                 const tilePos = (0, _utils.getTitlePosition)(dynamicEntity.position, this.tileSize);
@@ -38622,10 +38623,7 @@ class GameScene extends (0, _scene.Scene) {
     }
 }
 
-},{"../scene":"aOCet","./levels/level1.json":"i58Yp","../../event-manager":"l75gk","../../scene-manager":"2FQ8z","../menu/pause-scene":"iGHCP","../../entities/entity-factory":"dTnZv","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../menu/menu-scene":"4nuFJ","../../entities/behaviors/movement/abstract-movement-component":"4Zsay","../../utils/utils":"ea5wt"}],"i58Yp":[function(require,module,exports) {
-module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,211,211,102,211,211,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
-
-},{}],"l75gk":[function(require,module,exports) {
+},{"../scene":"aOCet","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../event-manager":"l75gk","../../scene-manager":"2FQ8z","./levels/level1.json":"i58Yp","../menu/pause-scene":"iGHCP","../../entities/entity-factory":"dTnZv","pixi.js":"1pSin","../menu/menu-scene":"4nuFJ","../../entities/behaviors/movement/abstract-movement-component":"4Zsay","../../utils/utils":"ea5wt"}],"l75gk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EventManager", ()=>EventManager);
@@ -38654,7 +38652,10 @@ class EventManager {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iGHCP":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"i58Yp":[function(require,module,exports) {
+module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,211,211,102,211,211,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
+
+},{}],"iGHCP":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "PauseScene", ()=>PauseScene);
@@ -38710,7 +38711,7 @@ class PauseScene extends (0, _scene.Scene) {
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dTnZv":[function(require,module,exports) {
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../event-manager":"l75gk"}],"dTnZv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EntityFactory", ()=>EntityFactory);
@@ -38728,10 +38729,13 @@ var _enemyBulletWeaponComponent = require("./behaviors/weapon/enemy-bullet-weapo
 var _wanderingAmountBasedSpawner = require("./interactive/spawners/wandering-amount-based-spawner");
 var _amountBasedSpawner = require("./interactive/spawners/amount-based-spawner");
 var _buff = require("./interactive/buff");
-var _assetsVars = require("../assets-vars");
 var _base = require("./interactive/base");
 var _bulletWeaponComponent = require("./behaviors/weapon/bullet-weapon-component");
 var _tractor = require("./interactive/tractor");
+var _basicDestroyComponent = require("./behaviors/destroy/basic-destroy-component");
+var _eventManager = require("../event-manager");
+var _abstractTeamComponent = require("./behaviors/team/abstract-team-component");
+var _inWorldEventCounter = require("./interactive/in-world-event-counter");
 class EntityFactory {
     constructor(){}
     static getTile(tileIndex) {
@@ -38770,9 +38774,12 @@ class EntityFactory {
                     });
                     playerTank.setComponent(new (0, _playerControlComponent.PlayerControlComponent)());
                     const weapon = new (0, _bulletWeaponComponent.BulletWeaponComponent)();
-                    weapon.setReloadTime(50);
+                    weapon.setReloadTime(1);
                     playerTank.setComponent(weapon);
                     playerTank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player1"));
+                    playerTank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
+                        (0, _eventManager.EventManager).notify("team_lost", playerTank.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+                    }));
                     return playerTank;
                 }
             case 902:
@@ -38794,6 +38801,9 @@ class EntityFactory {
                     weapon.setReloadTime(50);
                     tank.setComponent(weapon);
                     tank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
+                    tank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
+                        (0, _eventManager.EventManager).notify("entity_destroyed_player2", tank);
+                    }));
                     return tank;
                 }
             case 903:
@@ -38814,25 +38824,25 @@ class EntityFactory {
                         "Tank"
                     ]).setTimesToSpawn(12).setMaxAmountPerTime(3);
                     spawner.setSkin({
-                        assetName: "eagle"
+                        assetName: "empty",
+                        hitboxWidth: 32,
+                        hitboxHeight: 32
                     });
                     return spawner;
+                }
+            case 919:
+                {
+                    const counter = new (0, _inWorldEventCounter.InWorldEventCounter)();
+                    counter.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
+                    counter.timesToCount(12).setEventToCount("entity_destroyed_player2").onCountEnded(()=>{
+                        (0, _eventManager.EventManager).notify("team_lost", counter.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+                    });
+                    return counter;
                 }
             case 921:
                 {
                     const buff = new (0, _buff.Buff)();
-                    const buff_types = [
-                        (0, _assetsVars.Assets).Bonuses.BONUS_IMMORTAL,
-                        (0, _assetsVars.Assets).Bonuses.BONUS_LIVE,
-                        (0, _assetsVars.Assets).Bonuses.BONUS_SLOW,
-                        (0, _assetsVars.Assets).Bonuses.BONUS_SPEED,
-                        (0, _assetsVars.Assets).Bonuses.BONUS_TRACTOR
-                    ];
-                    buff.type = buff_types[Math.floor((0, _utils.randNum)(buff_types.length))];
-                    buff.setSkin({
-                        assetName: buff.type
-                    });
-                    let spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(buff).setTimeBetweenSpawns(150).setCollisionGroup([
+                    let spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(buff).setTimeBetweenSpawns(1200).setCollisionGroup([
                         "Tank"
                     ]).setTimesToSpawn(1000).setMaxAmountPerTime(1);
                     spawner.setSkin({
@@ -38857,118 +38867,7 @@ class EntityFactory {
     }
 }
 
-},{"./behaviors/control/player-control-component":"eT9lB","./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/wall":"4V1eD","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./interactive/buff":"8zU8G","../assets-vars":"cBooq","./interactive/base":"dC7wV","./interactive/spawners/amount-based-spawner":"lpKso","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/tractor":"hc7Oq"}],"eT9lB":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "PlayerControlComponent", ()=>PlayerControlComponent);
-var _abstractControlComponent = require("./abstract-control-component");
-var _eventManager = require("../../../event-manager");
-class PlayerControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
-    action = ()=>{};
-    constructor(source){
-        super(source);
-        (0, _eventManager.EventManager).subscribe("keydown", this);
-        (0, _eventManager.EventManager).subscribe("keyup", this);
-    }
-    onEvent(event, data) {
-        if (event == "keydown") switch(data){
-            case "ArrowUp":
-                this.action = this.triggerActionUp;
-                break;
-            case "w":
-                this.action = this.triggerActionUp;
-                break;
-            case "ArrowDown":
-                this.action = this.triggerActionDown;
-                break;
-            case "s":
-                this.action = this.triggerActionDown;
-                break;
-            case "ArrowLeft":
-                this.action = this.triggerActionLeft;
-                break;
-            case "a":
-                this.action = this.triggerActionLeft;
-                break;
-            case "ArrowRight":
-                this.action = this.triggerActionRight;
-                break;
-            case "d":
-                this.action = this.triggerActionRight;
-                break;
-            case " ":
-                this.action = this.triggerActionSpace;
-                break;
-        }
-        if (event == "keyup") this.action = ()=>{};
-    }
-    update(dt) {
-        super.update(dt);
-        this.action();
-    }
-    clone() {
-        return new PlayerControlComponent(this);
-    }
-}
-
-},{"./abstract-control-component":"8sX8j","../../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8sX8j":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractControlComponent", ()=>AbstractControlComponent);
-var _abstractComponent = require("../AbstractComponent");
-class AbstractControlComponent extends (0, _abstractComponent.AbstractComponent) {
-    _typeID = "control";
-    onActionDown(callback) {
-        this.actionDownCallback = callback;
-    }
-    onActionLeft(callback) {
-        this.actionLeftCallback = callback;
-    }
-    onActionRight(callback) {
-        this.actionRightCallback = callback;
-    }
-    onActionSpace(callback) {
-        this.actionSpaceCallback = callback;
-    }
-    onActionUp(callback) {
-        this.actionUpCallback = callback;
-    }
-    triggerActionDown() {
-        if (this.actionDownCallback) this.actionDownCallback();
-    }
-    triggerActionLeft() {
-        if (this.actionLeftCallback) this.actionLeftCallback();
-    }
-    triggerActionRight() {
-        if (this.actionRightCallback) this.actionRightCallback();
-    }
-    triggerActionSpace() {
-        if (this.actionSpaceCallback) this.actionSpaceCallback();
-    }
-    triggerActionUp() {
-        if (this.actionUpCallback) this.actionUpCallback();
-    }
-    update(dt) {}
-}
-
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2LLYT":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractComponent", ()=>AbstractComponent);
-class AbstractComponent {
-    _typeID = "";
-    constructor(source){}
-    get typeID() {
-        return this._typeID;
-    }
-    setEntity(entity) {
-        this._entity = entity;
-        return this;
-    }
-    update(dt) {}
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"M0rnZ":[function(require,module,exports) {
+},{"./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","./behaviors/control/player-control-component":"eT9lB","./tiles/wall":"4V1eD","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/base":"dC7wV","./interactive/spawners/amount-based-spawner":"lpKso","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/tractor":"hc7Oq","./interactive/buff":"8zU8G","./behaviors/destroy/basic-destroy-component":"7tCQV","../event-manager":"l75gk","./behaviors/team/abstract-team-component":"9vUi2","./interactive/in-world-event-counter":"e82Po"}],"M0rnZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BasicTeamComponent", ()=>BasicTeamComponent);
@@ -39005,7 +38904,24 @@ class AbstractTeamComponent extends (0, _abstractComponent.AbstractComponent) {
     }
 }
 
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bJjwP":[function(require,module,exports) {
+},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2LLYT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractComponent", ()=>AbstractComponent);
+class AbstractComponent {
+    _typeID = "";
+    constructor(source){}
+    get typeID() {
+        return this._typeID;
+    }
+    setEntity(entity) {
+        this._entity = entity;
+        return this;
+    }
+    update(dt) {}
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bJjwP":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Tank", ()=>Tank);
@@ -39091,23 +39007,39 @@ class Tank extends (0, _entity.Entity) {
         let collisionGroup = [
             ...tileMap[tilePos.y][tilePos.x]
         ];
+        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y][tilePos.x - 1]
+        ];
+        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y][tilePos.x + 1]
+        ];
+        if (tileMap[tilePos.y + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y + 1][tilePos.x]
+        ];
+        if (tileMap[tilePos.y - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y - 1][tilePos.x]
+        ];
         if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
             ...collisionGroup,
             ...tileMap[vectorTilePos.y][vectorTilePos.x]
         ];
-        if (vectorTilePos.y != 0 && tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
             ...collisionGroup,
             ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
         ];
-        if (vectorTilePos.y != 0 && tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
             ...collisionGroup,
             ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
         ];
-        if (vectorTilePos.x != 0 && tileMap[vectorTilePos.y + 1]) collisionGroup = [
+        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
             ...collisionGroup,
             ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
         ];
-        if (vectorTilePos.x != 0 && tileMap[vectorTilePos.y - 1]) collisionGroup = [
+        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
             ...collisionGroup,
             ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
         ];
@@ -39131,11 +39063,12 @@ class Tank extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../fx/big-explosion":"4vaID","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../utils/utils":"ea5wt","../behaviors/buffs/immortal-buff-component":"85AQc"}],"5vwA6":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../fx/big-explosion":"4vaID","../../utils/utils":"ea5wt","../behaviors/buffs/immortal-buff-component":"85AQc"}],"5vwA6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Entity", ()=>Entity);
 var _pixiJs = require("pixi.js");
+var _abstractDestroyComponent = require("./behaviors/destroy/abstract-destroy-component");
 class Entity extends (0, _pixiJs.Container) {
     _components = [];
     _initOnUpdate = true;
@@ -39246,9 +39179,34 @@ class Entity extends (0, _pixiJs.Container) {
         }
     }
     onEvent(event, data) {}
+    destroy(_options) {
+        super.destroy(_options);
+        if (this.getComponent((0, _abstractDestroyComponent.AbstractDestroyComponent))) this.getComponent((0, _abstractDestroyComponent.AbstractDestroyComponent)).destroy();
+    }
 }
 
-},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4jmrJ":[function(require,module,exports) {
+},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./behaviors/destroy/abstract-destroy-component":"8IMJl"}],"8IMJl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractDestroyComponent", ()=>AbstractDestroyComponent);
+var _abstractComponent = require("../AbstractComponent");
+class AbstractDestroyComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "destroy";
+    _destroyCallback = ()=>{};
+    constructor(source){
+        super(source);
+        if (source?._destroyCallback) this._destroyCallback = source._destroyCallback;
+    }
+    onDestroy(callback) {
+        this._destroyCallback = callback;
+        return this;
+    }
+    destroy() {
+        this._destroyCallback();
+    }
+}
+
+},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4jmrJ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DirectionalWalkMovementBehavior", ()=>DirectionalWalkMovementBehavior);
@@ -39302,7 +39260,11 @@ class AbstractMovementComponent extends (0, _abstractComponent.AbstractComponent
     get rotationVector() {
         const radAngle = (this._entity.angle - 90) * (Math.PI / 180);
         const vector = new (0, _pixiJs.Point)((Math.abs(Math.cos(radAngle)) != 1 ? 0 : Math.cos(radAngle)) * this._entity.width, (Math.abs(Math.sin(radAngle)) != 1 ? 0 : Math.sin(radAngle)) * this._entity.height);
-        return new (0, _pixiJs.Point)(this._entity.x + (vector.x >= 0 ? Math.ceil(vector.x / this._entity.width) : Math.floor(vector.x / this._entity.width)), this._entity.y + (vector.y >= 0 ? Math.ceil(vector.y / this._entity.width) : Math.floor(vector.y / this._entity.width)));
+        // return new Point(
+        //     this._entity.x + (vector.x >= 0 ? Math.ceil(vector.x / this._entity.width) : Math.floor(vector.x / this._entity.width)),
+        //     this._entity.y + (vector.y >= 0 ? Math.ceil(vector.y / this._entity.width) : Math.floor(vector.y / this._entity.width))
+        // )
+        return new (0, _pixiJs.Point)(this._entity.x + vector.x, this._entity.y + vector.y);
     }
     setRotationSpeed(speed) {
         this._rotationSpeed = speed;
@@ -39367,6 +39329,46 @@ class AbstractWeaponComponent extends (0, _abstractComponent.AbstractComponent) 
     }
 }
 
+},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8sX8j":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractControlComponent", ()=>AbstractControlComponent);
+var _abstractComponent = require("../AbstractComponent");
+class AbstractControlComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "control";
+    onActionDown(callback) {
+        this.actionDownCallback = callback;
+    }
+    onActionLeft(callback) {
+        this.actionLeftCallback = callback;
+    }
+    onActionRight(callback) {
+        this.actionRightCallback = callback;
+    }
+    onActionSpace(callback) {
+        this.actionSpaceCallback = callback;
+    }
+    onActionUp(callback) {
+        this.actionUpCallback = callback;
+    }
+    triggerActionDown() {
+        if (this.actionDownCallback) this.actionDownCallback();
+    }
+    triggerActionLeft() {
+        if (this.actionLeftCallback) this.actionLeftCallback();
+    }
+    triggerActionRight() {
+        if (this.actionRightCallback) this.actionRightCallback();
+    }
+    triggerActionSpace() {
+        if (this.actionSpaceCallback) this.actionSpaceCallback();
+    }
+    triggerActionUp() {
+        if (this.actionUpCallback) this.actionUpCallback();
+    }
+    update(dt) {}
+}
+
 },{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j2Wc6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -39392,7 +39394,7 @@ class AppearFX extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cBooq":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"cBooq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Assets", ()=>Assets);
@@ -39414,6 +39416,13 @@ let Assets;
         static BONUS_SLOW = "bonus_slow";
         static BONUS_SPEED = "bonus_speed";
         static BONUS_TRACTOR = "bonus_tractor";
+        static BUFF_TYPES = [
+            this.BONUS_IMMORTAL,
+            this.BONUS_LIVE,
+            this.BONUS_SLOW,
+            this.BONUS_SPEED,
+            this.BONUS_TRACTOR
+        ];
     }
     Assets1.Bonuses = Bonuses;
     class Buttons {
@@ -39474,7 +39483,7 @@ class BasicAabbCollisionComponent extends (0, _abstractCollisionComponent.Abstra
     }
 }
 
-},{"./abstract-collision-component":"6rzC8","../../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6rzC8":[function(require,module,exports) {
+},{"./abstract-collision-component":"6rzC8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../utils/utils":"ea5wt"}],"6rzC8":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AbstractCollisionComponent", ()=>AbstractCollisionComponent);
@@ -39517,7 +39526,7 @@ function AABB(a, b) {
     return a.x - a.width / 2 < b.x + b.width / 2 && a.x + a.width / 2 > b.x - b.width / 2 && a.y - a.height / 2 < b.y + b.height / 2 && a.y + a.height / 2 > b.y - b.height / 2;
 }
 
-},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4vaID":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin"}],"4vaID":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BigExplosionFX", ()=>BigExplosionFX);
@@ -39547,7 +39556,7 @@ class BigExplosionFX extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Vjgk":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq"}],"5Vjgk":[function(require,module,exports) {
 var global = arguments[3];
 /*!
  *  howler.js v2.2.3
@@ -42096,7 +42105,7 @@ class HardWall extends (0, _entity.Entity) {
     }
 }
 
-},{"../../assets-vars":"cBooq","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gs9Hp":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"gs9Hp":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Leaves", ()=>Leaves);
@@ -42116,59 +42125,7 @@ class Leaves extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../../utils/utils":"ea5wt","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4V1eD":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Wall", ()=>Wall);
-var _entity = require("../entity");
-var _smallWall = require("./small-wall");
-var _sceneManager = require("../../scene-manager");
-var _assetsVars = require("../../assets-vars");
-var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
-class Wall extends (0, _entity.Entity) {
-    update(dt) {
-        super.update(dt);
-        for(let i = 0; i < 2; i++)for(let j = 0; j < 2; j++){
-            let swall = new (0, _smallWall.SmallWall)();
-            swall.setSkin({
-                assetName: (0, _assetsVars.Assets).Tiles.SMALL_WALL
-            });
-            swall.x = this.x - swall.width / 2 + swall.width * j;
-            swall.y = this.y - swall.height / 2 + swall.height * i;
-            (0, _sceneManager.SceneManager).currentScene.addChild(swall);
-        }
-        this.destroy();
-    }
-    constructor(){
-        super();
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
-    }
-}
-
-},{"../entity":"5vwA6","./small-wall":"ckGaW","../../scene-manager":"2FQ8z","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/movement/projectile-movement-component":"25Jss"}],"ckGaW":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SmallWall", ()=>SmallWall);
-var _entity = require("../entity");
-class SmallWall extends (0, _entity.Entity) {
-}
-
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"25Jss":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "ProjectileMovementComponent", ()=>ProjectileMovementComponent);
-var _abstractMovementComponent = require("./abstract-movement-component");
-class ProjectileMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
-    setMovementVector(vector) {
-        this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
-        return super.setMovementVector(vector);
-    }
-    clone() {
-        return new ProjectileMovementComponent(this);
-    }
-}
-
-},{"./abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h4MBW":[function(require,module,exports) {
+},{"../entity":"5vwA6","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"h4MBW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Water", ()=>Water);
@@ -42183,7 +42140,7 @@ class Water extends (0, _entity.Entity) {
     }
 }
 
-},{"../../assets-vars":"cBooq","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9oAyj":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-vars":"cBooq"}],"9oAyj":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "RandomControlComponent", ()=>RandomControlComponent);
@@ -42256,7 +42213,7 @@ class EnemyBulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWe
     }
 }
 
-},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","../../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6c7ss":[function(require,module,exports) {
+},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../assets-vars":"cBooq"}],"6c7ss":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Bullet", ()=>Bullet);
@@ -42337,6 +42294,22 @@ class Bullet extends (0, _entity.Entity) {
             ...collisionGroup,
             ...tileMap[vectorTilePos.y][vectorTilePos.x]
         ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
+        ];
+        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
+        ];
         this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
     }
     update(dt) {
@@ -42346,7 +42319,22 @@ class Bullet extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/projectile-movement-component":"25Jss","../../scene-manager":"2FQ8z","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/small-explosion":"hcHEv","../behaviors/team/basic-team-component":"M0rnZ","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../vars":"7QgFK","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../fx/big-explosion":"4vaID","../../utils/utils":"ea5wt"}],"hcHEv":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/projectile-movement-component":"25Jss","../../scene-manager":"2FQ8z","../behaviors/movement/abstract-movement-component":"4Zsay","../behaviors/team/basic-team-component":"M0rnZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../fx/small-explosion":"hcHEv","../fx/big-explosion":"4vaID","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../vars":"7QgFK","../../utils/utils":"ea5wt"}],"25Jss":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ProjectileMovementComponent", ()=>ProjectileMovementComponent);
+var _abstractMovementComponent = require("./abstract-movement-component");
+class ProjectileMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
+    setMovementVector(vector) {
+        this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
+        return super.setMovementVector(vector);
+    }
+    clone() {
+        return new ProjectileMovementComponent(this);
+    }
+}
+
+},{"./abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hcHEv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SmallExplosionFX", ()=>SmallExplosionFX);
@@ -42376,7 +42364,7 @@ class SmallExplosionFX extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7QgFK":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq"}],"7QgFK":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Vars", ()=>Vars);
@@ -42396,431 +42384,98 @@ let Vars;
     Vars1.GameObjects = GameObjects;
 })(Vars || (Vars = {}));
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8zU8G":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eT9lB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Buff", ()=>Buff);
-var _assetsVars = require("../../assets-vars");
-var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
-var _liveBuffComponent = require("../behaviors/buffs/live-buff-component");
-var _slowBuffComponent = require("../behaviors/buffs/slow-buff-component");
-var _spawnTractorBuffComponentCopy = require("../behaviors/buffs/spawn-tractor-buff-component copy");
-var _speedBuffComponentCopy = require("../behaviors/buffs/speed-buff-component copy");
-var _entity = require("../entity");
-class Buff extends (0, _entity.Entity) {
+parcelHelpers.export(exports, "PlayerControlComponent", ()=>PlayerControlComponent);
+var _abstractControlComponent = require("./abstract-control-component");
+var _eventManager = require("../../../event-manager");
+class PlayerControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
+    action = ()=>{};
     constructor(source){
         super(source);
-        this.type = source?._type || "";
+        (0, _eventManager.EventManager).subscribe("keydown", this);
+        (0, _eventManager.EventManager).subscribe("keyup", this);
     }
-    set type(value) {
-        this._type = value;
-    }
-    get type() {
-        return this._type;
-    }
-    getBuff() {
-        switch(this._type){
-            case (0, _assetsVars.Assets).Bonuses.BONUS_SPEED:
-                return new (0, _speedBuffComponentCopy.SpeedBuffComponent)().applyBuff(180);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_IMMORTAL:
-                return new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(180);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_LIVE:
-                return new (0, _liveBuffComponent.LiveBuffComponent)().applyBuff(0);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_SLOW:
-                return new (0, _slowBuffComponent.SlowBuffComponent)().applyBuff(180);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_TRACTOR:
-                return new (0, _spawnTractorBuffComponentCopy.SpawnTractorBuffComponent)().applyBuff(0);
-            default:
+    onEvent(event, data) {
+        if (event == "keydown") switch(data){
+            case "ArrowUp":
+                this.action = this.triggerActionUp;
+                break;
+            case "w":
+                this.action = this.triggerActionUp;
+                break;
+            case "ArrowDown":
+                this.action = this.triggerActionDown;
+                break;
+            case "s":
+                this.action = this.triggerActionDown;
+                break;
+            case "ArrowLeft":
+                this.action = this.triggerActionLeft;
+                break;
+            case "a":
+                this.action = this.triggerActionLeft;
+                break;
+            case "ArrowRight":
+                this.action = this.triggerActionRight;
+                break;
+            case "d":
+                this.action = this.triggerActionRight;
+                break;
+            case " ":
+                this.action = this.triggerActionSpace;
                 break;
         }
-    }
-    clone() {
-        return new Buff(this);
-    }
-}
-
-},{"../../assets-vars":"cBooq","../behaviors/buffs/speed-buff-component copy":"ertEe","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/buffs/slow-buff-component":"9mnDN","../behaviors/buffs/live-buff-component":"2TMKl","../behaviors/buffs/immortal-buff-component":"85AQc","../behaviors/buffs/spawn-tractor-buff-component copy":"fxhye"}],"ertEe":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SpeedBuffComponent", ()=>SpeedBuffComponent);
-var _abstractBuffComponent = require("./abstract-buff-component");
-class SpeedBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
-    _typeID = "buff-speed";
-    firstUpdate() {
-        this._propToChange = "speed";
-        this._changeTo = this._entity[this._propToChange] * 2;
-        super.firstUpdate();
-    }
-    clone() {
-        return new SpeedBuffComponent(this);
-    }
-}
-
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9mnDN":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SlowBuffComponent", ()=>SlowBuffComponent);
-var _abstractBuffComponent = require("./abstract-buff-component");
-class SlowBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
-    _typeID = "buff-speed";
-    firstUpdate() {
-        this._propToChange = "speed";
-        this._changeTo = this._entity[this._propToChange] / 2;
-        super.firstUpdate();
-    }
-    clone() {
-        return new SlowBuffComponent(this);
-    }
-}
-
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2TMKl":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "LiveBuffComponent", ()=>LiveBuffComponent);
-var _abstractBuffComponent = require("./abstract-buff-component");
-class LiveBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
-    _typeID = "buff-live";
-    firstUpdate() {
-        this._propToChange = "health";
-        this._changeTo = this._entity[this._propToChange] + 1;
-        super.firstUpdate();
-    }
-    clone() {
-        return new LiveBuffComponent(this);
-    }
-}
-
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fxhye":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SpawnTractorBuffComponent", ()=>SpawnTractorBuffComponent);
-var _sceneManager = require("../../../scene-manager");
-var _tractor = require("../../interactive/tractor");
-var _randomControlComponent = require("../control/random-control-component");
-var _abstractMovementComponent = require("../movement/abstract-movement-component");
-var _abstractTeamComponent = require("../team/abstract-team-component");
-var _basicTeamComponent = require("../team/basic-team-component");
-var _abstractBuffComponent = require("./abstract-buff-component");
-class SpawnTractorBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
-    _typeID = "buff-spawn";
-    firstUpdate() {
-        const tractor = new (0, _tractor.Tractor)();
-        tractor.setSkin({
-            assetName: "tractor",
-            scaleX: 1.2,
-            numberOfFrames: 4
-        });
-        tractor.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
-        if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) tractor.setComponent(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).clone());
-        else tractor.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("wild-tractor"));
-        if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
-            const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
-            tractor.x = vec.x * 1.1;
-            tractor.y = vec.y * 1.1;
-        } else {
-            tractor.x = this._entity.x;
-            tractor.y = this._entity.y;
-        }
-        (0, _sceneManager.SceneManager).currentScene.addChild(tractor);
-        super.firstUpdate();
-    }
-    clone() {
-        return new SpawnTractorBuffComponent(this);
-    }
-}
-
-},{"../../interactive/tractor":"hc7Oq","../control/random-control-component":"9oAyj","../movement/abstract-movement-component":"4Zsay","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../scene-manager":"2FQ8z"}],"hc7Oq":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Tractor", ()=>Tractor);
-var _entity = require("../entity");
-var _pixiJs = require("pixi.js");
-var _directWalkMovementComponent = require("../behaviors/movement/direct-walk-movement-component");
-var _sceneManager = require("../../scene-manager");
-var _abstractWeaponComponent = require("../behaviors/weapon/abstract-weapon-component");
-var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
-var _abstractMovementComponent = require("../behaviors/movement/abstract-movement-component");
-var _appear = require("../fx/appear");
-var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
-var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
-var _utils = require("../../utils/utils");
-var _bigExplosion = require("../fx/big-explosion");
-var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
-class Tractor extends (0, _entity.Entity) {
-    constructor(source){
-        super(source);
-        this.speed = source?.speed || 3;
-        this.health = source?.health || 1;
-        this.setComponent(new (0, _directWalkMovementComponent.DirectionalWalkMovementBehavior)());
-        this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
-            if (object == this) return;
-            switch(object.entityType){
-                case "HardWall":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "SmallWall":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "Water":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "Tank":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
-                    object.takeDamage(1);
-                    break;
-                case "Tractor":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
-                    object.takeDamage(1);
-                    break;
-                case "Buff":
-                    this.setComponent(object.getBuff());
-                    object.destroy();
-            }
-        }));
-    }
-    clone() {
-        return new Tractor(this);
-    }
-    takeDamage(damage) {
-        this.health -= damage;
-    }
-    setComponent(component) {
-        super.setComponent(component);
-        if (this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)) && this._initOnUpdate) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).onEntityMoved((vector)=>{
-            this._skin.loop = false;
-            if (!this._skin.playing) this._skin.gotoAndPlay(0);
-        });
-        if (Object.getPrototypeOf(component) instanceof (0, _abstractControlComponent.AbstractControlComponent)) {
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionUp(()=>{
-                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, -this.speed));
-            });
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionDown(()=>{
-                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, this.speed));
-            });
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionRight(()=>{
-                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(this.speed, 0));
-            });
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionLeft(()=>{
-                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(-this.speed, 0));
-            });
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionSpace(()=>{
-                if (this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent))) this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent)).fire();
-            });
-        }
-    }
-    updateTilingData(tileMap, tileSize) {
-        const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
-        const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
-        if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
-        let collisionGroup = [
-            ...tileMap[tilePos.y][tilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x]
-        ];
-        if (vectorTilePos.y != 0 && tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
-        ];
-        if (vectorTilePos.y != 0 && tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
-        ];
-        if (vectorTilePos.x != 0 && tileMap[vectorTilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
-        ];
-        if (vectorTilePos.x != 0 && tileMap[vectorTilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
-        ];
-        this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
+        if (event == "keyup") this.action = ()=>{};
     }
     update(dt) {
-        if (this.health <= 0) {
-            const fx = new (0, _bigExplosion.BigExplosionFX)();
-            fx.x = this.x;
-            fx.y = this.y;
-            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
-            this.destroy();
-        }
-        if (this._initOnUpdate) {
-            const fx = new (0, _appear.AppearFX)();
-            fx.x = this.x;
-            fx.y = this.y;
-            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
-        }
         super.update(dt);
-    }
-}
-
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/team/abstract-team-component":"9vUi2"}],"dC7wV":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Base", ()=>Base);
-var _entity = require("../entity");
-var _sceneManager = require("../../scene-manager");
-var _appear = require("../fx/appear");
-var _eventManager = require("../../event-manager");
-var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
-class Base extends (0, _entity.Entity) {
-    constructor(source){
-        super(source);
+        this.action();
     }
     clone() {
-        return new Base(this);
-    }
-    onEvent(event, data) {}
-    destroy(options) {
-        super.destroy(options);
-        if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) (0, _eventManager.EventManager).notify("team_lost", this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
-    }
-    update(dt) {
-        if (this._initOnUpdate) {
-            const fx = new (0, _appear.AppearFX)();
-            fx.x = this.x;
-            fx.y = this.y;
-            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
-        }
-        super.update(dt);
+        return new PlayerControlComponent(this);
     }
 }
 
-},{"../entity":"5vwA6","../../scene-manager":"2FQ8z","../fx/appear":"j2Wc6","../../event-manager":"l75gk","../behaviors/team/abstract-team-component":"9vUi2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lpKso":[function(require,module,exports) {
+},{"./abstract-control-component":"8sX8j","../../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4V1eD":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AmountBasedSpawner", ()=>AmountBasedSpawner);
-var _spawner = require("./spawner");
-var _basicAabbCollisionComponent = require("../../behaviors/collision/basic-aabb-collision-component");
-var _abstractCollisionComponent = require("../../behaviors/collision/abstract-collision-component");
-var _utils = require("../../../utils/utils");
-var _projectileMovementComponent = require("../../behaviors/movement/projectile-movement-component");
-class AmountBasedSpawner extends (0, _spawner.Spawner) {
-    _entities = [];
-    _timeBetweenSpawns = 0;
-    _collisionGroup = [];
-    _collides = false;
-    constructor(source){
-        super(source);
-        this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
-            if (object == this) return;
-            if (this._collisionGroup.includes(object.entityType)) this._collides = true;
-        }));
+parcelHelpers.export(exports, "Wall", ()=>Wall);
+var _entity = require("../entity");
+var _smallWall = require("./small-wall");
+var _sceneManager = require("../../scene-manager");
+var _assetsVars = require("../../assets-vars");
+var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
+class Wall extends (0, _entity.Entity) {
+    update(dt) {
+        super.update(dt);
+        for(let i = 0; i < 2; i++)for(let j = 0; j < 2; j++){
+            let swall = new (0, _smallWall.SmallWall)();
+            swall.setSkin({
+                assetName: (0, _assetsVars.Assets).Tiles.SMALL_WALL
+            });
+            swall.x = this.x - swall.width / 2 + swall.width * j;
+            swall.y = this.y - swall.height / 2 + swall.height * i;
+            (0, _sceneManager.SceneManager).currentScene.addChild(swall);
+        }
+        this.destroy();
+    }
+    constructor(){
+        super();
         this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
     }
-    clone() {
-        return new AmountBasedSpawner(this);
-    }
-    setTimeBetweenSpawns(time) {
-        this._timeBetweenSpawns = time;
-        return this;
-    }
-    setTimesToSpawn(times) {
-        this._timesToSpawn = times;
-        return this;
-    }
-    setMaxAmountPerTime(amount) {
-        this._maxAmountPerTime = amount;
-        return this;
-    }
-    setCollisionGroup(collisionGroup) {
-        this._collisionGroup = collisionGroup;
-        return this;
-    }
-    setPrototypeEntity(entity) {
-        return super.setPrototypeEntity(entity);
-    }
-    updateTilingData(tileMap, tileSize) {
-        const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
-        if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos)) return;
-        let collisionGroup = [
-            ...tileMap[tilePos.y][tilePos.x]
-        ];
-        this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
-    }
-    update(dt) {
-        super.update(dt);
-        if (this._timesToSpawn && this._dttimer > this._timeBetweenSpawns && !this._collides) {
-            this._dttimer = 0;
-            this._entities = this._entities.filter((entity)=>{
-                return !entity.destroyed;
-            });
-            if (this._entities.length < this._maxAmountPerTime) {
-                this._entities.push(this.spawn());
-                this._timesToSpawn--;
-            }
-        }
-        if (this._timesToSpawn <= 0) this.destroy();
-        this._collides = false;
-    }
 }
 
-},{"./spawner":"4Uxgq","../../behaviors/collision/basic-aabb-collision-component":"iix3J","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../behaviors/collision/abstract-collision-component":"6rzC8","../../../utils/utils":"ea5wt","../../behaviors/movement/projectile-movement-component":"25Jss"}],"4Uxgq":[function(require,module,exports) {
+},{"../entity":"5vwA6","./small-wall":"ckGaW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../scene-manager":"2FQ8z","../../assets-vars":"cBooq","../behaviors/movement/projectile-movement-component":"25Jss"}],"ckGaW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Spawner", ()=>Spawner);
-var _entity = require("../../entity");
-var _sceneManager = require("../../../scene-manager");
-class Spawner extends (0, _entity.Entity) {
-    _dttimer = 0;
-    _timeBetweenSpawns = 0;
-    setPrototypeEntity(entity) {
-        this._prototypeEntity = entity;
-        return this;
-    }
-    update(dt) {
-        super.update(dt);
-        this._dttimer += dt;
-    }
-    spawn() {
-        const entity = this._prototypeEntity.clone();
-        entity.x = this.x;
-        entity.y = this.y;
-        (0, _sceneManager.SceneManager).currentScene.addChild(entity);
-        return entity;
-    }
+parcelHelpers.export(exports, "SmallWall", ()=>SmallWall);
+var _entity = require("../entity");
+class SmallWall extends (0, _entity.Entity) {
 }
 
-},{"../../entity":"5vwA6","../../../scene-manager":"2FQ8z","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jb7yn":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BulletWeaponComponent", ()=>BulletWeaponComponent);
-var _abstractWeaponComponent = require("./abstract-weapon-component");
-var _bullet = require("../../interactive/bullet");
-var _sceneManager = require("../../../scene-manager");
-var _abstractTeamComponent = require("../team/abstract-team-component");
-var _basicTeamComponent = require("../team/basic-team-component");
-var _assetsVars = require("../../../assets-vars");
-var _abstractMovementComponent = require("../movement/abstract-movement-component");
-class BulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWeaponComponent) {
-    fire() {
-        if (!this._reloaded) return;
-        super.fire();
-        const bullet = new (0, _bullet.Bullet)();
-        bullet.setSkin({
-            assetName: (0, _assetsVars.Assets).Bullets.BULLET
-        });
-        if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) bullet.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
-        if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
-            const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
-            bullet.x = vec.x;
-            bullet.y = vec.y;
-        } else {
-            bullet.x = this._entity.x;
-            bullet.y = this._entity.y;
-        }
-        (0, _sceneManager.SceneManager).currentScene.addChild(bullet);
-        bullet.launch(this._entity.angle);
-    }
-    clone() {
-        return new BulletWeaponComponent(this);
-    }
-}
-
-},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","../../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../movement/abstract-movement-component":"4Zsay"}],"lUX9i":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lUX9i":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "WanderingAmountBasedSpawner", ()=>WanderingAmountBasedSpawner);
@@ -42904,7 +42559,523 @@ class WanderingAmountBasedSpawner extends (0, _amountBasedSpawner.AmountBasedSpa
     }
 }
 
-},{"../../behaviors/control/random-control-component":"9oAyj","../../behaviors/movement/direct-walk-movement-component":"4jmrJ","./amount-based-spawner":"lpKso","../../behaviors/control/abstract-control-component":"8sX8j","../../behaviors/movement/abstract-movement-component":"4Zsay","pixi.js":"1pSin","../../behaviors/collision/basic-aabb-collision-component":"iix3J","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../utils/utils":"ea5wt","../../behaviors/collision/abstract-collision-component":"6rzC8"}],"9ftod":[function(require,module,exports) {
+},{"../../behaviors/control/random-control-component":"9oAyj","../../behaviors/movement/direct-walk-movement-component":"4jmrJ","./amount-based-spawner":"lpKso","../../behaviors/control/abstract-control-component":"8sX8j","../../behaviors/movement/abstract-movement-component":"4Zsay","pixi.js":"1pSin","../../behaviors/collision/basic-aabb-collision-component":"iix3J","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../utils/utils":"ea5wt","../../behaviors/collision/abstract-collision-component":"6rzC8"}],"lpKso":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AmountBasedSpawner", ()=>AmountBasedSpawner);
+var _spawner = require("./spawner");
+var _basicAabbCollisionComponent = require("../../behaviors/collision/basic-aabb-collision-component");
+var _abstractCollisionComponent = require("../../behaviors/collision/abstract-collision-component");
+var _utils = require("../../../utils/utils");
+var _projectileMovementComponent = require("../../behaviors/movement/projectile-movement-component");
+class AmountBasedSpawner extends (0, _spawner.Spawner) {
+    _entities = [];
+    _timeBetweenSpawns = 0;
+    _collisionGroup = [];
+    _collides = false;
+    constructor(source){
+        super(source);
+        this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
+            if (object == this) return;
+            if (this._collisionGroup.includes(object.entityType)) this._collides = true;
+        }));
+        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+    }
+    clone() {
+        return new AmountBasedSpawner(this);
+    }
+    setTimeBetweenSpawns(time) {
+        this._timeBetweenSpawns = time;
+        return this;
+    }
+    setTimesToSpawn(times) {
+        this._timesToSpawn = times;
+        return this;
+    }
+    setMaxAmountPerTime(amount) {
+        this._maxAmountPerTime = amount;
+        return this;
+    }
+    setCollisionGroup(collisionGroup) {
+        this._collisionGroup = collisionGroup;
+        return this;
+    }
+    setPrototypeEntity(entity) {
+        return super.setPrototypeEntity(entity);
+    }
+    updateTilingData(tileMap, tileSize) {
+        const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
+        if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos)) return;
+        let collisionGroup = [
+            ...tileMap[tilePos.y][tilePos.x]
+        ];
+        this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
+    }
+    update(dt) {
+        super.update(dt);
+        if (this._timesToSpawn && this._dttimer > this._timeBetweenSpawns && !this._collides) {
+            this._dttimer = 0;
+            this._entities = this._entities.filter((entity)=>{
+                return !entity.destroyed;
+            });
+            if (this._entities.length < this._maxAmountPerTime) {
+                this._entities.push(this.spawn());
+                this._timesToSpawn--;
+            }
+        }
+        if (this._timesToSpawn <= 0) this.destroy();
+        this._collides = false;
+    }
+}
+
+},{"./spawner":"4Uxgq","../../behaviors/collision/basic-aabb-collision-component":"iix3J","../../behaviors/collision/abstract-collision-component":"6rzC8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../utils/utils":"ea5wt","../../behaviors/movement/projectile-movement-component":"25Jss"}],"4Uxgq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Spawner", ()=>Spawner);
+var _entity = require("../../entity");
+var _sceneManager = require("../../../scene-manager");
+class Spawner extends (0, _entity.Entity) {
+    _dttimer = 0;
+    _timeBetweenSpawns = 0;
+    setPrototypeEntity(entity) {
+        this._prototypeEntity = entity;
+        return this;
+    }
+    update(dt) {
+        super.update(dt);
+        this._dttimer += dt;
+    }
+    spawn() {
+        const entity = this._prototypeEntity.clone();
+        entity.x = this.x;
+        entity.y = this.y;
+        (0, _sceneManager.SceneManager).currentScene.addChild(entity);
+        return entity;
+    }
+}
+
+},{"../../entity":"5vwA6","../../../scene-manager":"2FQ8z","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dC7wV":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Base", ()=>Base);
+var _entity = require("../entity");
+var _sceneManager = require("../../scene-manager");
+var _appear = require("../fx/appear");
+var _eventManager = require("../../event-manager");
+var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
+class Base extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+    }
+    clone() {
+        return new Base(this);
+    }
+    onEvent(event, data) {}
+    destroy(options) {
+        super.destroy(options);
+        if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) (0, _eventManager.EventManager).notify("team_lost", this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+    }
+    update(dt) {
+        if (this._initOnUpdate) {
+            const fx = new (0, _appear.AppearFX)();
+            fx.x = this.x;
+            fx.y = this.y;
+            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+        }
+        super.update(dt);
+    }
+}
+
+},{"../entity":"5vwA6","../../scene-manager":"2FQ8z","../fx/appear":"j2Wc6","../../event-manager":"l75gk","../behaviors/team/abstract-team-component":"9vUi2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jb7yn":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BulletWeaponComponent", ()=>BulletWeaponComponent);
+var _abstractWeaponComponent = require("./abstract-weapon-component");
+var _bullet = require("../../interactive/bullet");
+var _sceneManager = require("../../../scene-manager");
+var _abstractTeamComponent = require("../team/abstract-team-component");
+var _basicTeamComponent = require("../team/basic-team-component");
+var _assetsVars = require("../../../assets-vars");
+var _abstractMovementComponent = require("../movement/abstract-movement-component");
+class BulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWeaponComponent) {
+    fire() {
+        if (!this._reloaded) return;
+        super.fire();
+        const bullet = new (0, _bullet.Bullet)();
+        bullet.setSkin({
+            assetName: (0, _assetsVars.Assets).Bullets.BULLET
+        });
+        if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) bullet.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
+        if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
+            const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
+            bullet.x = (this._entity.x + vec.x) / 2;
+            bullet.y = (this._entity.y + vec.y) / 2;
+        } else {
+            bullet.x = this._entity.x;
+            bullet.y = this._entity.y;
+        }
+        (0, _sceneManager.SceneManager).currentScene.addChild(bullet);
+        bullet.launch(this._entity.angle);
+    }
+    clone() {
+        return new BulletWeaponComponent(this);
+    }
+}
+
+},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../assets-vars":"cBooq","../movement/abstract-movement-component":"4Zsay"}],"hc7Oq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Tractor", ()=>Tractor);
+var _entity = require("../entity");
+var _pixiJs = require("pixi.js");
+var _directWalkMovementComponent = require("../behaviors/movement/direct-walk-movement-component");
+var _sceneManager = require("../../scene-manager");
+var _abstractWeaponComponent = require("../behaviors/weapon/abstract-weapon-component");
+var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
+var _abstractMovementComponent = require("../behaviors/movement/abstract-movement-component");
+var _appear = require("../fx/appear");
+var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
+var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
+var _utils = require("../../utils/utils");
+var _bigExplosion = require("../fx/big-explosion");
+var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
+var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
+class Tractor extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+        this.speed = source?.speed || 3;
+        this.health = source?.health || 1;
+        this.setComponent(new (0, _directWalkMovementComponent.DirectionalWalkMovementBehavior)());
+        this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
+            if (object == this) return;
+            switch(object.entityType){
+                case "HardWall":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
+                case "SmallWall":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
+                case "Water":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
+                case "Tank":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
+                    object.takeDamage(1);
+                    break;
+                case "Tractor":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
+                    object.takeDamage(1);
+                    break;
+                case "Buff":
+                    this.setComponent(object.getBuff());
+                    object.destroy();
+            }
+        }));
+    }
+    clone() {
+        return new Tractor(this);
+    }
+    takeDamage(damage) {
+        if (this.immortal) return;
+        this.health -= damage;
+        this.setComponent(new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(60));
+    }
+    setComponent(component) {
+        super.setComponent(component);
+        if (this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)) && this._initOnUpdate) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).onEntityMoved((vector)=>{
+            this._skin.loop = false;
+            if (!this._skin.playing) this._skin.gotoAndPlay(0);
+        });
+        if (Object.getPrototypeOf(component) instanceof (0, _abstractControlComponent.AbstractControlComponent)) {
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionUp(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, -this.speed));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionDown(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, this.speed));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionRight(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(this.speed, 0));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionLeft(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(-this.speed, 0));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionSpace(()=>{
+                if (this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent))) this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent)).fire();
+            });
+        }
+    }
+    updateTilingData(tileMap, tileSize) {
+        const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
+        const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
+        if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
+        let collisionGroup = [
+            ...tileMap[tilePos.y][tilePos.x]
+        ];
+        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y][tilePos.x - 1]
+        ];
+        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y][tilePos.x + 1]
+        ];
+        if (tileMap[tilePos.y + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y + 1][tilePos.x]
+        ];
+        if (tileMap[tilePos.y - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y - 1][tilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
+        ];
+        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
+        ];
+        this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
+    }
+    update(dt) {
+        if (this.health <= 0) {
+            const fx = new (0, _bigExplosion.BigExplosionFX)();
+            fx.x = this.x;
+            fx.y = this.y;
+            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+            this.destroy();
+        }
+        if (this._initOnUpdate) {
+            const fx = new (0, _appear.AppearFX)();
+            fx.x = this.x;
+            fx.y = this.y;
+            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+        }
+        super.update(dt);
+    }
+}
+
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8zU8G":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Buff", ()=>Buff);
+var _assetsVars = require("../../assets-vars");
+var _utils = require("../../utils/utils");
+var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
+var _liveBuffComponent = require("../behaviors/buffs/live-buff-component");
+var _slowBuffComponent = require("../behaviors/buffs/slow-buff-component");
+var _spawnTractorBuffComponentCopy = require("../behaviors/buffs/spawn-tractor-buff-component copy");
+var _speedBuffComponentCopy = require("../behaviors/buffs/speed-buff-component copy");
+var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
+var _entity = require("../entity");
+class Buff extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+        this.type = source?._type || "";
+        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+    }
+    set type(value) {
+        this._type = value;
+    }
+    get type() {
+        return this._type;
+    }
+    getBuff() {
+        switch(this._type){
+            case (0, _assetsVars.Assets).Bonuses.BONUS_SPEED:
+                return new (0, _speedBuffComponentCopy.SpeedBuffComponent)().applyBuff(180);
+            case (0, _assetsVars.Assets).Bonuses.BONUS_IMMORTAL:
+                return new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(180);
+            case (0, _assetsVars.Assets).Bonuses.BONUS_LIVE:
+                return new (0, _liveBuffComponent.LiveBuffComponent)().applyBuff(0);
+            case (0, _assetsVars.Assets).Bonuses.BONUS_SLOW:
+                return new (0, _slowBuffComponent.SlowBuffComponent)().applyBuff(180);
+            case (0, _assetsVars.Assets).Bonuses.BONUS_TRACTOR:
+                return new (0, _spawnTractorBuffComponentCopy.SpawnTractorBuffComponent)().applyBuff(0);
+            default:
+                break;
+        }
+    }
+    update(dt) {
+        if (this._initOnUpdate) {
+            this.type = (0, _assetsVars.Assets).Bonuses.BUFF_TYPES[Math.floor((0, _utils.randNum)((0, _assetsVars.Assets).Bonuses.BUFF_TYPES.length))];
+            this.setSkin({
+                assetName: this.type
+            });
+        }
+        super.update(dt);
+    }
+    clone() {
+        return new Buff(this);
+    }
+}
+
+},{"../../assets-vars":"cBooq","../behaviors/buffs/immortal-buff-component":"85AQc","../behaviors/buffs/live-buff-component":"2TMKl","../behaviors/buffs/slow-buff-component":"9mnDN","../behaviors/buffs/spawn-tractor-buff-component copy":"fxhye","../behaviors/buffs/speed-buff-component copy":"ertEe","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/movement/projectile-movement-component":"25Jss","../../utils/utils":"ea5wt"}],"2TMKl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "LiveBuffComponent", ()=>LiveBuffComponent);
+var _abstractBuffComponent = require("./abstract-buff-component");
+class LiveBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
+    _typeID = "buff-live";
+    firstUpdate() {
+        this._propToChange = "health";
+        this._changeTo = this._entity[this._propToChange] + 1;
+        super.firstUpdate();
+    }
+    clone() {
+        return new LiveBuffComponent(this);
+    }
+}
+
+},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9mnDN":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SlowBuffComponent", ()=>SlowBuffComponent);
+var _abstractBuffComponent = require("./abstract-buff-component");
+class SlowBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
+    _typeID = "buff-speed";
+    firstUpdate() {
+        this._propToChange = "speed";
+        this._changeTo = this._entity[this._propToChange] / 2;
+        super.firstUpdate();
+    }
+    clone() {
+        return new SlowBuffComponent(this);
+    }
+}
+
+},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fxhye":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SpawnTractorBuffComponent", ()=>SpawnTractorBuffComponent);
+var _sceneManager = require("../../../scene-manager");
+var _tractor = require("../../interactive/tractor");
+var _randomControlComponent = require("../control/random-control-component");
+var _abstractMovementComponent = require("../movement/abstract-movement-component");
+var _abstractTeamComponent = require("../team/abstract-team-component");
+var _basicTeamComponent = require("../team/basic-team-component");
+var _abstractBuffComponent = require("./abstract-buff-component");
+class SpawnTractorBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
+    _typeID = "buff-spawn";
+    firstUpdate() {
+        const tractor = new (0, _tractor.Tractor)();
+        tractor.setSkin({
+            assetName: "tractor",
+            scaleX: 1.2,
+            numberOfFrames: 4
+        });
+        tractor.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+        if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) tractor.setComponent(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).clone());
+        else tractor.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("wild-tractor"));
+        if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
+            const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
+            tractor.x = this._entity.x * (this._entity.x / vec.x);
+            tractor.y = this._entity.y * (this._entity.y / vec.y);
+        } else {
+            tractor.x = this._entity.x;
+            tractor.y = this._entity.y;
+        }
+        (0, _sceneManager.SceneManager).currentScene.addChild(tractor);
+        super.firstUpdate();
+    }
+    clone() {
+        return new SpawnTractorBuffComponent(this);
+    }
+}
+
+},{"../../../scene-manager":"2FQ8z","../../interactive/tractor":"hc7Oq","../control/random-control-component":"9oAyj","../movement/abstract-movement-component":"4Zsay","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ertEe":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SpeedBuffComponent", ()=>SpeedBuffComponent);
+var _abstractBuffComponent = require("./abstract-buff-component");
+class SpeedBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
+    _typeID = "buff-speed";
+    firstUpdate() {
+        this._propToChange = "speed";
+        this._changeTo = this._entity[this._propToChange] * 2;
+        super.firstUpdate();
+    }
+    clone() {
+        return new SpeedBuffComponent(this);
+    }
+}
+
+},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7tCQV":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BasicDestroyComponent", ()=>BasicDestroyComponent);
+var _abstractDestroyComponent = require("./abstract-destroy-component");
+class BasicDestroyComponent extends (0, _abstractDestroyComponent.AbstractDestroyComponent) {
+    onDestroy(callback) {
+        return super.onDestroy(callback);
+    }
+    clone() {
+        return new BasicDestroyComponent(this);
+    }
+}
+
+},{"./abstract-destroy-component":"8IMJl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"e82Po":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "InWorldEventCounter", ()=>InWorldEventCounter);
+var _entity = require("../entity");
+var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
+var _eventManager = require("../../event-manager");
+class InWorldEventCounter extends (0, _entity.Entity) {
+    _count = 0;
+    _timesToCount = 0;
+    constructor(source){
+        super(source);
+        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+    }
+    get count() {
+        return this._count;
+    }
+    setEventToCount(event) {
+        if (this._eventToCount) (0, _eventManager.EventManager).unsubscribe(this._eventToCount, this);
+        this._eventToCount = event;
+        (0, _eventManager.EventManager).subscribe(this._eventToCount, this);
+        return this;
+    }
+    timesToCount(timesToCount) {
+        this._timesToCount = timesToCount;
+        return this;
+    }
+    onCountEnded(callback) {
+        this._onCountEnded = callback;
+        return this;
+    }
+    update(dt) {
+        super.update(dt);
+        if (this._count >= this._timesToCount) {
+            this._count = 0;
+            if (this._onCountEnded) this._onCountEnded();
+        }
+    }
+    clone() {
+        return new InWorldEventCounter(this);
+    }
+    onEvent(event, data) {
+        super.onEvent(event, data);
+        this._count++;
+    }
+}
+
+},{"../entity":"5vwA6","../behaviors/movement/projectile-movement-component":"25Jss","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9ftod":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loaderAssets", ()=>loaderAssets);
