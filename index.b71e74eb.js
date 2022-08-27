@@ -38627,7 +38627,7 @@ class GameScene extends (0, _scene.Scene) {
                 if (!this.tileMap[rowIndex]) this.tileMap[rowIndex] = [];
                 for (let [tileIndex, tileID] of row.entries()){
                     if (!this.tileMap[rowIndex][tileIndex]) this.tileMap[rowIndex][tileIndex] = [];
-                    let tile = (0, _entityFactory.EntityFactory).getTile(tileID);
+                    let tile = (0, _entityFactory.EntityFactory).getEntity(tileID);
                     if (tile) {
                         tile.x = x;
                         tile.y = y;
@@ -38822,10 +38822,12 @@ var _basicDestroyComponent = require("./behaviors/destroy/basic-destroy-componen
 var _eventManager = require("../event-manager");
 var _abstractTeamComponent = require("./behaviors/team/abstract-team-component");
 var _inWorldEventCounter = require("./interactive/in-world-event-counter");
+var _soldier = require("./interactive/soldier");
+var _atHedgehogs = require("./tiles/at-hedgehogs");
 class EntityFactory {
     constructor(){}
-    static getTile(tileIndex) {
-        switch(tileIndex){
+    static getEntity(entityID) {
+        switch(entityID){
             case 101:
                 {
                     const floor = new (0, _floor.Floor)();
@@ -38848,6 +38850,8 @@ class EntityFactory {
                 return new (0, _hardWall.HardWall)();
             case 202:
                 return new (0, _wall.Wall)();
+            case 203:
+                return new (0, _atHedgehogs.ATHedgehogs)();
             case 211:
                 return new (0, _water.Water)();
             case 901:
@@ -38904,11 +38908,30 @@ class EntityFactory {
                     playerTractor.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player1"));
                     return playerTractor;
                 }
+            case 904:
+                {
+                    const soldier = new (0, _soldier.Soldier)();
+                    soldier.setSkin({
+                        assetName: "soldier",
+                        numberOfFrames: 13,
+                        scaleX: 0.75,
+                        scaleY: 0.5,
+                        animationSpeed: 0.5
+                    });
+                    soldier.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+                    soldier.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
+                    return soldier;
+                }
             case 912:
                 {
-                    const spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(EntityFactory.getTile(902)).setTimeBetweenSpawns(250).setCollisionGroup([
-                        "Tank"
-                    ]).setTimesToSpawn(12).setMaxAmountPerTime(1);
+                    const spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(EntityFactory.getEntity(902)).setTimeBetweenSpawns(250).setCollisionGroup([
+                        "Tank",
+                        "Tractor",
+                        "DeadTank",
+                        "HardWall",
+                        "SmallWall",
+                        "Water"
+                    ]).setTimesToSpawn(4).setMaxAmountPerTime(1);
                     spawner.setSkin({
                         assetName: "empty",
                         hitboxWidth: 32,
@@ -38953,7 +38976,7 @@ class EntityFactory {
     }
 }
 
-},{"./behaviors/control/player-control-component":"eT9lB","./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/wall":"4V1eD","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/buff":"8zU8G","./interactive/base":"dC7wV","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/tractor":"hc7Oq","./behaviors/destroy/basic-destroy-component":"7tCQV","../event-manager":"l75gk","./behaviors/team/abstract-team-component":"9vUi2","./interactive/in-world-event-counter":"e82Po","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eT9lB":[function(require,module,exports) {
+},{"./behaviors/control/player-control-component":"eT9lB","./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/wall":"4V1eD","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/buff":"8zU8G","./interactive/base":"dC7wV","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/tractor":"hc7Oq","./behaviors/destroy/basic-destroy-component":"7tCQV","../event-manager":"l75gk","./behaviors/team/abstract-team-component":"9vUi2","./interactive/in-world-event-counter":"e82Po","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./interactive/soldier":"12agJ","./tiles/at-hedgehogs":"2bpzf"}],"eT9lB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "PlayerControlComponent", ()=>PlayerControlComponent);
@@ -39118,6 +39141,11 @@ var _abstractCollisionComponent = require("../behaviors/collision/abstract-colli
 var _utils = require("../../utils/utils");
 var _bigExplosion = require("../fx/big-explosion");
 var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
+var _soldier = require("./soldier");
+var _randomControlComponent = require("../behaviors/control/random-control-component");
+var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
+var _basicTeamComponent = require("../behaviors/team/basic-team-component");
+var _deadTank = require("../tiles/dead-tank");
 class Tank extends (0, _entity.Entity) {
     constructor(source){
         super(source);
@@ -39130,6 +39158,9 @@ class Tank extends (0, _entity.Entity) {
                 case "HardWall":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
+                case "ATHedgehogs":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
                 case "SmallWall":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
@@ -39139,8 +39170,14 @@ class Tank extends (0, _entity.Entity) {
                 case "Tank":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
+                case "DeadTank":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
                 case "Tractor":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
+                case "Soldier":
+                    object.takeDamage(9999);
                     break;
                 case "Buff":
                     this.setComponent(object.getBuff());
@@ -39227,6 +39264,27 @@ class Tank extends (0, _entity.Entity) {
     }
     update(dt) {
         if (this.health <= 0) {
+            const dead = new (0, _deadTank.DeadTank)();
+            dead.x = this.x;
+            dead.y = this.y;
+            dead.angle = this.angle;
+            (0, _sceneManager.SceneManager).currentScene.addChild(dead);
+            let i = Math.floor((0, _utils.randNum)(3));
+            while(i--){
+                const soldier = new (0, _soldier.Soldier)();
+                soldier.setSkin({
+                    assetName: "soldier",
+                    numberOfFrames: 13,
+                    scaleX: 0.75,
+                    scaleY: 0.5,
+                    animationSpeed: 0.5
+                });
+                soldier.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+                soldier.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
+                soldier.x = this.x;
+                soldier.y = this.y;
+                (0, _sceneManager.SceneManager).currentScene.addChild(soldier);
+            }
             const fx = new (0, _bigExplosion.BigExplosionFX)();
             fx.x = this.x;
             fx.y = this.y;
@@ -39243,7 +39301,7 @@ class Tank extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5vwA6":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./soldier":"12agJ","../behaviors/control/random-control-component":"9oAyj","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/team/basic-team-component":"M0rnZ","../tiles/dead-tank":"5Xr4D"}],"5vwA6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Entity", ()=>Entity);
@@ -39323,6 +39381,7 @@ class Entity extends (0, _pixiJs.Container) {
         this._skin.scale.y = options?.scaleY || this._skin.scale.y;
         if (options?.hitboxWidth) this._hitboxWidth = options.hitboxWidth;
         if (options?.hitboxHeight) this._hitboxHeight = options.hitboxHeight;
+        if (options?.animationSpeed) this._skin.animationSpeed = options.animationSpeed;
     }
     update(dt) {
         if (this.destroyed) return;
@@ -39567,6 +39626,10 @@ var _abstractComponent = require("../AbstractComponent");
 class AbstractCollisionComponent extends (0, _abstractComponent.AbstractComponent) {
     _typeID = "collision";
     _collisionGroup = [];
+    constructor(source){
+        super(source);
+        if (source?._collisionCallback) this._collisionCallback = source._collisionCallback;
+    }
     onCollidedWith(callback) {
         this._collisionCallback = callback;
         return this;
@@ -42152,7 +42215,251 @@ class AbstractBuffComponent extends (0, _abstractComponent.AbstractComponent) {
     }
 }
 
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7694K":[function(require,module,exports) {
+},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"12agJ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Soldier", ()=>Soldier);
+var _entity = require("../entity");
+var _pixiJs = require("pixi.js");
+var _directWalkMovementComponent = require("../behaviors/movement/direct-walk-movement-component");
+var _sceneManager = require("../../scene-manager");
+var _abstractWeaponComponent = require("../behaviors/weapon/abstract-weapon-component");
+var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
+var _abstractMovementComponent = require("../behaviors/movement/abstract-movement-component");
+var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
+var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
+var _utils = require("../../utils/utils");
+var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
+var _deadSoldier = require("../tiles/dead-soldier");
+class Soldier extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+        this.speed = source?.speed || 0.5;
+        this.health = source?.health || 1;
+        this.setComponent(new (0, _directWalkMovementComponent.DirectionalWalkMovementBehavior)());
+        this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
+            if (object == this) return;
+            switch(object.entityType){
+                case "HardWall":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
+                case "SmallWall":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
+                case "Tank":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
+                case "Tractor":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
+            }
+        }));
+    }
+    clone() {
+        return new Soldier(this);
+    }
+    takeDamage(damage) {
+        if (this.immortal) return;
+        this.health -= damage;
+        this.setComponent(new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(60));
+    }
+    setComponent(component) {
+        super.setComponent(component);
+        if (this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)) && this._initOnUpdate) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).onEntityMoved((vector)=>{
+            this._skin.loop = false;
+            if (!this._skin.playing) this._skin.gotoAndPlay(1);
+        });
+        if (Object.getPrototypeOf(component) instanceof (0, _abstractControlComponent.AbstractControlComponent)) {
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionUp(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, -this.speed));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionDown(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, this.speed));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionRight(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(this.speed, 0));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionLeft(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(-this.speed, 0));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionSpace(()=>{
+                if (this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent))) this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent)).fire();
+            });
+        }
+    }
+    updateTilingData(tileMap, tileSize) {
+        const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
+        const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
+        if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
+        let collisionGroup = [
+            ...tileMap[tilePos.y][tilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
+        ];
+        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
+        ];
+        this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
+    }
+    update(dt) {
+        if (this.health <= 0) {
+            const dead = new (0, _deadSoldier.DeadSoldier)();
+            dead.x = this.x;
+            dead.y = this.y;
+            (0, _sceneManager.SceneManager).currentScene.addChild(dead);
+            this.destroy();
+        }
+        super.update(dt);
+        if (this.destroyed) return;
+        if (!this._skin.playing) this._skin.gotoAndStop(0);
+        const scaleX = Math.abs(this._skin.scale.x);
+        if (this.angle == 90) this._skin.scale.x = scaleX;
+        if (this.angle == 270) this._skin.scale.x = -scaleX;
+        this._skin.angle = -this.angle;
+    }
+}
+
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../tiles/dead-soldier":"iETuq"}],"iETuq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "DeadSoldier", ()=>DeadSoldier);
+var _entity = require("../entity");
+class DeadSoldier extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+        this.setSkin({
+            assetName: "dead_soldier"
+        });
+    }
+    clone() {
+        return new DeadSoldier(this);
+    }
+}
+
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9oAyj":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "RandomControlComponent", ()=>RandomControlComponent);
+var _abstractControlComponent = require("./abstract-control-component");
+var _utils = require("../../../utils/utils");
+class RandomControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
+    _actionChangeTimer = 0;
+    _actionChangeDelay = 50;
+    _nextAction = "";
+    constructor(source){
+        super(source);
+        this._actionChangeDelay = (0, _utils.randNum)(100, 10);
+    }
+    update(dt) {
+        super.update(dt);
+        this._actionChangeTimer += dt;
+        if (this._actionChangeTimer > this._actionChangeDelay) {
+            this._actionChangeTimer = 0;
+            const chance = Math.floor((0, _utils.randNum)(6));
+            switch(chance){
+                case 1:
+                    this._nextAction = "Space";
+                    break;
+                case 2:
+                    this._nextAction = "Right";
+                    break;
+                case 3:
+                    this._nextAction = "Left";
+                    break;
+                case 4:
+                    this._nextAction = "Down";
+                    break;
+                case 5:
+                    this._nextAction = "Up";
+                    break;
+                default:
+                    this._nextAction = "";
+                    break;
+            }
+        }
+        if (this._nextAction) this[`triggerAction${this._nextAction}`]();
+    }
+    clone() {
+        return new RandomControlComponent(this);
+    }
+}
+
+},{"./abstract-control-component":"8sX8j","../../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Xr4D":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "DeadTank", ()=>DeadTank);
+var _entity = require("../entity");
+var _sceneManager = require("../../scene-manager");
+var _bigExplosion = require("../fx/big-explosion");
+var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
+var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
+class DeadTank extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+        this.health = source?.health || 1;
+        this.setSkin({
+            assetName: "dead_tank",
+            numberOfFrames: 4,
+            animationSpeed: 0.1
+        });
+        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+    }
+    setSkin(options) {
+        super.setSkin(options);
+        this._skin.loop = true;
+        this._skin.gotoAndPlay(0);
+    }
+    clone() {
+        return new DeadTank(this);
+    }
+    takeDamage(damage) {
+        if (this.immortal) return;
+        this.health -= damage;
+        this.setComponent(new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(60));
+    }
+    update(dt) {
+        if (this.health <= 0) {
+            const fx = new (0, _bigExplosion.BigExplosionFX)();
+            fx.x = this.x;
+            fx.y = this.y;
+            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+            this.destroy();
+        }
+        super.update(dt);
+    }
+}
+
+},{"../entity":"5vwA6","../../scene-manager":"2FQ8z","../fx/big-explosion":"4vaID","../behaviors/buffs/immortal-buff-component":"85AQc","../behaviors/movement/projectile-movement-component":"25Jss","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"25Jss":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ProjectileMovementComponent", ()=>ProjectileMovementComponent);
+var _abstractMovementComponent = require("./abstract-movement-component");
+class ProjectileMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
+    setMovementVector(vector) {
+        this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
+        return super.setMovementVector(vector);
+    }
+    clone() {
+        return new ProjectileMovementComponent(this);
+    }
+}
+
+},{"./abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7694K":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Floor", ()=>Floor);
@@ -42238,32 +42545,19 @@ var _entity = require("../entity");
 class SmallWall extends (0, _entity.Entity) {
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"25Jss":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "ProjectileMovementComponent", ()=>ProjectileMovementComponent);
-var _abstractMovementComponent = require("./abstract-movement-component");
-class ProjectileMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
-    setMovementVector(vector) {
-        this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
-        return super.setMovementVector(vector);
-    }
-    clone() {
-        return new ProjectileMovementComponent(this);
-    }
-}
-
-},{"./abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h4MBW":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h4MBW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Water", ()=>Water);
 var _assetsVars = require("../../assets-vars");
+var _sceneManager = require("../../scene-manager");
 var _utils = require("../../utils/utils");
 var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
 var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
 var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
 var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
 var _entity = require("../entity");
+var _splash = require("../fx/splash");
 class Water extends (0, _entity.Entity) {
     constructor(source){
         super(source);
@@ -42278,6 +42572,9 @@ class Water extends (0, _entity.Entity) {
                     this.drown(object);
                     break;
                 case "Tractor":
+                    this.drown(object);
+                    break;
+                case "Soldier":
                     this.drown(object);
                     break;
             }
@@ -42304,8 +42601,14 @@ class Water extends (0, _entity.Entity) {
     update(dt) {
         super.update(dt);
         if (this._objectToDrown && !this._objectToDrown.destroyed) {
-            this._objectToDrown.scale.x = this._objectToDrown.scale.y -= 0.01;
-            if (this._objectToDrown.scale.x <= 0) this._objectToDrown.destroy();
+            this._objectToDrown.scale.x = this._objectToDrown.scale.y -= 0.005;
+            if (this._objectToDrown.scale.x <= 0.75) {
+                this._objectToDrown.destroy();
+                const fx = new (0, _splash.Splash)();
+                fx.x = this.x;
+                fx.y = this.y;
+                (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+            }
         }
     }
     clone() {
@@ -42313,55 +42616,31 @@ class Water extends (0, _entity.Entity) {
     }
 }
 
-},{"../../assets-vars":"cBooq","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/movement/projectile-movement-component":"25Jss","../../utils/utils":"ea5wt","../behaviors/collision/abstract-collision-component":"6rzC8","../behaviors/control/abstract-control-component":"8sX8j"}],"9oAyj":[function(require,module,exports) {
+},{"../../assets-vars":"cBooq","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/movement/projectile-movement-component":"25Jss","../../utils/utils":"ea5wt","../behaviors/collision/abstract-collision-component":"6rzC8","../behaviors/control/abstract-control-component":"8sX8j","../../scene-manager":"2FQ8z","../fx/splash":"7nmiW"}],"7nmiW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "RandomControlComponent", ()=>RandomControlComponent);
-var _abstractControlComponent = require("./abstract-control-component");
-var _utils = require("../../../utils/utils");
-class RandomControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
-    _actionChangeTimer = 0;
-    _actionChangeDelay = 50;
-    _nextAction = "";
+parcelHelpers.export(exports, "Splash", ()=>Splash);
+var _entity = require("../entity");
+class Splash extends (0, _entity.Entity) {
     constructor(source){
         super(source);
-        this._actionChangeDelay = (0, _utils.randNum)(100, 10);
-    }
-    update(dt) {
-        super.update(dt);
-        this._actionChangeTimer += dt;
-        if (this._actionChangeTimer > this._actionChangeDelay) {
-            this._actionChangeTimer = 0;
-            const chance = Math.floor((0, _utils.randNum)(6));
-            switch(chance){
-                case 1:
-                    this._nextAction = "Space";
-                    break;
-                case 2:
-                    this._nextAction = "Right";
-                    break;
-                case 3:
-                    this._nextAction = "Left";
-                    break;
-                case 4:
-                    this._nextAction = "Down";
-                    break;
-                case 5:
-                    this._nextAction = "Up";
-                    break;
-                default:
-                    this._nextAction = "";
-                    break;
-            }
-        }
-        if (this._nextAction) this[`triggerAction${this._nextAction}`]();
+        this.setSkin({
+            assetName: "splash",
+            numberOfFrames: 7
+        });
+        this._skin.onComplete = ()=>{
+            this.destroy();
+        };
+        this._skin.animationSpeed = 0.2;
+        this._skin.loop = false;
+        this._skin.play();
     }
     clone() {
-        return new RandomControlComponent(this);
+        return new Splash;
     }
 }
 
-},{"./abstract-control-component":"8sX8j","../../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kCXtB":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kCXtB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EnemyBulletWeaponComponent", ()=>EnemyBulletWeaponComponent);
@@ -42429,10 +42708,19 @@ class Bullet extends (0, _entity.Entity) {
                     this.destroy();
                     object.takeDamage(1);
                     break;
+                case "DeadTank":
+                    this.destroy();
+                    object.takeDamage(1);
+                    break;
                 case "Tractor":
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     this.destroy();
                     object.takeDamage(1);
+                    break;
+                case "Soldier":
+                    if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
+                    this.explode(new (0, _smallExplosion.SmallExplosionFX)());
+                    object.takeDamage(9999);
                     break;
                 case "Bullet":
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
@@ -42566,6 +42854,7 @@ class WanderingAmountBasedSpawner extends (0, _amountBasedSpawner.AmountBasedSpa
         this.setComponent(new (0, _directWalkMovementComponent.DirectionalWalkMovementBehavior)());
         this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
             if (object == this) return;
+            if (this._collisionGroup.includes(object.entityType)) this._collides = true;
             switch(object.entityType){
                 case "HardWall":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
@@ -42753,13 +43042,13 @@ class Buff extends (0, _entity.Entity) {
     getBuff() {
         switch(this._type){
             case (0, _assetsVars.Assets).Bonuses.BONUS_SPEED:
-                return new (0, _speedBuffComponentCopy.SpeedBuffComponent)().applyBuff(180);
+                return new (0, _speedBuffComponentCopy.SpeedBuffComponent)().applyBuff(240);
             case (0, _assetsVars.Assets).Bonuses.BONUS_IMMORTAL:
-                return new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(180);
+                return new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(300);
             case (0, _assetsVars.Assets).Bonuses.BONUS_LIVE:
                 return new (0, _liveBuffComponent.LiveBuffComponent)().applyBuff(0);
             case (0, _assetsVars.Assets).Bonuses.BONUS_SLOW:
-                return new (0, _slowBuffComponent.SlowBuffComponent)().applyBuff(180);
+                return new (0, _slowBuffComponent.SlowBuffComponent)().applyBuff(300);
             case (0, _assetsVars.Assets).Bonuses.BONUS_TRACTOR:
                 return new (0, _spawnTractorBuffComponentCopy.SpawnTractorBuffComponent)().applyBuff(0);
             default:
@@ -42883,10 +43172,10 @@ class Tractor extends (0, _entity.Entity) {
                 case "HardWall":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
-                case "SmallWall":
+                case "ATHedgehogs":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
-                case "Water":
+                case "SmallWall":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
                 case "Tank":
@@ -42894,10 +43183,16 @@ class Tractor extends (0, _entity.Entity) {
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     object.takeDamage(1);
                     break;
+                case "DeadTank":
+                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                    break;
                 case "Tractor":
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     object.takeDamage(1);
+                    break;
+                case "Soldier":
+                    object.takeDamage(9999);
                     break;
                 case "Buff":
                     this.setComponent(object.getBuff());
@@ -43146,7 +43441,21 @@ class InWorldEventCounter extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../behaviors/movement/projectile-movement-component":"25Jss","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6JDuJ":[function(require,module,exports) {
+},{"../entity":"5vwA6","../behaviors/movement/projectile-movement-component":"25Jss","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2bpzf":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ATHedgehogs", ()=>ATHedgehogs);
+var _entity = require("../entity");
+class ATHedgehogs extends (0, _entity.Entity) {
+    constructor(){
+        super();
+        this.setSkin({
+            assetName: "at_hedgehogs"
+        });
+    }
+}
+
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6JDuJ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Level2Scene", ()=>Level2Scene);
@@ -43188,7 +43497,7 @@ class Level2Scene extends (0, _gameScene.GameScene) {
 module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
 
 },{}],"1SXu6":[function(require,module,exports) {
-module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,211,211,102,211,211,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,211,211,102,211,211,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,912,999,999,999,999,999,912,999,999,999,999,912,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,202,999,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,999,202,999,201],[201,999,999,999,999,999,999,999,999,202,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,201,999,999,999,202,201,202,999,999,202,201,202,999,202,201,202,999,999,999,999,201,999,999,999,201],[201,999,999,999,999,999,999,999,999,202,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,202,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,202,999,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
+module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,211,102,211,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,211,102,211,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,211,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,101,101,102,101,101,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,101,101,102,101,101,102,999],[999,101,211,211,101,211,211,101,102,102,102,102,102,102,102,102,102,102,102,102,102,101,211,211,101,211,211,101,999],[999,102,101,101,102,101,101,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,101,101,102,101,101,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,912,999,999,999,999,999,912,999,999,999,999,912,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,202,999,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,999,202,999,201],[201,999,203,203,999,203,203,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,203,203,999,203,203,999,201],[201,999,999,999,201,999,999,999,999,202,201,202,999,202,201,202,999,202,201,202,999,999,999,999,201,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,202,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,202,999,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
 
 },{}],"9ftod":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -43239,6 +43548,10 @@ const assets = [
         url: "./assets/effects/appear.png"
     },
     {
+        name: "splash",
+        url: "./assets/effects/splash.png"
+    },
+    {
         name: "bullet",
         url: "./assets/effects/bullet.png"
     },
@@ -43271,8 +43584,20 @@ const assets = [
         url: "./assets/tanks/tank_player_move.png"
     },
     {
+        name: "dead_tank",
+        url: "./assets/tanks/tank_dead_move.png"
+    },
+    {
         name: "tractor",
         url: "./assets/tanks/tractor_move.png"
+    },
+    {
+        name: "soldier",
+        url: "./assets/entities/soldier.png"
+    },
+    {
+        name: "dead_soldier",
+        url: "./assets/entities/good_russian.png"
     },
     {
         name: "empty",
@@ -43291,6 +43616,10 @@ const assets = [
         url: "./assets/tiles/small_wall.png"
     },
     {
+        name: "at_hedgehogs",
+        url: "./assets/tiles/anti_tank_hedgehogs.png"
+    },
+    {
         name: "wall",
         url: "./assets/tiles/wall.png"
     },
@@ -43305,6 +43634,10 @@ const assets = [
     {
         name: "water",
         url: "./assets/tiles/water.png"
+    },
+    {
+        name: "motor_sound",
+        url: "./assets/sounds/shot.wav"
     },
     {
         name: "shot_sound",
