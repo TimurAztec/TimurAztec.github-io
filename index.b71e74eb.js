@@ -576,7 +576,7 @@ class SceneManager {
                 view: document.getElementById("game-canvas"),
                 resolution: window.devicePixelRatio || 1,
                 autoDensity: true,
-                backgroundColor: 0x112233,
+                backgroundColor: 0x000000,
                 width: width,
                 height: height
             });
@@ -38400,9 +38400,14 @@ var _pixiJs = require("pixi.js");
 class Scene extends (0, _pixiJs.Container) {
     paused = false;
     _preUpdateAction = ()=>{};
+    _sceneTime = 0;
+    get sceneTime() {
+        return this._sceneTime;
+    }
     constructor(){
         super();
         this.name = this.constructor.name;
+        this._sceneTime = 0;
         this.sortableChildren = true;
     }
     pause() {
@@ -38413,6 +38418,7 @@ class Scene extends (0, _pixiJs.Container) {
     }
     update(dt) {
         if (this.paused) return;
+        this._sceneTime += dt;
         this._preUpdateAction();
     }
 }
@@ -38424,35 +38430,43 @@ parcelHelpers.export(exports, "MenuScene", ()=>MenuScene);
 var _scene = require("../scene");
 var _sceneManager = require("../../scene-manager");
 var _pixiJs = require("pixi.js");
-var _assetsVars = require("../../assets-vars");
 var _level1 = require("../game/levels/level1/level1");
 class MenuScene extends (0, _scene.Scene) {
     constructor(){
         super();
-        this.logoText = new (0, _pixiJs.Text)("War Thunder", new (0, _pixiJs.TextStyle)({
-            fontSize: 42,
+        this.background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["menu_background"].texture);
+        this.logoText = new (0, _pixiJs.Text)("Orcs Thunder", new (0, _pixiJs.TextStyle)({
+            fontSize: 84,
             align: "center",
-            fill: "#754c24"
+            fill: "#ffffff"
         }));
-        this.startButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _assetsVars.Assets).Buttons.BUTTON].texture);
-        this.scoreButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _assetsVars.Assets).Buttons.BUTTON_SCORES].texture);
+        this.startButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["button_play"].texture);
+        // this.scoreButton = new Sprite(Loader.shared.resources[Assets.Buttons.BUTTON_SCORES].texture);
+        this.background.anchor.set(0.5);
+        this.background.x = (0, _sceneManager.SceneManager).width / 2;
+        this.background.y = (0, _sceneManager.SceneManager).height / 2;
+        this.background.width = (0, _sceneManager.SceneManager).width;
+        this.background.height = (0, _sceneManager.SceneManager).height;
         this.logoText.anchor.set(0.5);
         this.logoText.x = (0, _sceneManager.SceneManager).width / 2;
-        this.logoText.y = (0, _sceneManager.SceneManager).height / 3;
+        this.logoText.y = (0, _sceneManager.SceneManager).height / 4;
         this.startButton.anchor.set(0.5);
         this.startButton.x = (0, _sceneManager.SceneManager).width / 2;
-        this.startButton.y = (0, _sceneManager.SceneManager).height / 2;
+        this.startButton.y = (0, _sceneManager.SceneManager).height / 1.15;
+        this.startButton.scale.set(2);
         this.startButton.interactive = true;
         this.startButton.buttonMode = true;
-        this.scoreButton.anchor.set(0.5);
-        this.scoreButton.x = (0, _sceneManager.SceneManager).width / 2;
-        this.scoreButton.y = (0, _sceneManager.SceneManager).height / 2 + this.scoreButton.height * 2;
-        this.scoreButton.interactive = true;
-        this.scoreButton.buttonMode = true;
+        // this.scoreButton.anchor.set(0.5);
+        // this.scoreButton.x = SceneManager.width / 2;
+        // this.scoreButton.y = SceneManager.height / 2 + this.scoreButton.height*2;
+        // this.scoreButton.interactive = true;
+        // this.scoreButton.buttonMode = true;
+        this.addChild(this.background);
         this.addChild(this.logoText);
         this.addChild(this.startButton);
-        this.addChild(this.scoreButton);
+        // this.addChild(this.scoreButton);
         this.initActions();
+        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(0, 0));
     }
     initActions() {
         this.startButton.on("click", ()=>{
@@ -38465,79 +38479,18 @@ class MenuScene extends (0, _scene.Scene) {
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../game/levels/level1/level1":"bMsfR"}],"cBooq":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Assets", ()=>Assets);
-parcelHelpers.export(exports, "LoaderAssets", ()=>LoaderAssets);
-let Assets;
-(function(Assets1) {
-    class Tiles {
-        static SMALL_WALL = "small_wall";
-        static WALL = "wall";
-        static WATER = "water";
-        static DIRT = "dirt";
-        static LAEVES = "leaves";
-        static EAGLE = "eagle";
-    }
-    Assets1.Tiles = Tiles;
-    class Bonuses {
-        static BONUS_IMMORTAL = "bonus_immortal";
-        static BONUS_LIVE = "bonus_live";
-        static BONUS_SLOW = "bonus_slow";
-        static BONUS_SPEED = "bonus_speed";
-        static BONUS_TRACTOR = "bonus_tractor";
-        static BUFF_TYPES = [
-            this.BONUS_IMMORTAL,
-            this.BONUS_LIVE,
-            this.BONUS_SLOW,
-            this.BONUS_SPEED,
-            this.BONUS_TRACTOR
-        ];
-    }
-    Assets1.Bonuses = Bonuses;
-    class Buttons {
-        static BUTTON = "button";
-        static BUTTON_SCORES = "button_scores";
-    }
-    Assets1.Buttons = Buttons;
-    class Bullets {
-        static BULLET = "bullet";
-        static BULLET_ENEMY = "enemy_bullet";
-    }
-    Assets1.Bullets = Bullets;
-    class FX {
-        static EXPLODE = "explode";
-        static EXPLODE_SMALL = "explode_small";
-        static APPEAR = "appear";
-    }
-    Assets1.FX = FX;
-    class Tanks {
-        static TANK_PLAYER = "tank_player";
-        static TANK_BLUE = "tank_blue";
-        static TANK_RED = "tank_red";
-        static TANK_WHITE = "tank_white";
-    }
-    Assets1.Tanks = Tanks;
-})(Assets || (Assets = {}));
-let LoaderAssets;
-(function(LoaderAssets1) {
-    class Loaders {
-        static LOADER_BACKGROUND = "loader_bg";
-        static LOADER_BAR = "loader_bar";
-    }
-    LoaderAssets1.Loaders = Loaders;
-})(LoaderAssets || (LoaderAssets = {}));
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bMsfR":[function(require,module,exports) {
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../game/levels/level1/level1":"bMsfR"}],"bMsfR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Level1Scene", ()=>Level1Scene);
+var _howler = require("howler");
+var _pixiJs = require("pixi.js");
 var _eventManager = require("../../../../event-manager");
 var _sceneManager = require("../../../../scene-manager");
+var _savesHandler = require("../../../../utils/saves-handler");
 var _menuScene = require("../../../menu/menu-scene");
 var _gameScene = require("../../game-scene");
-var _level2 = require("../level2/level2");
+var _gameWonScreen = require("../../game_won_screen");
 var _level1Json = require("./level1.json");
 class Level1Scene extends (0, _gameScene.GameScene) {
     constructor(){
@@ -38545,6 +38498,7 @@ class Level1Scene extends (0, _gameScene.GameScene) {
         this.loadLevel(_level1Json);
         (0, _eventManager.EventManager).subscribe("team_lost", this);
         (0, _eventManager.EventManager).subscribe("team_won", this);
+        (0, _savesHandler.SavesHandler).saveData("score", 0);
     }
     onEvent(event, data) {
         if (this.paused) return;
@@ -38553,6 +38507,9 @@ class Level1Scene extends (0, _gameScene.GameScene) {
             this.pause();
             this.dynamicChildren.length = 0;
             this.tileMap.length = 0;
+            new (0, _howler.Howl)({
+                src: (0, _pixiJs.Loader).shared.resources["lose_sound"].url
+            }).play();
             (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
             this.destroy();
             this._preUpdateAction = ()=>{};
@@ -38561,14 +38518,17 @@ class Level1Scene extends (0, _gameScene.GameScene) {
             this.pause();
             this.dynamicChildren.length = 0;
             this.tileMap.length = 0;
-            (0, _sceneManager.SceneManager).changeScene(new (0, _level2.Level2Scene)());
+            new (0, _howler.Howl)({
+                src: (0, _pixiJs.Loader).shared.resources["win_sound"].url
+            }).play();
+            (0, _sceneManager.SceneManager).changeScene(new (0, _gameWonScreen.GameWonScene)());
             this.destroy();
             this._preUpdateAction = ()=>{};
         };
     }
 }
 
-},{"../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","../level2/level2":"6JDuJ","./level1.json":"1SXu6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l75gk":[function(require,module,exports) {
+},{"../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","./level1.json":"1SXu6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../utils/saves-handler":"1qn3x","../../game_won_screen":"8w9F4","howler":"5Vjgk","pixi.js":"1pSin"}],"l75gk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EventManager", ()=>EventManager);
@@ -38722,9 +38682,9 @@ class GameScene extends (0, _scene.Scene) {
         return super.removeChild(...children);
     }
     moveEntityFromTileToTile(entity, from, to) {
-        if (!this.tileMap[from.y] || !this.tileMap[from.y][from.x]) return;
-        const index = this.tileMap[from.y][from.x].indexOf(entity);
+        let index = -1;
         if (!this.tileMap[to.y] || !this.tileMap[to.y][to.x]) return;
+        if (this.tileMap[from.y] && this.tileMap[from.y][from.x]) index = this.tileMap[from.y][from.x].indexOf(entity);
         if (index >= 0) this.tileMap[to.y][to.x].push(this.tileMap[from.y][from.x].splice(index, 1)[0]);
         else {
             let i = this.tileMap.length;
@@ -38756,14 +38716,21 @@ class PauseScene extends (0, _scene.Scene) {
         (0, _eventManager.EventManager).subscribe("keydown", this);
         this.initVisuals();
         this.initActions();
+        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(0, 0));
     }
     initVisuals() {
+        this._background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["menu_background"].texture);
+        this._background.anchor.set(0.5);
+        this._background.x = (0, _sceneManager.SceneManager).width / 2;
+        this._background.y = (0, _sceneManager.SceneManager).height / 2;
+        this._background.width = (0, _sceneManager.SceneManager).width;
+        this._background.height = (0, _sceneManager.SceneManager).height;
         this._menuText = new (0, _pixiJs.Text)("Pause", new (0, _pixiJs.TextStyle)({
-            fontSize: 42,
+            fontSize: 64,
             align: "center",
-            fill: "#754c24"
+            fill: "#FFFFFF"
         }));
-        this._menuStartButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["button"].texture);
+        this._menuStartButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["button_play"].texture);
         this._menuText.anchor.set(0.5);
         this._menuText.x = (0, _sceneManager.SceneManager).width / 2;
         this._menuText.y = (0, _sceneManager.SceneManager).height / 3;
@@ -38772,6 +38739,7 @@ class PauseScene extends (0, _scene.Scene) {
         this._menuStartButton.y = (0, _sceneManager.SceneManager).height / 2;
         this._menuStartButton.interactive = true;
         this._menuStartButton.buttonMode = true;
+        this.addChild(this._background);
         this.addChild(this._menuStartButton);
         this.addChild(this._menuText);
     }
@@ -38824,6 +38792,8 @@ var _abstractTeamComponent = require("./behaviors/team/abstract-team-component")
 var _inWorldEventCounter = require("./interactive/in-world-event-counter");
 var _soldier = require("./interactive/soldier");
 var _atHedgehogs = require("./tiles/at-hedgehogs");
+var _savesHandler = require("../utils/saves-handler");
+var _sceneManager = require("../scene-manager");
 class EntityFactory {
     constructor(){}
     static getEntity(entityID) {
@@ -38840,7 +38810,9 @@ class EntityFactory {
                 {
                     const floor = new (0, _floor.Floor)();
                     floor.setSkin({
-                        assetName: "grass"
+                        assetName: "grass",
+                        numberOfFrames: 10,
+                        animationSpeed: 0.1
                     });
                     return floor;
                 }
@@ -38893,6 +38865,7 @@ class EntityFactory {
                     tank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
                     tank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
                         (0, _eventManager.EventManager).notify("entity_destroyed_player2", tank);
+                        (0, _savesHandler.SavesHandler).saveData("score", (0, _savesHandler.SavesHandler).loadData("score") + (10 - (0, _sceneManager.SceneManager).currentScene.sceneTime * 0.01));
                     }));
                     return tank;
                 }
@@ -38976,7 +38949,7 @@ class EntityFactory {
     }
 }
 
-},{"./behaviors/control/player-control-component":"eT9lB","./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/wall":"4V1eD","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/buff":"8zU8G","./interactive/base":"dC7wV","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/tractor":"hc7Oq","./behaviors/destroy/basic-destroy-component":"7tCQV","../event-manager":"l75gk","./behaviors/team/abstract-team-component":"9vUi2","./interactive/in-world-event-counter":"e82Po","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./interactive/soldier":"12agJ","./tiles/at-hedgehogs":"2bpzf"}],"eT9lB":[function(require,module,exports) {
+},{"./behaviors/control/player-control-component":"eT9lB","./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/wall":"4V1eD","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/buff":"8zU8G","./interactive/base":"dC7wV","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/tractor":"hc7Oq","./behaviors/destroy/basic-destroy-component":"7tCQV","../event-manager":"l75gk","./behaviors/team/abstract-team-component":"9vUi2","./interactive/in-world-event-counter":"e82Po","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./interactive/soldier":"12agJ","./tiles/at-hedgehogs":"2bpzf","../utils/saves-handler":"1qn3x","../scene-manager":"2FQ8z"}],"eT9lB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "PlayerControlComponent", ()=>PlayerControlComponent);
@@ -39146,6 +39119,7 @@ var _randomControlComponent = require("../behaviors/control/random-control-compo
 var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
 var _basicTeamComponent = require("../behaviors/team/basic-team-component");
 var _deadTank = require("../tiles/dead-tank");
+var _howler = require("howler");
 class Tank extends (0, _entity.Entity) {
     constructor(source){
         super(source);
@@ -39180,6 +39154,9 @@ class Tank extends (0, _entity.Entity) {
                     object.takeDamage(9999);
                     break;
                 case "Buff":
+                    new (0, _howler.Howl)({
+                        src: (0, _pixiJs.Loader).shared.resources["bonus_sound"].url
+                    }).play();
                     this.setComponent(object.getBuff());
                     object.destroy();
             }
@@ -39301,7 +39278,7 @@ class Tank extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./soldier":"12agJ","../behaviors/control/random-control-component":"9oAyj","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/team/basic-team-component":"M0rnZ","../tiles/dead-tank":"5Xr4D"}],"5vwA6":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./soldier":"12agJ","../behaviors/control/random-control-component":"9oAyj","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/team/basic-team-component":"M0rnZ","../tiles/dead-tank":"5Xr4D","howler":"5Vjgk"}],"5vwA6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Entity", ()=>Entity);
@@ -39496,6 +39473,9 @@ class AbstractMovementComponent extends (0, _abstractComponent.AbstractComponent
     get previousPosition() {
         return this._previousPosition;
     }
+    get movementVector() {
+        return this._movementVector;
+    }
     get rotationVector() {
         const radAngle = (this._entity.angle - 90) * (Math.PI / 180);
         const vector = new (0, _pixiJs.Point)((Math.abs(Math.cos(radAngle)) != 1 ? 0 : Math.cos(radAngle)) * this._entity.width, (Math.abs(Math.sin(radAngle)) != 1 ? 0 : Math.sin(radAngle)) * this._entity.height);
@@ -39593,7 +39573,71 @@ class AppearFX extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iix3J":[function(require,module,exports) {
+},{"../entity":"5vwA6","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cBooq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Assets", ()=>Assets);
+parcelHelpers.export(exports, "LoaderAssets", ()=>LoaderAssets);
+let Assets;
+(function(Assets1) {
+    class Tiles {
+        static SMALL_WALL = "small_wall";
+        static WALL = "wall";
+        static WATER = "water";
+        static DIRT = "dirt";
+        static LAEVES = "leaves";
+        static EAGLE = "eagle";
+    }
+    Assets1.Tiles = Tiles;
+    class Bonuses {
+        static BONUS_IMMORTAL = "bonus_immortal";
+        static BONUS_LIVE = "bonus_live";
+        static BONUS_SLOW = "bonus_slow";
+        static BONUS_SPEED = "bonus_speed";
+        static BONUS_TRACTOR = "bonus_tractor";
+        static BUFF_TYPES = [
+            this.BONUS_IMMORTAL,
+            this.BONUS_LIVE,
+            this.BONUS_SLOW,
+            this.BONUS_SPEED,
+            this.BONUS_TRACTOR
+        ];
+    }
+    Assets1.Bonuses = Bonuses;
+    class Buttons {
+        static BUTTON = "button";
+        static BUTTON_SCORES = "button_scores";
+    }
+    Assets1.Buttons = Buttons;
+    class Bullets {
+        static BULLET = "bullet";
+        static BULLET_ENEMY = "enemy_bullet";
+    }
+    Assets1.Bullets = Bullets;
+    class FX {
+        static EXPLODE = "explode";
+        static EXPLODE_SMALL = "explode_small";
+        static APPEAR = "appear";
+    }
+    Assets1.FX = FX;
+    class Tanks {
+        static TANK_PLAYER = "tank_player";
+        static TANK_BLUE = "tank_blue";
+        static TANK_RED = "tank_red";
+        static TANK_WHITE = "tank_white";
+    }
+    Assets1.Tanks = Tanks;
+})(Assets || (Assets = {}));
+let LoaderAssets;
+(function(LoaderAssets1) {
+    class Loaders {
+        static LOADER_BACKGROUND = "loader_bg";
+        static LOADER_BAR = "loader_bar";
+    }
+    LoaderAssets1.Loaders = Loaders;
+})(LoaderAssets || (LoaderAssets = {}));
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iix3J":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BasicAabbCollisionComponent", ()=>BasicAabbCollisionComponent);
@@ -42468,6 +42512,10 @@ class Floor extends (0, _entity.Entity) {
     constructor(source){
         super(source);
     }
+    setSkin(options) {
+        super.setSkin(options);
+        this._skin.gotoAndPlay(0);
+    }
     clone() {
         return new Floor(this);
     }
@@ -42569,6 +42617,9 @@ class Water extends (0, _entity.Entity) {
             if (object == this) return;
             switch(object.entityType){
                 case "Tank":
+                    this.drown(object);
+                    break;
+                case "DeadTank":
                     this.drown(object);
                     break;
                 case "Tractor":
@@ -42686,6 +42737,7 @@ var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-co
 var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
 var _vars = require("../../vars");
 var _utils = require("../../utils/utils");
+var _howler = require("howler");
 class Bullet extends (0, _entity.Entity) {
     _speed = 6;
     _dttimer = 0;
@@ -42739,6 +42791,9 @@ class Bullet extends (0, _entity.Entity) {
         return new Bullet(this);
     }
     launch(angle) {
+        new (0, _howler.Howl)({
+            src: (0, _pixiJs.Loader).shared.resources["shot_sound"].url
+        }).play();
         const radAngle = (angle - 90) * (Math.PI / 180);
         this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(Math.cos(radAngle) * this._speed, Math.sin(radAngle) * this._speed));
     }
@@ -42784,7 +42839,7 @@ class Bullet extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/projectile-movement-component":"25Jss","../../scene-manager":"2FQ8z","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/small-explosion":"hcHEv","../fx/big-explosion":"4vaID","../behaviors/team/basic-team-component":"M0rnZ","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../vars":"7QgFK","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hcHEv":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/projectile-movement-component":"25Jss","../../scene-manager":"2FQ8z","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/small-explosion":"hcHEv","../fx/big-explosion":"4vaID","../behaviors/team/basic-team-component":"M0rnZ","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../vars":"7QgFK","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","howler":"5Vjgk"}],"hcHEv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SmallExplosionFX", ()=>SmallExplosionFX);
@@ -43160,6 +43215,7 @@ var _utils = require("../../utils/utils");
 var _bigExplosion = require("../fx/big-explosion");
 var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
 var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
+var _howler = require("howler");
 class Tractor extends (0, _entity.Entity) {
     constructor(source){
         super(source);
@@ -43195,6 +43251,9 @@ class Tractor extends (0, _entity.Entity) {
                     object.takeDamage(9999);
                     break;
                 case "Buff":
+                    new (0, _howler.Howl)({
+                        src: (0, _pixiJs.Loader).shared.resources["bonus_sound"].url
+                    }).play();
                     this.setComponent(object.getBuff());
                     object.destroy();
             }
@@ -43295,7 +43354,7 @@ class Tractor extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ertEe":[function(require,module,exports) {
+},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/buffs/immortal-buff-component":"85AQc","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","howler":"5Vjgk"}],"ertEe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SpeedBuffComponent", ()=>SpeedBuffComponent);
@@ -43450,56 +43509,96 @@ class ATHedgehogs extends (0, _entity.Entity) {
     constructor(){
         super();
         this.setSkin({
-            assetName: "at_hedgehogs"
+            assetName: "at_hedgehogs",
+            hitboxWidth: 32,
+            hitboxHeight: 32
         });
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6JDuJ":[function(require,module,exports) {
+},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1qn3x":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Level2Scene", ()=>Level2Scene);
-var _eventManager = require("../../../../event-manager");
-var _sceneManager = require("../../../../scene-manager");
-var _menuScene = require("../../../menu/menu-scene");
-var _gameScene = require("../../game-scene");
-var _level2Json = require("./level2.json");
-class Level2Scene extends (0, _gameScene.GameScene) {
-    constructor(){
-        super();
-        this.loadLevel(_level2Json);
-        (0, _eventManager.EventManager).subscribe("team_lost", this);
-        (0, _eventManager.EventManager).subscribe("team_won", this);
+parcelHelpers.export(exports, "SavesHandler", ()=>SavesHandler);
+class SavesHandler {
+    constructor(){}
+    static saveData(key, data) {
+        sessionStorage.setItem(key, JSON.stringify(data));
     }
-    onEvent(event, data) {
-        if (this.paused) return;
-        super.onEvent(event, data);
-        if (event == "team_lost") this._preUpdateAction = ()=>{
-            this.pause();
-            this.dynamicChildren.length = 0;
-            this.tileMap.length = 0;
-            (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
-            this.destroy();
-            this._preUpdateAction = ()=>{};
-        };
-        if (event == "team_won" && data == "player1") this._preUpdateAction = ()=>{
-            this.pause();
-            this.dynamicChildren.length = 0;
-            this.tileMap.length = 0;
-            (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
-            this.destroy();
-            this._preUpdateAction = ()=>{};
-        };
+    static loadData(key) {
+        return JSON.parse(sessionStorage.getItem(key));
+    }
+    static saveDataLongTerm(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+    static loadDataLongTerm(key) {
+        return JSON.parse(localStorage.getItem(key));
     }
 }
 
-},{"../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","./level2.json":"fP5rd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fP5rd":[function(require,module,exports) {
-module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
-
-},{}],"1SXu6":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1SXu6":[function(require,module,exports) {
 module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,211,102,211,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,211,102,211,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,211,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,101,101,102,101,101,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,101,101,102,101,101,102,999],[999,101,211,211,101,211,211,101,102,102,102,102,102,102,102,102,102,102,102,102,102,101,211,211,101,211,211,101,999],[999,102,101,101,102,101,101,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,101,101,102,101,101,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,912,999,999,999,999,999,912,999,999,999,999,912,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,202,999,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,999,202,999,201],[201,999,203,203,999,203,203,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,203,203,999,203,203,999,201],[201,999,999,999,201,999,999,999,999,202,201,202,999,202,201,202,999,202,201,202,999,999,999,999,201,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,202,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,202,999,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
 
-},{}],"9ftod":[function(require,module,exports) {
+},{}],"8w9F4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "GameWonScene", ()=>GameWonScene);
+var _scene = require("../scene");
+var _sceneManager = require("../../scene-manager");
+var _pixiJs = require("pixi.js");
+var _menuScene = require("../menu/menu-scene");
+var _howler = require("howler");
+class GameWonScene extends (0, _scene.Scene) {
+    constructor(){
+        super();
+        this.background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["win_background"].texture);
+        this.logoText = new (0, _pixiJs.Text)("You`ve completed the game!", new (0, _pixiJs.TextStyle)({
+            fontSize: 64,
+            align: "center",
+            fill: "#ffffff"
+        }));
+        this.startButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["button_exit"].texture);
+        // this.scoreButton = new Sprite(Loader.shared.resources[Assets.Buttons.BUTTON_SCORES].texture);
+        this.background.anchor.set(0.5);
+        this.background.x = (0, _sceneManager.SceneManager).width / 2;
+        this.background.y = (0, _sceneManager.SceneManager).height / 2;
+        this.background.width = (0, _sceneManager.SceneManager).width;
+        this.background.height = (0, _sceneManager.SceneManager).height;
+        this.logoText.anchor.set(0.5);
+        this.logoText.x = (0, _sceneManager.SceneManager).width / 2;
+        this.logoText.y = (0, _sceneManager.SceneManager).height / 6;
+        this.startButton.anchor.set(0.5);
+        this.startButton.x = (0, _sceneManager.SceneManager).width / 2;
+        this.startButton.y = (0, _sceneManager.SceneManager).height / 1.15;
+        this.startButton.scale.set(2);
+        this.startButton.interactive = true;
+        this.startButton.buttonMode = true;
+        // this.scoreButton.anchor.set(0.5);
+        // this.scoreButton.x = SceneManager.width / 2;
+        // this.scoreButton.y = SceneManager.height / 2 + this.scoreButton.height*2;
+        // this.scoreButton.interactive = true;
+        // this.scoreButton.buttonMode = true;
+        this.addChild(this.background);
+        this.addChild(this.logoText);
+        this.addChild(this.startButton);
+        // this.addChild(this.scoreButton);
+        this.initActions();
+        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(0, 0));
+    }
+    initActions() {
+        this.music = new (0, _howler.Howl)({
+            src: (0, _pixiJs.Loader).shared.resources["endgame_music"].url
+        });
+        this.music.play();
+        this.startButton.on("click", ()=>{
+            (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
+            this.music.stop();
+            this.destroy();
+        });
+    }
+}
+
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../menu/menu-scene":"4nuFJ","howler":"5Vjgk"}],"9ftod":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loaderAssets", ()=>loaderAssets);
@@ -43536,12 +43635,20 @@ const assets = [
         url: "./assets/bonus/bonus_tractor.png"
     },
     {
-        name: "button",
-        url: "./assets/buttons/button.png"
+        name: "button_play",
+        url: "./assets/buttons/play.png"
     },
     {
-        name: "button_scores",
-        url: "./assets/buttons/scores.png"
+        name: "button_exit",
+        url: "./assets/buttons/exit.png"
+    },
+    {
+        name: "menu_background",
+        url: "./assets/game_background.png"
+    },
+    {
+        name: "win_background",
+        url: "./assets/win_screen_background.png"
     },
     {
         name: "appear",
@@ -43644,12 +43751,28 @@ const assets = [
         url: "./assets/sounds/shot.wav"
     },
     {
+        name: "bonus_sound",
+        url: "./assets/sounds/bonus.wav"
+    },
+    {
+        name: "win_sound",
+        url: "./assets/sounds/win.wav"
+    },
+    {
+        name: "lose_sound",
+        url: "./assets/sounds/lose.wav"
+    },
+    {
         name: "explode_sound",
         url: "./assets/sounds/explode.wav"
     },
     {
         name: "hit_sound",
         url: "./assets/sounds/hit.wav"
+    },
+    {
+        name: "endgame_music",
+        url: "./assets/sounds/endgame_music.mp3"
     }, 
 ];
 
