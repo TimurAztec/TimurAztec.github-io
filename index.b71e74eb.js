@@ -620,7 +620,7 @@ class SceneManager {
     }
 }
 
-},{"@pixi/app":"3i5UU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin"}],"3i5UU":[function(require,module,exports) {
+},{"@pixi/app":"3i5UU","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3i5UU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Application", ()=>Application);
@@ -38352,7 +38352,7 @@ var _scene = require("../scene");
 var _sceneManager = require("../../scene-manager");
 var _menuScene = require("../menu/menu-scene");
 var _assetsList = require("../../assets-list");
-var _assetsVars = require("../../assets-vars");
+var _constants = require("../../constants");
 class LoaderScene extends (0, _scene.Scene) {
     constructor(){
         super();
@@ -38366,9 +38366,9 @@ class LoaderScene extends (0, _scene.Scene) {
         });
     }
     initLoader() {
-        this.loaderBarBg = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _assetsVars.LoaderAssets).Loaders.LOADER_BACKGROUND].texture);
-        this.loaderBarMask = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _assetsVars.LoaderAssets).Loaders.LOADER_BACKGROUND].texture);
-        this.loaderBar = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _assetsVars.LoaderAssets).Loaders.LOADER_BAR].texture);
+        this.loaderBarBg = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.LOADER_BAR_BG].texture);
+        this.loaderBarMask = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.LOADER_BAR_BG].texture);
+        this.loaderBar = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.LOADER_BAR].texture);
         this.loaderBarBg.anchor.set(0.5);
         this.loaderBarBg.x = (0, _sceneManager.SceneManager).width / 2;
         this.loaderBarBg.y = (0, _sceneManager.SceneManager).height / 2;
@@ -38392,7 +38392,7 @@ class LoaderScene extends (0, _scene.Scene) {
     }
 }
 
-},{"pixi.js":"1pSin","../scene":"aOCet","../../scene-manager":"2FQ8z","../menu/menu-scene":"4nuFJ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-list":"9ftod","../../assets-vars":"cBooq"}],"aOCet":[function(require,module,exports) {
+},{"pixi.js":"1pSin","../scene":"aOCet","../../scene-manager":"2FQ8z","../menu/menu-scene":"4nuFJ","../../assets-list":"9ftod","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../constants":"45DZp"}],"aOCet":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Scene", ()=>Scene);
@@ -38432,16 +38432,17 @@ var _sceneManager = require("../../scene-manager");
 var _pixiJs = require("pixi.js");
 var _level1 = require("../game/levels/level1/level1");
 var _savesHandler = require("../../utils/saves-handler");
+var _constants = require("../../constants");
 class MenuScene extends (0, _scene.Scene) {
     constructor(){
         super();
-        this.background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["menu_background"].texture);
+        this.background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.MENU_BG].texture);
         this.logoText = new (0, _pixiJs.Text)("Orcs Thunder", new (0, _pixiJs.TextStyle)({
             fontSize: 84,
             align: "center",
             fill: "#ffffff"
         }));
-        this.startButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["button_play"].texture);
+        this.startButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.BUTTON_PLAY].texture);
         this.background.anchor.set(0.5);
         this.background.x = (0, _sceneManager.SceneManager).width / 2;
         this.background.y = (0, _sceneManager.SceneManager).height / 2;
@@ -38484,16 +38485,18 @@ class MenuScene extends (0, _scene.Scene) {
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../game/levels/level1/level1":"bMsfR","../../utils/saves-handler":"1qn3x"}],"bMsfR":[function(require,module,exports) {
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../game/levels/level1/level1":"bMsfR","../../utils/saves-handler":"1qn3x","../../constants":"45DZp"}],"bMsfR":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Level1Scene", ()=>Level1Scene);
 var _howler = require("howler");
 var _pixiJs = require("pixi.js");
+var _constants = require("../../../../constants");
 var _eventManager = require("../../../../event-manager");
 var _sceneManager = require("../../../../scene-manager");
 var _savesHandler = require("../../../../utils/saves-handler");
 var _menuScene = require("../../../menu/menu-scene");
+var _gameConstants = require("../../game-constants");
 var _gameScene = require("../../game-scene");
 var _level2 = require("../level2/level2");
 var _level1Json = require("./level1.json");
@@ -38501,19 +38504,19 @@ class Level1Scene extends (0, _gameScene.GameScene) {
     constructor(){
         super();
         this.loadLevel(_level1Json);
-        (0, _eventManager.EventManager).subscribe("team_lost", this);
-        (0, _eventManager.EventManager).subscribe("team_won", this);
-        (0, _savesHandler.SavesHandler).saveData("score", 0);
+        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_LOST, this);
+        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_WON, this);
+        (0, _savesHandler.SavesHandler).saveData((0, _constants.Constants).GlobalNames.SCORE, 0);
     }
     onEvent(event, data) {
         if (this.paused) return;
         super.onEvent(event, data);
-        if (event == "team_lost") this._preUpdateAction = ()=>{
+        if (event == (0, _gameConstants.GameConstants).Events.TEAM_LOST) this._preUpdateAction = ()=>{
             this.pause();
             this.dynamicChildren.length = 0;
             this.tileMap.length = 0;
             new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources["lose_sound"].url,
+                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.LOSE].url,
                 onend: ()=>{
                     (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
                     this.destroy();
@@ -38521,12 +38524,12 @@ class Level1Scene extends (0, _gameScene.GameScene) {
                 }
             }).play();
         };
-        if (event == "team_won" && data == "player1") this._preUpdateAction = ()=>{
+        if (event == (0, _gameConstants.GameConstants).Events.TEAM_WON && data == (0, _gameConstants.GameConstants).Teams.PLAYER_1) this._preUpdateAction = ()=>{
             this.pause();
             this.dynamicChildren.length = 0;
             this.tileMap.length = 0;
             new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources["win_sound"].url,
+                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.WIN].url,
                 onend: ()=>{
                     (0, _sceneManager.SceneManager).changeScene(new (0, _level2.Level2Scene)());
                     this.destroy();
@@ -38537,7 +38540,1286 @@ class Level1Scene extends (0, _gameScene.GameScene) {
     }
 }
 
-},{"howler":"5Vjgk","pixi.js":"1pSin","../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../../utils/saves-handler":"1qn3x","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","./level1.json":"1SXu6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../level2/level2":"6JDuJ"}],"5Vjgk":[function(require,module,exports) {
+},{"../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","./level1.json":"1SXu6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../utils/saves-handler":"1qn3x","howler":"5Vjgk","pixi.js":"1pSin","../../game-constants":"k2kvk","../level2/level2":"6JDuJ","../../../../constants":"45DZp"}],"l75gk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "EventManager", ()=>EventManager);
+class EventManager {
+    constructor(){}
+    static _listeners = new Map();
+    static subscribe(event, listener) {
+        const listeners = EventManager._listeners.get(event);
+        EventManager._listeners.set(event, listeners ? [
+            ...listeners,
+            listener
+        ] : [
+            listener
+        ]);
+    }
+    static unsubscribe(event, listener) {
+        const listeners = EventManager._listeners.get(event);
+        if (listeners && listeners.indexOf(listener)) {
+            listeners.splice(listeners.indexOf(listener), 1);
+            EventManager._listeners.set(event, listeners);
+        }
+    }
+    static notify(event, data) {
+        const listeners = EventManager._listeners.get(event);
+        if (listeners) for (let listener of listeners)listener.onEvent(event, data);
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eoY4A":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "GameScene", ()=>GameScene);
+var _scene = require("../scene");
+var _eventManager = require("../../event-manager");
+var _sceneManager = require("../../scene-manager");
+var _pauseScene = require("../menu/pause-scene");
+var _pixiJs = require("pixi.js");
+var _utils = require("../../utils/utils");
+var _abstractMovementComponent = require("./entities/behaviors/movement/abstract-movement-component");
+var _entityFactory = require("./entities/entity-factory");
+class GameScene extends (0, _scene.Scene) {
+    dynamicChildren = [];
+    tileMap = [];
+    tileSize = 36;
+    constructor(){
+        super();
+        (0, _eventManager.EventManager).subscribe("keydown", this);
+    }
+    loadLevel(level) {
+        this.tileMap.length = 0;
+        for (let [zindex, tilemap] of level.depthLevels.entries()){
+            if (!this.tileMap.length) this.tileMap = new Array(tilemap.length);
+            let x = this.tileSize / 2;
+            let y = this.tileSize / 2;
+            for (let [rowIndex, row] of tilemap.entries()){
+                if (!this.tileMap[rowIndex]) this.tileMap[rowIndex] = [];
+                for (let [tileIndex, tileID] of row.entries()){
+                    if (!this.tileMap[rowIndex][tileIndex]) this.tileMap[rowIndex][tileIndex] = [];
+                    let tile = (0, _entityFactory.EntityFactory).getEntity(tileID);
+                    if (tile) {
+                        tile.x = x;
+                        tile.y = y;
+                        tile.zIndex = zindex;
+                        this.addChild(tile);
+                    }
+                    x += this.tileSize;
+                }
+                x = this.tileSize / 2;
+                y += this.tileSize;
+            }
+        }
+        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(12, 12));
+    }
+    onEvent(event, data) {
+        if (!this.paused) {
+            if (event == "keydown" && data == "Escape") this._preUpdateAction = ()=>{
+                (0, _sceneManager.SceneManager).changeScene(new (0, _pauseScene.PauseScene)().setParentScene(this));
+                this._preUpdateAction = ()=>{};
+            };
+        }
+    }
+    // Забирает как то Тимур Дениса с интернатруры. Идут они по улице, Денис говорит "Тимур, а почему солнышко светит?"
+    // Тимур отвечает ему "Работает и х*й с ним, не трогай"
+    // Так и с кодом ниже
+    update(dt) {
+        super.update(dt);
+        console.log(dt);
+        this.dynamicChildren = this.dynamicChildren.filter((entity)=>{
+            return !entity.destroyed;
+        });
+        let i = this.dynamicChildren.length;
+        while(i--){
+            const dynamicEntity = this.dynamicChildren[i];
+            if (dynamicEntity.destroyed) continue;
+            if (dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && !dynamicEntity.position.equals(dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).previousPosition)) {
+                const prevTilePos = (0, _utils.getTitlePosition)(dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).previousPosition, this.tileSize);
+                const tilePos = (0, _utils.getTitlePosition)(dynamicEntity.position, this.tileSize);
+                this.moveEntityFromTileToTile(dynamicEntity, prevTilePos, tilePos);
+            }
+            dynamicEntity.updateTilingData(this.tileMap, this.tileSize);
+            dynamicEntity.update(dt);
+        }
+    }
+    addChild(...children) {
+        this.dynamicChildren = [
+            ...this.dynamicChildren,
+            ...[
+                ...children
+            ].filter((child)=>child.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)))
+        ];
+        let canBeAdded = true;
+        for (const child1 of [
+            ...children
+        ]){
+            const pos = (0, _utils.getTitlePosition)(child1.position, this.tileSize);
+            if (this.tileMap[pos.y] && this.tileMap[pos.y][pos.x]) this.tileMap[pos.y][pos.x].push(child1);
+            else canBeAdded = false;
+        }
+        if (canBeAdded) return super.addChild(...children);
+        else {
+            for (const child of [
+                ...children
+            ])child.destroy();
+            return [
+                ...children
+            ][0];
+        }
+    }
+    removeChild(...children) {
+        for (const child of [
+            ...children
+        ]){
+            const pos = (0, _utils.getTitlePosition)(child.position, this.tileSize);
+            if (this.tileMap[pos.y] && this.tileMap[pos.y][pos.x]) {
+                const index = this.tileMap[pos.y][pos.x].indexOf(child);
+                this.tileMap[pos.y][pos.x].splice(index, 1);
+            } else {
+                let i = this.tileMap.length;
+                while(i--){
+                    let j = this.tileMap[i].length;
+                    while(j--){
+                        const index = this.tileMap[i][j].indexOf(child);
+                        if (index >= 0) {
+                            this.tileMap[i][j].splice(index, 1);
+                            i = j = 0;
+                        }
+                    }
+                }
+            }
+        }
+        return super.removeChild(...children);
+    }
+    moveEntityFromTileToTile(entity, from, to) {
+        let index = -1;
+        if (!this.tileMap[to.y] || !this.tileMap[to.y][to.x]) return;
+        if (this.tileMap[from.y] && this.tileMap[from.y][from.x]) index = this.tileMap[from.y][from.x].indexOf(entity);
+        if (index >= 0) this.tileMap[to.y][to.x].push(this.tileMap[from.y][from.x].splice(index, 1)[0]);
+        else {
+            let i = this.tileMap.length;
+            while(i--){
+                let j = this.tileMap[i].length;
+                while(j--){
+                    const findex = this.tileMap[i][j].indexOf(entity);
+                    if (findex >= 0) {
+                        this.tileMap[to.y][to.x].push(this.tileMap[i][j].splice(findex, 1)[0]);
+                        i = j = 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+},{"../scene":"aOCet","../../event-manager":"l75gk","../../scene-manager":"2FQ8z","../menu/pause-scene":"iGHCP","pixi.js":"1pSin","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./entities/behaviors/movement/abstract-movement-component":"a64l3","./entities/entity-factory":"e4Fm9"}],"iGHCP":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "PauseScene", ()=>PauseScene);
+var _scene = require("../scene");
+var _sceneManager = require("../../scene-manager");
+var _pixiJs = require("pixi.js");
+var _eventManager = require("../../event-manager");
+var _menuScene = require("./menu-scene");
+var _savesHandler = require("../../utils/saves-handler");
+var _constants = require("../../constants");
+class PauseScene extends (0, _scene.Scene) {
+    constructor(){
+        super();
+        (0, _eventManager.EventManager).subscribe("keydown", this);
+        this.initVisuals();
+        this.initActions();
+        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(0, 0));
+    }
+    initVisuals() {
+        this._background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.MENU_BG].texture);
+        this._background.anchor.set(0.5);
+        this._background.x = (0, _sceneManager.SceneManager).width / 2;
+        this._background.y = (0, _sceneManager.SceneManager).height / 2;
+        this._background.width = (0, _sceneManager.SceneManager).width;
+        this._background.height = (0, _sceneManager.SceneManager).height;
+        this._menuText = new (0, _pixiJs.Text)("Pause", new (0, _pixiJs.TextStyle)({
+            fontSize: 64,
+            align: "center",
+            fill: "#FFFFFF"
+        }));
+        this._menuStartButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.BUTTON_PLAY].texture);
+        this._menuText.anchor.set(0.5);
+        this._menuText.x = (0, _sceneManager.SceneManager).width / 2;
+        this._menuText.y = (0, _sceneManager.SceneManager).height / 3;
+        this._menuStartButton.anchor.set(0.5);
+        this._menuStartButton.x = (0, _sceneManager.SceneManager).width / 2;
+        this._menuStartButton.y = (0, _sceneManager.SceneManager).height / 2;
+        this._menuStartButton.interactive = true;
+        this._menuStartButton.buttonMode = true;
+        this._menuExitButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.BUTTON_EXIT].texture);
+        this._menuExitButton.anchor.set(0.5);
+        this._menuExitButton.x = (0, _sceneManager.SceneManager).width / 2;
+        this._menuExitButton.y = (0, _sceneManager.SceneManager).height / 1.5;
+        this._menuExitButton.interactive = true;
+        this._menuExitButton.buttonMode = true;
+        this.addChild(this._background);
+        this.addChild(this._menuStartButton);
+        this.addChild(this._menuExitButton);
+        this.addChild(this._menuText);
+    }
+    initActions() {
+        this._menuStartButton.on("click", ()=>{
+            this.resumeParentScene();
+        });
+        this._menuExitButton.on("click", ()=>{
+            this.exit();
+        });
+    }
+    setParentScene(scene) {
+        this._parentScene = scene;
+        this._parentScene.pause();
+        return this;
+    }
+    onEvent(event, data) {
+        if (!this.paused) {
+            if (event == "keydown" && data == "Escape") this.resumeParentScene();
+        }
+    }
+    resumeParentScene() {
+        (0, _sceneManager.SceneManager).changeScene(this._parentScene);
+        this._parentScene.resume();
+        (0, _eventManager.EventManager).unsubscribe("keydown", this);
+        this.destroy();
+    }
+    exit() {
+        (0, _savesHandler.SavesHandler).saveData("score", 0);
+        (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
+        (0, _eventManager.EventManager).unsubscribe("keydown", this);
+        this.destroy();
+    }
+}
+
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./menu-scene":"4nuFJ","../../utils/saves-handler":"1qn3x","../../constants":"45DZp"}],"1qn3x":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SavesHandler", ()=>SavesHandler);
+class SavesHandler {
+    constructor(){}
+    static saveData(key, data) {
+        sessionStorage.setItem(key, JSON.stringify(data));
+    }
+    static loadData(key) {
+        return JSON.parse(sessionStorage.getItem(key));
+    }
+    static saveDataLongTerm(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+    static loadDataLongTerm(key) {
+        return JSON.parse(localStorage.getItem(key));
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"45DZp":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Constants", ()=>Constants);
+let Constants;
+(function(Constants1) {
+    class AssetsTextures {
+        static LOADER_BAR_BG = "loader-bg";
+        static LOADER_BAR = "loader-bar";
+        static BONUS_IMMORTAL = "bonus_immortal";
+        static BONUS_LIVE = "bonus_live";
+        static BONUS_SLOW = "bonus_slow";
+        static BONUS_SPEED = "bonus_speed";
+        static BONUS_TRACTOR = "bonus_tractor";
+        static BUTTON_PLAY = "button_play";
+        static BUTTON_EXIT = "button_exit";
+        static MENU_BG = "menu_background";
+        static WIN_MENU_BG = "win_menu_background";
+        static APPEAR_FX = "appear_fx";
+        static SPLASH_FX = "splash_fx";
+        static BULLET_1 = "bullet_1";
+        static BULLET_2 = "bullet_2";
+        static EXPLODE_BIG_FX = "explode_big_fx";
+        static EXPLODE_SMALL_FX = "explode_small_fx";
+        static TANK_1 = "tank_player";
+        static TANK_2 = "tank_enemy_1";
+        static TANK_3 = "tank_enemy_2";
+        static TANK_4 = "tank_enemy_3";
+        static TANK_DEAD = "tank_dead";
+        static TRACTOR = "tractor";
+        static SOLIDER = "soldier";
+        static SOLIDER_DEAD = "soldier_dead";
+        static EMPTY_SPACE = "empty";
+        static EAGLE = "base_player";
+        static LEAVES = "leaves";
+        static SMALL_WALL = "small_wall";
+        static AT_BARRICADE = "at_hedgehogs";
+        static HARD_WALL = "hard_wall";
+        static DIRT = "dirt";
+        static GRASS = "grass";
+        static WATER = "water";
+    }
+    Constants1.AssetsTextures = AssetsTextures;
+    class AssetsSounds {
+        static SHOT = "shot_sound";
+        static BONUS = "bonus_sound";
+        static WIN = "win_sound";
+        static LOSE = "lose_sound";
+        static EXPLODE_SMALL = "explode_small_sound";
+        static EXPLODE_BIG = "explode_big_sound";
+        static WIN_GAME_MUSIC = "win_end_game_music";
+        static HEAVY_TRANSPORT_MOVE = "heavy_transport_move";
+        static WATER_SPLASH = "water_splash";
+    }
+    Constants1.AssetsSounds = AssetsSounds;
+    class GlobalNames {
+        static SCORE = "score";
+    }
+    Constants1.GlobalNames = GlobalNames;
+})(Constants || (Constants = {}));
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ea5wt":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "randNum", ()=>randNum);
+parcelHelpers.export(exports, "validatePointIsPositive", ()=>validatePointIsPositive);
+parcelHelpers.export(exports, "getTitlePosition", ()=>getTitlePosition);
+parcelHelpers.export(exports, "AABB", ()=>AABB);
+var _pixiJs = require("pixi.js");
+function randNum(max, min = 0) {
+    return Math.random() * max + min;
+}
+function validatePointIsPositive(point) {
+    return point.x !== null && point.x !== undefined && point.x >= 0 && point.y !== null && point.y !== undefined && point.y >= 0;
+}
+function getTitlePosition(cords, tileSize) {
+    const row = Math.floor(cords.y / tileSize);
+    const column = Math.floor(cords.x / tileSize);
+    return new (0, _pixiJs.Point)(column, row);
+}
+function AABB(a, b) {
+    return a.x - a.width / 2 < b.x + b.width / 2 && a.x + a.width / 2 > b.x - b.width / 2 && a.y - a.height / 2 < b.y + b.height / 2 && a.y + a.height / 2 > b.y - b.height / 2;
+}
+
+},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"a64l3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractMovementComponent", ()=>AbstractMovementComponent);
+var _abstractComponent = require("../AbstractComponent");
+var _pixiJs = require("pixi.js");
+class AbstractMovementComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "movement";
+    // IgnoreDT needed for smooth collision
+    _ignoreDT = false;
+    _previousPosition = new (0, _pixiJs.Point)();
+    _movementVector = new (0, _pixiJs.Point)();
+    _rotationSpeed = 0;
+    _rotationTo = undefined;
+    get previousPosition() {
+        return this._previousPosition;
+    }
+    get movementVector() {
+        return this._movementVector;
+    }
+    get rotationVector() {
+        const radAngle = (this._entity.angle - 90) * (Math.PI / 180);
+        const vector = new (0, _pixiJs.Point)((Math.abs(Math.cos(radAngle)) != 1 ? 0 : Math.cos(radAngle)) * this._entity.width, (Math.abs(Math.sin(radAngle)) != 1 ? 0 : Math.sin(radAngle)) * this._entity.height);
+        // return new Point(
+        //     this._entity.x + (vector.x >= 0 ? Math.ceil(vector.x / this._entity.width) : Math.floor(vector.x / this._entity.width)),
+        //     this._entity.y + (vector.y >= 0 ? Math.ceil(vector.y / this._entity.width) : Math.floor(vector.y / this._entity.width))
+        // )
+        return new (0, _pixiJs.Point)(this._entity.x + vector.x, this._entity.y + vector.y);
+    }
+    setRotationSpeed(speed) {
+        this._rotationSpeed = speed;
+        return this;
+    }
+    rotateTo(angle) {
+        this._rotationTo = angle;
+        return this;
+    }
+    setMovementVector(vector) {
+        this._movementVector = vector;
+        return this;
+    }
+    stop() {
+        this._movementVector = new (0, _pixiJs.Point)();
+        this._rotationSpeed = 0;
+    }
+    collides() {
+        this.stop();
+        this._entity.position = this._previousPosition;
+        this._ignoreDT = true;
+    }
+    onEntityMoved(callback) {
+        this._onEntityMoved = callback;
+        return this;
+    }
+    update(dt) {
+        if (!this._entity || this._entity.destroyed) return;
+        if (!this._previousPosition.equals(this._entity.position) && this._onEntityMoved) this._onEntityMoved(this._movementVector, this._previousPosition);
+        this._previousPosition.copyFrom(this._entity.position);
+        this._entity.x += this._ignoreDT ? this._movementVector.x : this._movementVector.x * dt;
+        this._entity.y += this._ignoreDT ? this._movementVector.y : this._movementVector.y * dt;
+        this._entity.angle = this._rotationTo ?? this._entity.angle + this._rotationSpeed * dt;
+        this._rotationTo = undefined;
+        this._ignoreDT = false;
+    }
+}
+
+},{"../AbstractComponent":"dF7BW","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dF7BW":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractComponent", ()=>AbstractComponent);
+class AbstractComponent {
+    _typeID = "";
+    constructor(source){}
+    get typeID() {
+        return this._typeID;
+    }
+    setEntity(entity) {
+        this._entity = entity;
+        return this;
+    }
+    update(dt) {}
+    remove() {}
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"e4Fm9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "EntityFactory", ()=>EntityFactory);
+var _playerControlComponent = require("./behaviors/control/player-control-component");
+var _basicTeamComponent = require("./behaviors/team/basic-team-component");
+var _tank = require("./interactive/tank");
+var _floor = require("./tiles/floor");
+var _hardWall = require("./tiles/hard-wall");
+var _leaves = require("./tiles/leaves");
+var _wall = require("./tiles/wall");
+var _water = require("./tiles/water");
+var _randomControlComponent = require("./behaviors/control/random-control-component");
+var _enemyBulletWeaponComponent = require("./behaviors/weapon/enemy-bullet-weapon-component");
+var _wanderingAmountBasedSpawner = require("./interactive/spawners/wandering-amount-based-spawner");
+var _buff = require("./interactive/buff");
+var _base = require("./interactive/base");
+var _bulletWeaponComponent = require("./behaviors/weapon/bullet-weapon-component");
+var _tractor = require("./interactive/tractor");
+var _basicDestroyComponent = require("./behaviors/destroy/basic-destroy-component");
+var _abstractTeamComponent = require("./behaviors/team/abstract-team-component");
+var _inWorldEventCounter = require("./interactive/in-world-event-counter");
+var _soldier = require("./interactive/soldier");
+var _atHedgehogs = require("./tiles/at-hedgehogs");
+var _eventManager = require("../../../event-manager");
+var _savesHandler = require("../../../utils/saves-handler");
+var _utils = require("../../../utils/utils");
+var _gameConstants = require("../game-constants");
+var _constants = require("../../../constants");
+class EntityFactory {
+    constructor(){}
+    static getEntity(entityID) {
+        switch(entityID){
+            case (0, _gameConstants.GameConstants).EntityIDs.DIRT:
+                {
+                    const floor = new (0, _floor.Floor)();
+                    floor.setSkin({
+                        assetName: (0, _constants.Constants).AssetsTextures.DIRT
+                    });
+                    return floor;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.GRASS:
+                {
+                    const floor = new (0, _floor.Floor)();
+                    floor.setSkin({
+                        assetName: (0, _constants.Constants).AssetsTextures.GRASS,
+                        numberOfFrames: 10,
+                        animationSpeed: 0.1
+                    });
+                    return floor;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.LEAVES:
+                return new (0, _leaves.Leaves)();
+            case (0, _gameConstants.GameConstants).EntityIDs.HARD_WALL:
+                return new (0, _hardWall.HardWall)();
+            case (0, _gameConstants.GameConstants).EntityIDs.WALL:
+                return new (0, _wall.Wall)();
+            case (0, _gameConstants.GameConstants).EntityIDs.AT_HEDGEHOGS:
+                return new (0, _atHedgehogs.ATHedgehogs)();
+            case (0, _gameConstants.GameConstants).EntityIDs.WATER:
+                return new (0, _water.Water)();
+            case (0, _gameConstants.GameConstants).EntityIDs.PLAYER_TANK:
+                {
+                    const playerTank = new (0, _tank.Tank)();
+                    playerTank.setSkin({
+                        assetName: (0, _constants.Constants).AssetsTextures.TANK_1,
+                        scaleX: 1.2,
+                        numberOfFrames: 4
+                    });
+                    playerTank.setComponent(new (0, _playerControlComponent.PlayerControlComponent)());
+                    const weapon = new (0, _bulletWeaponComponent.BulletWeaponComponent)();
+                    weapon.setReloadTime(50);
+                    playerTank.setComponent(weapon);
+                    playerTank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_1));
+                    playerTank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
+                        (0, _eventManager.EventManager).notify((0, _gameConstants.GameConstants).Events.TEAM_LOST, playerTank.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+                    }));
+                    return playerTank;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_TANK:
+                {
+                    const tank = new (0, _tank.Tank)();
+                    const enemy_skins = [
+                        (0, _constants.Constants).AssetsTextures.TANK_2,
+                        (0, _constants.Constants).AssetsTextures.TANK_3,
+                        (0, _constants.Constants).AssetsTextures.TANK_4
+                    ];
+                    tank.setSkin({
+                        assetName: enemy_skins[Math.floor((0, _utils.randNum)(3))],
+                        scaleX: 1.2,
+                        numberOfFrames: 4
+                    });
+                    tank.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+                    const weapon = new (0, _enemyBulletWeaponComponent.EnemyBulletWeaponComponent)();
+                    weapon.setReloadTime(50);
+                    tank.setComponent(weapon);
+                    tank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
+                    tank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
+                        (0, _eventManager.EventManager).notify((0, _gameConstants.GameConstants).Events.ENTITY_DESTROY + (0, _gameConstants.GameConstants).Teams.PLAYER_2, tank);
+                        (0, _savesHandler.SavesHandler).saveData((0, _constants.Constants).GlobalNames.SCORE, (0, _savesHandler.SavesHandler).loadData((0, _constants.Constants).GlobalNames.SCORE) + 10);
+                    }));
+                    return tank;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.PLAYER_TRACTOR:
+                {
+                    const playerTractor = new (0, _tractor.Tractor)();
+                    playerTractor.setSkin({
+                        assetName: (0, _constants.Constants).AssetsTextures.TRACTOR,
+                        scaleX: 1.2,
+                        numberOfFrames: 4
+                    });
+                    playerTractor.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+                    playerTractor.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_1));
+                    return playerTractor;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_SOLDIER:
+                {
+                    const soldier = new (0, _soldier.Soldier)();
+                    soldier.setSkin({
+                        assetName: (0, _constants.Constants).AssetsTextures.SOLIDER,
+                        numberOfFrames: 13,
+                        scaleX: 0.75,
+                        scaleY: 0.5,
+                        animationSpeed: 0.5
+                    });
+                    soldier.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+                    soldier.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
+                    return soldier;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_SUPPORT_TANK:
+                {
+                    const supportTank = new (0, _tank.Tank)();
+                    const enemy_skins = [
+                        (0, _constants.Constants).AssetsTextures.TANK_2,
+                        (0, _constants.Constants).AssetsTextures.TANK_3,
+                        (0, _constants.Constants).AssetsTextures.TANK_4
+                    ];
+                    supportTank.setSkin({
+                        assetName: enemy_skins[Math.floor((0, _utils.randNum)(3))],
+                        scaleX: 1.2,
+                        numberOfFrames: 4
+                    });
+                    supportTank.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+                    const weapon = new (0, _enemyBulletWeaponComponent.EnemyBulletWeaponComponent)();
+                    weapon.setReloadTime(50);
+                    supportTank.setComponent(weapon);
+                    supportTank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
+                    supportTank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
+                        (0, _savesHandler.SavesHandler).saveData((0, _constants.Constants).GlobalNames.SCORE, (0, _savesHandler.SavesHandler).loadData((0, _constants.Constants).GlobalNames.SCORE) + 10);
+                    }));
+                    return supportTank;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_SMALL_SPAWNER:
+                {
+                    const spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(EntityFactory.getEntity(902)).setTimeBetweenSpawns(250).setCollisionGroup([
+                        (0, _gameConstants.GameConstants).EntityTypes.TANK,
+                        (0, _gameConstants.GameConstants).EntityTypes.TRACTOR,
+                        (0, _gameConstants.GameConstants).EntityTypes.DEAD_TANK,
+                        (0, _gameConstants.GameConstants).EntityTypes.HARD_WALL,
+                        (0, _gameConstants.GameConstants).EntityTypes.SMALL_WALL,
+                        (0, _gameConstants.GameConstants).EntityTypes.WATER,
+                        (0, _gameConstants.GameConstants).EntityTypes.AT_HEDGEHOGS
+                    ]).setTimesToSpawn(4).setMaxAmountPerTime(1);
+                    spawner.setSkin({
+                        hitboxWidth: 32,
+                        hitboxHeight: 32
+                    });
+                    return spawner;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_DEATH_COUNTER:
+                {
+                    const counter = new (0, _inWorldEventCounter.InWorldEventCounter)();
+                    counter.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
+                    counter.timesToCount(12).setEventToCount((0, _gameConstants.GameConstants).Events.ENTITY_DESTROY + (0, _gameConstants.GameConstants).Teams.PLAYER_2).onCountEnded(()=>{
+                        (0, _eventManager.EventManager).notify((0, _gameConstants.GameConstants).Events.TEAM_WON, (0, _gameConstants.GameConstants).Teams.PLAYER_1);
+                    });
+                    return counter;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.RANDOM_BONUS_SPAWNER:
+                {
+                    const buff = new (0, _buff.Buff)();
+                    let spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(buff).setTimeBetweenSpawns(600).setCollisionGroup([
+                        (0, _gameConstants.GameConstants).EntityTypes.TANK,
+                        (0, _gameConstants.GameConstants).EntityTypes.TRACTOR,
+                        (0, _gameConstants.GameConstants).EntityTypes.DEAD_TANK,
+                        (0, _gameConstants.GameConstants).EntityTypes.HARD_WALL,
+                        (0, _gameConstants.GameConstants).EntityTypes.SMALL_WALL,
+                        (0, _gameConstants.GameConstants).EntityTypes.WATER,
+                        (0, _gameConstants.GameConstants).EntityTypes.AT_HEDGEHOGS
+                    ]).setTimesToSpawn(9999).setMaxAmountPerTime(1);
+                    spawner.setSkin({
+                        hitboxWidth: 32,
+                        hitboxHeight: 32
+                    });
+                    return spawner;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.PLAYER_BASE:
+                {
+                    const base = new (0, _base.Base)();
+                    base.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_1));
+                    base.setSkin({
+                        assetName: (0, _constants.Constants).AssetsTextures.EAGLE
+                    });
+                    return base;
+                }
+            default:
+                return null;
+        }
+    }
+}
+
+},{"./behaviors/control/player-control-component":"57j96","./behaviors/team/basic-team-component":"5ouad","./interactive/tank":"gsDw0","./tiles/floor":"6dewe","./tiles/hard-wall":"l6PUG","./tiles/leaves":"hunmf","./tiles/wall":"4QX7V","./tiles/water":"eCNzS","./behaviors/control/random-control-component":"hIlER","./behaviors/weapon/enemy-bullet-weapon-component":"dj8Y2","./interactive/spawners/wandering-amount-based-spawner":"hygE5","./interactive/buff":"1NWEN","./interactive/base":"5gio5","./behaviors/weapon/bullet-weapon-component":"3cOKk","./interactive/tractor":"ixdmX","./behaviors/destroy/basic-destroy-component":"dyUm8","./behaviors/team/abstract-team-component":"f7VfU","./interactive/in-world-event-counter":"iKGAS","./interactive/soldier":"2fiQn","./tiles/at-hedgehogs":"j65HL","../../../event-manager":"l75gk","../../../utils/saves-handler":"1qn3x","../../../utils/utils":"ea5wt","../game-constants":"k2kvk","../../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"57j96":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "PlayerControlComponent", ()=>PlayerControlComponent);
+var _eventManager = require("../../../../../event-manager");
+var _abstractControlComponent = require("./abstract-control-component");
+class PlayerControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
+    action = ()=>{};
+    constructor(source){
+        super(source);
+        (0, _eventManager.EventManager).subscribe("keydown", this);
+        (0, _eventManager.EventManager).subscribe("keyup", this);
+    }
+    onEvent(event, data) {
+        if (event == "keydown") switch(data){
+            case "ArrowUp":
+                this.action = this.triggerActionUp;
+                break;
+            case "w":
+                this.action = this.triggerActionUp;
+                break;
+            case "ArrowDown":
+                this.action = this.triggerActionDown;
+                break;
+            case "s":
+                this.action = this.triggerActionDown;
+                break;
+            case "ArrowLeft":
+                this.action = this.triggerActionLeft;
+                break;
+            case "a":
+                this.action = this.triggerActionLeft;
+                break;
+            case "ArrowRight":
+                this.action = this.triggerActionRight;
+                break;
+            case "d":
+                this.action = this.triggerActionRight;
+                break;
+            case " ":
+                this.action = this.triggerActionSpace;
+                break;
+        }
+        if (event == "keyup") this.action = ()=>{};
+    }
+    update(dt) {
+        super.update(dt);
+        this.action();
+    }
+    clone() {
+        return new PlayerControlComponent(this);
+    }
+}
+
+},{"../../../../../event-manager":"l75gk","./abstract-control-component":"iMT9O","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iMT9O":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractControlComponent", ()=>AbstractControlComponent);
+var _abstractComponent = require("../AbstractComponent");
+class AbstractControlComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "control";
+    onActionDown(callback) {
+        this.actionDownCallback = callback;
+    }
+    onActionLeft(callback) {
+        this.actionLeftCallback = callback;
+    }
+    onActionRight(callback) {
+        this.actionRightCallback = callback;
+    }
+    onActionSpace(callback) {
+        this.actionSpaceCallback = callback;
+    }
+    onActionUp(callback) {
+        this.actionUpCallback = callback;
+    }
+    triggerActionDown() {
+        if (this.actionDownCallback) this.actionDownCallback();
+    }
+    triggerActionLeft() {
+        if (this.actionLeftCallback) this.actionLeftCallback();
+    }
+    triggerActionRight() {
+        if (this.actionRightCallback) this.actionRightCallback();
+    }
+    triggerActionSpace() {
+        if (this.actionSpaceCallback) this.actionSpaceCallback();
+    }
+    triggerActionUp() {
+        if (this.actionUpCallback) this.actionUpCallback();
+    }
+    update(dt) {}
+}
+
+},{"../AbstractComponent":"dF7BW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5ouad":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BasicTeamComponent", ()=>BasicTeamComponent);
+var _abstractTeamComponent = require("./abstract-team-component");
+class BasicTeamComponent extends (0, _abstractTeamComponent.AbstractTeamComponent) {
+    constructor(source){
+        super(source);
+        if (source?._team) this._team = source._team;
+    }
+    clone() {
+        return new BasicTeamComponent(this);
+    }
+}
+
+},{"./abstract-team-component":"f7VfU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f7VfU":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractTeamComponent", ()=>AbstractTeamComponent);
+var _abstractComponent = require("../AbstractComponent");
+class AbstractTeamComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "team";
+    _team = "";
+    _setTeamCallback = ()=>{};
+    getTeam() {
+        return this._team;
+    }
+    setTeam(team) {
+        this._team = team;
+        this._setTeamCallback();
+        return this;
+    }
+    onTeamSet(callback) {
+        this._setTeamCallback = callback;
+    }
+}
+
+},{"../AbstractComponent":"dF7BW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gsDw0":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Tank", ()=>Tank);
+var _entity = require("../entity");
+var _pixiJs = require("pixi.js");
+var _directWalkMovementComponent = require("../behaviors/movement/direct-walk-movement-component");
+var _abstractWeaponComponent = require("../behaviors/weapon/abstract-weapon-component");
+var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
+var _abstractMovementComponent = require("../behaviors/movement/abstract-movement-component");
+var _appear = require("../fx/appear");
+var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
+var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
+var _bigExplosion = require("../fx/big-explosion");
+var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
+var _soldier = require("./soldier");
+var _randomControlComponent = require("../behaviors/control/random-control-component");
+var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
+var _basicTeamComponent = require("../behaviors/team/basic-team-component");
+var _deadTank = require("../tiles/dead-tank");
+var _howler = require("howler");
+var _utils = require("../../../../utils/utils");
+var _sceneManager = require("../../../../scene-manager");
+var _constants = require("../../../../constants");
+var _gameConstants = require("../../game-constants");
+class Tank extends (0, _entity.Entity) {
+    _moveSound = new (0, _howler.Howl)({
+        src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.HEAVY_TRANSPORT_MOVE].url,
+        volume: 0.25
+    });
+    constructor(source){
+        super(source);
+        this.speed = source?.speed || 2;
+        this.health = source?.health || 1;
+        this.setComponent(new (0, _directWalkMovementComponent.DirectionalWalkMovementBehavior)());
+        this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
+            if (object == this) return;
+            const stopObject = [
+                (0, _gameConstants.GameConstants).EntityTypes.HARD_WALL,
+                (0, _gameConstants.GameConstants).EntityTypes.SMALL_WALL,
+                (0, _gameConstants.GameConstants).EntityTypes.AT_HEDGEHOGS,
+                (0, _gameConstants.GameConstants).EntityTypes.TANK,
+                (0, _gameConstants.GameConstants).EntityTypes.DEAD_TANK,
+                (0, _gameConstants.GameConstants).EntityTypes.TRACTOR
+            ];
+            if (stopObject.includes(object.entityType)) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+            switch(object.entityType){
+                case (0, _gameConstants.GameConstants).EntityTypes.SOLDIER:
+                    object.takeDamage(9999);
+                    break;
+                case (0, _gameConstants.GameConstants).EntityTypes.BUFF:
+                    new (0, _howler.Howl)({
+                        src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.BONUS].url
+                    }).play();
+                    this.setComponent(object.getBuff());
+                    object.destroy();
+            }
+        }));
+    }
+    clone() {
+        return new Tank(this);
+    }
+    takeDamage(damage) {
+        if (this.immortal) return;
+        this.health -= damage;
+        this.setComponent(new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(60));
+    }
+    setComponent(component) {
+        super.setComponent(component);
+        if (this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)) && this._initOnUpdate) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).onEntityMoved((vector)=>{
+            this._skin.loop = false;
+            this._skin.onComplete = ()=>{
+                this._moveSound.pause();
+            };
+            if (!this._skin.playing) {
+                this._skin.gotoAndPlay(0);
+                this._moveSound.play();
+            }
+        });
+        if (Object.getPrototypeOf(component) instanceof (0, _abstractControlComponent.AbstractControlComponent)) {
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionUp(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, -this.speed));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionDown(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, this.speed));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionRight(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(this.speed, 0));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionLeft(()=>{
+                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(-this.speed, 0));
+            });
+            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionSpace(()=>{
+                if (this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent))) this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent)).fire();
+            });
+        }
+    }
+    updateTilingData(tileMap, tileSize) {
+        const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
+        const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
+        if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
+        let collisionGroup = [
+            ...tileMap[tilePos.y][tilePos.x]
+        ];
+        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y][tilePos.x - 1]
+        ];
+        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y][tilePos.x + 1]
+        ];
+        if (tileMap[tilePos.y + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y + 1][tilePos.x]
+        ];
+        if (tileMap[tilePos.y - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[tilePos.y - 1][tilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
+        ];
+        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
+        ];
+        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
+        ];
+        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
+            ...collisionGroup,
+            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
+        ];
+        this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
+    }
+    update(dt) {
+        if (this.health <= 0) {
+            const dead = new (0, _deadTank.DeadTank)();
+            dead.x = this.x;
+            dead.y = this.y;
+            dead.angle = this.angle;
+            (0, _sceneManager.SceneManager).currentScene.addChild(dead);
+            let i = Math.floor((0, _utils.randNum)(3));
+            while(i--){
+                const soldier = new (0, _soldier.Soldier)();
+                soldier.setSkin({
+                    assetName: (0, _constants.Constants).AssetsTextures.SOLIDER,
+                    numberOfFrames: 13,
+                    scaleX: 0.75,
+                    scaleY: 0.5,
+                    animationSpeed: 0.5
+                });
+                soldier.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
+                soldier.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
+                soldier.x = this.x;
+                soldier.y = this.y;
+                (0, _sceneManager.SceneManager).currentScene.addChild(soldier);
+            }
+            const fx = new (0, _bigExplosion.BigExplosionFX)();
+            fx.x = this.x;
+            fx.y = this.y;
+            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+            this.destroy();
+        }
+        if (this._initOnUpdate) {
+            const fx = new (0, _appear.AppearFX)();
+            fx.x = this.x;
+            fx.y = this.y;
+            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+        }
+        super.update(dt);
+    }
+}
+
+},{"../entity":"7O5J4","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"5Vj0c","../behaviors/weapon/abstract-weapon-component":"aDMpq","../behaviors/control/abstract-control-component":"iMT9O","../behaviors/movement/abstract-movement-component":"a64l3","../fx/appear":"54360","../behaviors/collision/basic-aabb-collision-component":"htN9e","../behaviors/collision/abstract-collision-component":"l1gV3","../fx/big-explosion":"fqHpB","../behaviors/buffs/immortal-buff-component":"ibCZq","./soldier":"2fiQn","../behaviors/control/random-control-component":"hIlER","../behaviors/team/abstract-team-component":"f7VfU","../behaviors/team/basic-team-component":"5ouad","../tiles/dead-tank":"5nGmE","howler":"5Vjgk","../../../../utils/utils":"ea5wt","../../../../scene-manager":"2FQ8z","../../../../constants":"45DZp","../../game-constants":"k2kvk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7O5J4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Entity", ()=>Entity);
+var _pixiJs = require("pixi.js");
+var _abstractDestroyComponent = require("./behaviors/destroy/abstract-destroy-component");
+var _constants = require("../../../constants");
+class Entity extends (0, _pixiJs.Container) {
+    _components = [];
+    _initOnUpdate = true;
+    get entityType() {
+        return this.constructor.name;
+    }
+    get destroyed() {
+        return this._destroyed;
+    }
+    // protected getNextTilePosition(movementVector?: Point): Point {
+    //     const entityTilePos = this.tilePosition;
+    //     let vector = movementVector;
+    //     //TODO prototype code for advanced collision for fast moving objects (doesent work for now)
+    //     // if (!vector || (vector.x == 0 && vector.y == 0)) {
+    //     //     const radAngle: number = (this.angle-90) * (Math.PI/180);
+    //     //     vector = new Point(
+    //     //         (Math.abs(Math.cos(radAngle)) != 1 ? 0 : Math.cos(radAngle)),
+    //     //         (Math.abs(Math.sin(radAngle)) != 1 ? 0 : Math.sin(radAngle))
+    //     //     );
+    //     // }
+    //     const radAngle: number = (this.angle-90) * (Math.PI/180);
+    //     vector = new Point(
+    //         (Math.abs(Math.cos(radAngle)) != 1 ? 0 : Math.cos(radAngle)),
+    //         (Math.abs(Math.sin(radAngle)) != 1 ? 0 : Math.sin(radAngle))
+    //     );
+    //     return new Point(
+    //         entityTilePos.x + (vector.x >= 0 ? Math.ceil(vector.x / TILE_SIZE) : Math.floor(vector.x / TILE_SIZE)),
+    //         entityTilePos.y + (vector.y >= 0 ? Math.ceil(vector.y / TILE_SIZE) : Math.floor(vector.y / TILE_SIZE))
+    //     )
+    // }
+    get simpleBounds() {
+        return this.destroyed ? {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0
+        } : {
+            x: this.x,
+            y: this.y,
+            width: this._hitboxWidth || this.width,
+            height: this._hitboxHeight || this.height
+        };
+    }
+    updateTilingData(tileMap, tileSize) {}
+    constructor(source){
+        super();
+        this._initOnUpdate = true;
+        if (source?._skinOptions) this.setSkin(source._skinOptions);
+        if (source?._components) source._components.forEach((component)=>this.setComponent(component.clone()));
+        this.name = this.constructor.name + (0, _pixiJs.utils).uid();
+        if (this._skin) this.addChild(this._skin);
+    }
+    setSkin(options) {
+        this._skinOptions = options;
+        if (!this._skin && !options?.assetName) options.assetName = (0, _constants.Constants).AssetsTextures.EMPTY_SPACE;
+        if (options?.assetName) {
+            const numberOfFrames = options?.numberOfFrames || 1;
+            const sheet = (0, _pixiJs.Loader).shared.resources[options.assetName].texture;
+            const frameWidth = sheet.width / numberOfFrames;
+            const frameHeight = sheet.height;
+            const frames = [];
+            for(let i = 0; i < numberOfFrames; i++){
+                const frame = sheet.clone();
+                frame.frame = new (0, _pixiJs.Rectangle)(i * frameWidth, 0, frameWidth, frameHeight);
+                frame.updateUvs();
+                frames.push(frame);
+            }
+            this._skin = new (0, _pixiJs.AnimatedSprite)(frames);
+            this.addChild(this._skin);
+        }
+        this._skin.anchor.set(0.5);
+        this._skin.scale.x = options?.scaleX || this._skin.scale.x;
+        this._skin.scale.y = options?.scaleY || this._skin.scale.y;
+        if (options?.hitboxWidth) this._hitboxWidth = options.hitboxWidth;
+        if (options?.hitboxHeight) this._hitboxHeight = options.hitboxHeight;
+        if (options?.animationSpeed) this._skin.animationSpeed = options.animationSpeed;
+    }
+    update(dt) {
+        if (this.destroyed) return;
+        if (this._initOnUpdate) this._initOnUpdate = false;
+        this._components.forEach((component)=>component.update(dt));
+    }
+    setComponent(component) {
+        component.setEntity(this);
+        let componentExist = false;
+        for (const [i, c] of this._components.entries())if (c.typeID == component.typeID) {
+            this._components[i].remove();
+            this._components[i] = component;
+            componentExist = true;
+            return;
+        }
+        if (!componentExist) this._components.push(component);
+    }
+    getComponent(componentType) {
+        for (const component of this._components){
+            if (component instanceof componentType) return component;
+        }
+        return undefined;
+    }
+    removeComponent(componentType) {
+        let toRemove;
+        let index;
+        for (const [i, component] of this._components.entries())if (component instanceof componentType) {
+            toRemove = component;
+            index = i;
+            break;
+        }
+        if (toRemove && index) {
+            toRemove.setEntity(null);
+            this._components.splice(index, 1);
+        }
+    }
+    onEvent(event, data) {}
+    destroy(_options) {
+        super.destroy(_options);
+        if (this.getComponent((0, _abstractDestroyComponent.AbstractDestroyComponent))) this.getComponent((0, _abstractDestroyComponent.AbstractDestroyComponent)).destroy();
+    }
+}
+
+},{"pixi.js":"1pSin","./behaviors/destroy/abstract-destroy-component":"7BYTl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../constants":"45DZp"}],"7BYTl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractDestroyComponent", ()=>AbstractDestroyComponent);
+var _abstractComponent = require("../AbstractComponent");
+class AbstractDestroyComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "destroy";
+    _destroyCallback = ()=>{};
+    constructor(source){
+        super(source);
+        if (source?._destroyCallback) this._destroyCallback = source._destroyCallback;
+    }
+    onDestroy(callback) {
+        this._destroyCallback = callback;
+        return this;
+    }
+    destroy() {
+        this._destroyCallback();
+    }
+}
+
+},{"../AbstractComponent":"dF7BW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Vj0c":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "DirectionalWalkMovementBehavior", ()=>DirectionalWalkMovementBehavior);
+var _abstractMovementComponent = require("./abstract-movement-component");
+class DirectionalWalkMovementBehavior extends (0, _abstractMovementComponent.AbstractMovementComponent) {
+    setMovementVector(vector) {
+        if (vector.y < 0) {
+            vector.x = 0;
+            this.rotateTo(0);
+        }
+        if (vector.y > 0) {
+            vector.x = 0;
+            this.rotateTo(180);
+        }
+        if (vector.x < 0) {
+            vector.y = 0;
+            this.rotateTo(270);
+        }
+        if (vector.x > 0) {
+            vector.y = 0;
+            this.rotateTo(90);
+        }
+        return super.setMovementVector(vector);
+    }
+    update(dt) {
+        super.update(dt);
+        this.stop();
+    }
+    clone() {
+        return new DirectionalWalkMovementBehavior(this);
+    }
+}
+
+},{"./abstract-movement-component":"a64l3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aDMpq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractWeaponComponent", ()=>AbstractWeaponComponent);
+var _abstractComponent = require("../AbstractComponent");
+class AbstractWeaponComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "weapon";
+    constructor(source){
+        super(source);
+        this._reloaded = true;
+        this._reloadTime = source?._reloadTime || 1;
+        this._reloadCounter = 0;
+    }
+    fire() {
+        this._reloadCounter = 0;
+        this._reloaded = false;
+    }
+    setReloadTime(value) {
+        this._reloadTime = value;
+    }
+    update(dt) {
+        this._reloadCounter += dt;
+        if (this._reloadCounter > this._reloadTime) this._reloaded = true;
+    }
+}
+
+},{"../AbstractComponent":"dF7BW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"54360":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AppearFX", ()=>AppearFX);
+var _entity = require("../entity");
+var _constants = require("../../../../constants");
+class AppearFX extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+        this.setSkin({
+            assetName: (0, _constants.Constants).AssetsTextures.APPEAR_FX,
+            numberOfFrames: 10
+        });
+        this._skin.onComplete = ()=>{
+            this.destroy();
+        };
+        this._skin.animationSpeed = 0.2;
+        this._skin.loop = false;
+        this._skin.play();
+    }
+    clone() {
+        return new AppearFX;
+    }
+}
+
+},{"../entity":"7O5J4","../../../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"htN9e":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BasicAabbCollisionComponent", ()=>BasicAabbCollisionComponent);
+var _abstractCollisionComponent = require("./abstract-collision-component");
+var _utils = require("../../../../../utils/utils");
+class BasicAabbCollisionComponent extends (0, _abstractCollisionComponent.AbstractCollisionComponent) {
+    getCollisionGroup() {
+        return this._collisionGroup;
+    }
+    setCollisionGroup(objects) {
+        this._collisionGroup = objects;
+        return this;
+    }
+    update(dt) {
+        if (!this._entity.destroyed) {
+            let i = this._collisionGroup.length;
+            while(i--)if (this._collisionGroup[i] && this._collisionGroup[i] !== this._entity && (0, _utils.AABB)(this._entity.simpleBounds, this._collisionGroup[i].simpleBounds)) this.collidedWith(this._collisionGroup[i]);
+        }
+    }
+    clone() {
+        return new BasicAabbCollisionComponent(this);
+    }
+}
+
+},{"./abstract-collision-component":"l1gV3","../../../../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l1gV3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AbstractCollisionComponent", ()=>AbstractCollisionComponent);
+var _abstractComponent = require("../AbstractComponent");
+class AbstractCollisionComponent extends (0, _abstractComponent.AbstractComponent) {
+    _typeID = "collision";
+    _collisionGroup = [];
+    constructor(source){
+        super(source);
+        if (source?._collisionCallback) this._collisionCallback = source._collisionCallback;
+    }
+    onCollidedWith(callback) {
+        this._collisionCallback = callback;
+        return this;
+    }
+    collidedWith(object) {
+        this._collisionCallback(object);
+    }
+    getCollisionGroup() {
+        return this._collisionGroup;
+    }
+}
+
+},{"../AbstractComponent":"dF7BW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fqHpB":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "BigExplosionFX", ()=>BigExplosionFX);
+var _entity = require("../entity");
+var _pixiJs = require("pixi.js");
+var _howler = require("howler");
+var _constants = require("../../../../constants");
+class BigExplosionFX extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+        this.setSkin({
+            assetName: (0, _constants.Constants).AssetsTextures.EXPLODE_BIG_FX,
+            numberOfFrames: 16
+        });
+        this._skin.onComplete = ()=>{
+            this.destroy();
+        };
+        this._skin.animationSpeed = 0.25;
+        this._skin.loop = false;
+        this._skin.play();
+        new (0, _howler.Howl)({
+            src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.EXPLODE_BIG].url
+        }).play();
+    }
+    clone() {
+        return new BigExplosionFX;
+    }
+}
+
+},{"../entity":"7O5J4","pixi.js":"1pSin","howler":"5Vjgk","../../../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Vjgk":[function(require,module,exports) {
 var global = arguments[3];
 /*!
  *  howler.js v2.2.3
@@ -40992,1286 +42274,7 @@ var global = arguments[3];
     };
 })();
 
-},{}],"l75gk":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "EventManager", ()=>EventManager);
-class EventManager {
-    constructor(){}
-    static _listeners = new Map();
-    static subscribe(event, listener) {
-        const listeners = EventManager._listeners.get(event);
-        EventManager._listeners.set(event, listeners ? [
-            ...listeners,
-            listener
-        ] : [
-            listener
-        ]);
-    }
-    static unsubscribe(event, listener) {
-        const listeners = EventManager._listeners.get(event);
-        if (listeners && listeners.indexOf(listener)) {
-            listeners.splice(listeners.indexOf(listener), 1);
-            EventManager._listeners.set(event, listeners);
-        }
-    }
-    static notify(event, data) {
-        const listeners = EventManager._listeners.get(event);
-        if (listeners) for (let listener of listeners)listener.onEvent(event, data);
-    }
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1qn3x":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SavesHandler", ()=>SavesHandler);
-class SavesHandler {
-    constructor(){}
-    static saveData(key, data) {
-        sessionStorage.setItem(key, JSON.stringify(data));
-    }
-    static loadData(key) {
-        return JSON.parse(sessionStorage.getItem(key));
-    }
-    static saveDataLongTerm(key, data) {
-        localStorage.setItem(key, JSON.stringify(data));
-    }
-    static loadDataLongTerm(key) {
-        return JSON.parse(localStorage.getItem(key));
-    }
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eoY4A":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "GameScene", ()=>GameScene);
-var _scene = require("../scene");
-var _eventManager = require("../../event-manager");
-var _sceneManager = require("../../scene-manager");
-var _pauseScene = require("../menu/pause-scene");
-var _entityFactory = require("../../entities/entity-factory");
-var _pixiJs = require("pixi.js");
-var _abstractMovementComponent = require("../../entities/behaviors/movement/abstract-movement-component");
-var _utils = require("../../utils/utils");
-class GameScene extends (0, _scene.Scene) {
-    dynamicChildren = [];
-    tileMap = [];
-    tileSize = 36;
-    constructor(){
-        super();
-        (0, _eventManager.EventManager).subscribe("keydown", this);
-    }
-    loadLevel(level) {
-        this.tileMap.length = 0;
-        for (let [zindex, tilemap] of level.depthLevels.entries()){
-            if (!this.tileMap.length) this.tileMap = new Array(tilemap.length);
-            let x = this.tileSize / 2;
-            let y = this.tileSize / 2;
-            for (let [rowIndex, row] of tilemap.entries()){
-                if (!this.tileMap[rowIndex]) this.tileMap[rowIndex] = [];
-                for (let [tileIndex, tileID] of row.entries()){
-                    if (!this.tileMap[rowIndex][tileIndex]) this.tileMap[rowIndex][tileIndex] = [];
-                    let tile = (0, _entityFactory.EntityFactory).getEntity(tileID);
-                    if (tile) {
-                        tile.x = x;
-                        tile.y = y;
-                        tile.zIndex = zindex;
-                        this.addChild(tile);
-                    }
-                    x += this.tileSize;
-                }
-                x = this.tileSize / 2;
-                y += this.tileSize;
-            }
-        }
-        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(12, 12));
-    }
-    onEvent(event, data) {
-        if (!this.paused) {
-            if (event == "keydown" && data == "Escape") this._preUpdateAction = ()=>{
-                (0, _sceneManager.SceneManager).changeScene(new (0, _pauseScene.PauseScene)().setParentScene(this));
-                this._preUpdateAction = ()=>{};
-            };
-        }
-    }
-    // Забирает как то Тимур Дениса с интернатруры. Идут они по улице, Денис говорит "Тимур, а почему солнышко светит?"
-    // Тимур отвечает ему "Работает и х*й с ним, не трогай"
-    // Так и с кодом ниже
-    update(dt) {
-        super.update(dt);
-        console.log(dt);
-        this.dynamicChildren = this.dynamicChildren.filter((entity)=>{
-            return !entity.destroyed;
-        });
-        let i = this.dynamicChildren.length;
-        while(i--){
-            const dynamicEntity = this.dynamicChildren[i];
-            if (dynamicEntity.destroyed) continue;
-            if (dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && !dynamicEntity.position.equals(dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).previousPosition)) {
-                const prevTilePos = (0, _utils.getTitlePosition)(dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).previousPosition, this.tileSize);
-                const tilePos = (0, _utils.getTitlePosition)(dynamicEntity.position, this.tileSize);
-                this.moveEntityFromTileToTile(dynamicEntity, prevTilePos, tilePos);
-            }
-            dynamicEntity.updateTilingData(this.tileMap, this.tileSize);
-            dynamicEntity.update(dt);
-        }
-    }
-    addChild(...children) {
-        this.dynamicChildren = [
-            ...this.dynamicChildren,
-            ...[
-                ...children
-            ].filter((child)=>child.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)))
-        ];
-        let canBeAdded = true;
-        for (const child1 of [
-            ...children
-        ]){
-            const pos = (0, _utils.getTitlePosition)(child1.position, this.tileSize);
-            if (this.tileMap[pos.y] && this.tileMap[pos.y][pos.x]) this.tileMap[pos.y][pos.x].push(child1);
-            else canBeAdded = false;
-        }
-        if (canBeAdded) return super.addChild(...children);
-        else {
-            for (const child of [
-                ...children
-            ])child.destroy();
-            return [
-                ...children
-            ][0];
-        }
-    }
-    removeChild(...children) {
-        for (const child of [
-            ...children
-        ]){
-            const pos = (0, _utils.getTitlePosition)(child.position, this.tileSize);
-            if (this.tileMap[pos.y] && this.tileMap[pos.y][pos.x]) {
-                const index = this.tileMap[pos.y][pos.x].indexOf(child);
-                this.tileMap[pos.y][pos.x].splice(index, 1);
-            } else {
-                let i = this.tileMap.length;
-                while(i--){
-                    let j = this.tileMap[i].length;
-                    while(j--){
-                        const index = this.tileMap[i][j].indexOf(child);
-                        if (index >= 0) {
-                            this.tileMap[i][j].splice(index, 1);
-                            i = j = 0;
-                        }
-                    }
-                }
-            }
-        }
-        return super.removeChild(...children);
-    }
-    moveEntityFromTileToTile(entity, from, to) {
-        let index = -1;
-        if (!this.tileMap[to.y] || !this.tileMap[to.y][to.x]) return;
-        if (this.tileMap[from.y] && this.tileMap[from.y][from.x]) index = this.tileMap[from.y][from.x].indexOf(entity);
-        if (index >= 0) this.tileMap[to.y][to.x].push(this.tileMap[from.y][from.x].splice(index, 1)[0]);
-        else {
-            let i = this.tileMap.length;
-            while(i--){
-                let j = this.tileMap[i].length;
-                while(j--){
-                    const findex = this.tileMap[i][j].indexOf(entity);
-                    if (findex >= 0) {
-                        this.tileMap[to.y][to.x].push(this.tileMap[i][j].splice(findex, 1)[0]);
-                        i = j = 0;
-                    }
-                }
-            }
-        }
-    }
-}
-
-},{"../scene":"aOCet","../../event-manager":"l75gk","../../scene-manager":"2FQ8z","../menu/pause-scene":"iGHCP","../../entities/entity-factory":"dTnZv","pixi.js":"1pSin","../../entities/behaviors/movement/abstract-movement-component":"4Zsay","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iGHCP":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "PauseScene", ()=>PauseScene);
-var _scene = require("../scene");
-var _sceneManager = require("../../scene-manager");
-var _pixiJs = require("pixi.js");
-var _eventManager = require("../../event-manager");
-var _menuScene = require("./menu-scene");
-var _savesHandler = require("../../utils/saves-handler");
-class PauseScene extends (0, _scene.Scene) {
-    constructor(){
-        super();
-        (0, _eventManager.EventManager).subscribe("keydown", this);
-        this.initVisuals();
-        this.initActions();
-        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(0, 0));
-    }
-    initVisuals() {
-        this._background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["menu_background"].texture);
-        this._background.anchor.set(0.5);
-        this._background.x = (0, _sceneManager.SceneManager).width / 2;
-        this._background.y = (0, _sceneManager.SceneManager).height / 2;
-        this._background.width = (0, _sceneManager.SceneManager).width;
-        this._background.height = (0, _sceneManager.SceneManager).height;
-        this._menuText = new (0, _pixiJs.Text)("Pause", new (0, _pixiJs.TextStyle)({
-            fontSize: 64,
-            align: "center",
-            fill: "#FFFFFF"
-        }));
-        this._menuStartButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["button_play"].texture);
-        this._menuText.anchor.set(0.5);
-        this._menuText.x = (0, _sceneManager.SceneManager).width / 2;
-        this._menuText.y = (0, _sceneManager.SceneManager).height / 3;
-        this._menuStartButton.anchor.set(0.5);
-        this._menuStartButton.x = (0, _sceneManager.SceneManager).width / 2;
-        this._menuStartButton.y = (0, _sceneManager.SceneManager).height / 2;
-        this._menuStartButton.interactive = true;
-        this._menuStartButton.buttonMode = true;
-        this._menuExitButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["button_exit"].texture);
-        this._menuExitButton.anchor.set(0.5);
-        this._menuExitButton.x = (0, _sceneManager.SceneManager).width / 2;
-        this._menuExitButton.y = (0, _sceneManager.SceneManager).height / 1.5;
-        this._menuExitButton.interactive = true;
-        this._menuExitButton.buttonMode = true;
-        this.addChild(this._background);
-        this.addChild(this._menuStartButton);
-        this.addChild(this._menuExitButton);
-        this.addChild(this._menuText);
-    }
-    initActions() {
-        this._menuStartButton.on("click", ()=>{
-            this.resumeParentScene();
-        });
-        this._menuExitButton.on("click", ()=>{
-            this.exit();
-        });
-    }
-    setParentScene(scene) {
-        this._parentScene = scene;
-        this._parentScene.pause();
-        return this;
-    }
-    onEvent(event, data) {
-        if (!this.paused) {
-            if (event == "keydown" && typeof data == "string" && data == "Escape") this.resumeParentScene();
-        }
-    }
-    resumeParentScene() {
-        (0, _sceneManager.SceneManager).changeScene(this._parentScene);
-        this._parentScene.resume();
-        (0, _eventManager.EventManager).unsubscribe("keydown", this);
-        this.destroy();
-    }
-    exit() {
-        (0, _savesHandler.SavesHandler).saveData("score", 0);
-        (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
-        (0, _eventManager.EventManager).unsubscribe("keydown", this);
-        this.destroy();
-    }
-}
-
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./menu-scene":"4nuFJ","../../utils/saves-handler":"1qn3x"}],"dTnZv":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "EntityFactory", ()=>EntityFactory);
-var _playerControlComponent = require("./behaviors/control/player-control-component");
-var _basicTeamComponent = require("./behaviors/team/basic-team-component");
-var _tank = require("./interactive/tank");
-var _floor = require("./tiles/floor");
-var _hardWall = require("./tiles/hard-wall");
-var _leaves = require("./tiles/leaves");
-var _wall = require("./tiles/wall");
-var _water = require("./tiles/water");
-var _utils = require("../utils/utils");
-var _randomControlComponent = require("./behaviors/control/random-control-component");
-var _enemyBulletWeaponComponent = require("./behaviors/weapon/enemy-bullet-weapon-component");
-var _wanderingAmountBasedSpawner = require("./interactive/spawners/wandering-amount-based-spawner");
-var _buff = require("./interactive/buff");
-var _base = require("./interactive/base");
-var _bulletWeaponComponent = require("./behaviors/weapon/bullet-weapon-component");
-var _tractor = require("./interactive/tractor");
-var _basicDestroyComponent = require("./behaviors/destroy/basic-destroy-component");
-var _eventManager = require("../event-manager");
-var _abstractTeamComponent = require("./behaviors/team/abstract-team-component");
-var _inWorldEventCounter = require("./interactive/in-world-event-counter");
-var _soldier = require("./interactive/soldier");
-var _atHedgehogs = require("./tiles/at-hedgehogs");
-var _savesHandler = require("../utils/saves-handler");
-class EntityFactory {
-    constructor(){}
-    static getEntity(entityID) {
-        switch(entityID){
-            case 101:
-                {
-                    const floor = new (0, _floor.Floor)();
-                    floor.setSkin({
-                        assetName: "dirt"
-                    });
-                    return floor;
-                }
-            case 102:
-                {
-                    const floor = new (0, _floor.Floor)();
-                    floor.setSkin({
-                        assetName: "grass",
-                        numberOfFrames: 10,
-                        animationSpeed: 0.1
-                    });
-                    return floor;
-                }
-            case 112:
-                return new (0, _leaves.Leaves)();
-            case 201:
-                return new (0, _hardWall.HardWall)();
-            case 202:
-                return new (0, _wall.Wall)();
-            case 203:
-                return new (0, _atHedgehogs.ATHedgehogs)();
-            case 211:
-                return new (0, _water.Water)();
-            case 901:
-                {
-                    const playerTank = new (0, _tank.Tank)();
-                    playerTank.setSkin({
-                        assetName: "tank_player",
-                        scaleX: 1.2,
-                        numberOfFrames: 4
-                    });
-                    playerTank.setComponent(new (0, _playerControlComponent.PlayerControlComponent)());
-                    const weapon = new (0, _bulletWeaponComponent.BulletWeaponComponent)();
-                    weapon.setReloadTime(50);
-                    playerTank.setComponent(weapon);
-                    playerTank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player1"));
-                    playerTank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
-                        (0, _eventManager.EventManager).notify("team_lost", playerTank.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
-                    }));
-                    return playerTank;
-                }
-            case 902:
-                {
-                    const tank = new (0, _tank.Tank)();
-                    const enemy_skins = [
-                        "tank_enemy1",
-                        "tank_enemy2",
-                        "tank_enemy3"
-                    ];
-                    tank.setSkin({
-                        assetName: enemy_skins[Math.floor((0, _utils.randNum)(3))],
-                        scaleX: 1.2,
-                        numberOfFrames: 4
-                    });
-                    tank.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
-                    const weapon = new (0, _enemyBulletWeaponComponent.EnemyBulletWeaponComponent)();
-                    weapon.setReloadTime(50);
-                    tank.setComponent(weapon);
-                    tank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
-                    tank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
-                        (0, _eventManager.EventManager).notify("entity_destroyed_player2", tank);
-                        (0, _savesHandler.SavesHandler).saveData("score", (0, _savesHandler.SavesHandler).loadData("score") + 10);
-                    }));
-                    return tank;
-                }
-            case 903:
-                {
-                    const playerTractor = new (0, _tractor.Tractor)();
-                    playerTractor.setSkin({
-                        assetName: "tractor",
-                        scaleX: 1.2,
-                        numberOfFrames: 4
-                    });
-                    playerTractor.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
-                    playerTractor.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player1"));
-                    return playerTractor;
-                }
-            case 904:
-                {
-                    const soldier = new (0, _soldier.Soldier)();
-                    soldier.setSkin({
-                        assetName: "soldier",
-                        numberOfFrames: 13,
-                        scaleX: 0.75,
-                        scaleY: 0.5,
-                        animationSpeed: 0.5
-                    });
-                    soldier.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
-                    soldier.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
-                    return soldier;
-                }
-            case 905:
-                {
-                    const supportTank = new (0, _tank.Tank)();
-                    const enemy_skins = [
-                        "tank_enemy1",
-                        "tank_enemy2",
-                        "tank_enemy3"
-                    ];
-                    supportTank.setSkin({
-                        assetName: enemy_skins[Math.floor((0, _utils.randNum)(3))],
-                        scaleX: 1.2,
-                        numberOfFrames: 4
-                    });
-                    supportTank.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
-                    const weapon = new (0, _enemyBulletWeaponComponent.EnemyBulletWeaponComponent)();
-                    weapon.setReloadTime(50);
-                    supportTank.setComponent(weapon);
-                    supportTank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
-                    supportTank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
-                        (0, _savesHandler.SavesHandler).saveData("score", (0, _savesHandler.SavesHandler).loadData("score") + 10);
-                    }));
-                    return supportTank;
-                }
-            case 912:
-                {
-                    const spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(EntityFactory.getEntity(902)).setTimeBetweenSpawns(250).setCollisionGroup([
-                        "Tank",
-                        "Tractor",
-                        "DeadTank",
-                        "HardWall",
-                        "SmallWall",
-                        "Water",
-                        "ATHedgehogs"
-                    ]).setTimesToSpawn(4).setMaxAmountPerTime(1);
-                    spawner.setSkin({
-                        assetName: "empty",
-                        hitboxWidth: 32,
-                        hitboxHeight: 32
-                    });
-                    return spawner;
-                }
-            case 919:
-                {
-                    const counter = new (0, _inWorldEventCounter.InWorldEventCounter)();
-                    counter.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player2"));
-                    counter.timesToCount(12).setEventToCount("entity_destroyed_player2").onCountEnded(()=>{
-                        (0, _eventManager.EventManager).notify("team_won", "player1");
-                    });
-                    return counter;
-                }
-            case 921:
-                {
-                    const buff = new (0, _buff.Buff)();
-                    let spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(buff).setTimeBetweenSpawns(600).setCollisionGroup([
-                        "Tank",
-                        "Tractor",
-                        "DeadTank",
-                        "HardWall",
-                        "SmallWall",
-                        "Water",
-                        "ATHedgehogs"
-                    ]).setTimesToSpawn(9999).setMaxAmountPerTime(1);
-                    spawner.setSkin({
-                        assetName: "empty",
-                        hitboxWidth: 32,
-                        hitboxHeight: 32
-                    });
-                    return spawner;
-                }
-            case 777:
-                {
-                    const base = new (0, _base.Base)();
-                    base.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam("player1"));
-                    base.setSkin({
-                        assetName: "eagle"
-                    });
-                    return base;
-                }
-            default:
-                return null;
-        }
-    }
-}
-
-},{"./behaviors/control/player-control-component":"eT9lB","./behaviors/team/basic-team-component":"M0rnZ","./interactive/tank":"bJjwP","./tiles/floor":"7694K","./tiles/hard-wall":"eKWJw","./tiles/leaves":"gs9Hp","./tiles/wall":"4V1eD","./tiles/water":"h4MBW","../utils/utils":"ea5wt","./behaviors/control/random-control-component":"9oAyj","./behaviors/weapon/enemy-bullet-weapon-component":"kCXtB","./interactive/spawners/wandering-amount-based-spawner":"lUX9i","./interactive/buff":"8zU8G","./interactive/base":"dC7wV","./behaviors/weapon/bullet-weapon-component":"jb7yn","./interactive/tractor":"hc7Oq","./behaviors/destroy/basic-destroy-component":"7tCQV","../event-manager":"l75gk","./behaviors/team/abstract-team-component":"9vUi2","./interactive/in-world-event-counter":"e82Po","./interactive/soldier":"12agJ","./tiles/at-hedgehogs":"2bpzf","../utils/saves-handler":"1qn3x","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eT9lB":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "PlayerControlComponent", ()=>PlayerControlComponent);
-var _abstractControlComponent = require("./abstract-control-component");
-var _eventManager = require("../../../event-manager");
-class PlayerControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
-    action = ()=>{};
-    constructor(source){
-        super(source);
-        (0, _eventManager.EventManager).subscribe("keydown", this);
-        (0, _eventManager.EventManager).subscribe("keyup", this);
-    }
-    onEvent(event, data) {
-        if (event == "keydown") switch(data){
-            case "ArrowUp":
-                this.action = this.triggerActionUp;
-                break;
-            case "w":
-                this.action = this.triggerActionUp;
-                break;
-            case "ArrowDown":
-                this.action = this.triggerActionDown;
-                break;
-            case "s":
-                this.action = this.triggerActionDown;
-                break;
-            case "ArrowLeft":
-                this.action = this.triggerActionLeft;
-                break;
-            case "a":
-                this.action = this.triggerActionLeft;
-                break;
-            case "ArrowRight":
-                this.action = this.triggerActionRight;
-                break;
-            case "d":
-                this.action = this.triggerActionRight;
-                break;
-            case " ":
-                this.action = this.triggerActionSpace;
-                break;
-        }
-        if (event == "keyup") this.action = ()=>{};
-    }
-    update(dt) {
-        super.update(dt);
-        this.action();
-    }
-    clone() {
-        return new PlayerControlComponent(this);
-    }
-}
-
-},{"./abstract-control-component":"8sX8j","../../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8sX8j":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractControlComponent", ()=>AbstractControlComponent);
-var _abstractComponent = require("../AbstractComponent");
-class AbstractControlComponent extends (0, _abstractComponent.AbstractComponent) {
-    _typeID = "control";
-    onActionDown(callback) {
-        this.actionDownCallback = callback;
-    }
-    onActionLeft(callback) {
-        this.actionLeftCallback = callback;
-    }
-    onActionRight(callback) {
-        this.actionRightCallback = callback;
-    }
-    onActionSpace(callback) {
-        this.actionSpaceCallback = callback;
-    }
-    onActionUp(callback) {
-        this.actionUpCallback = callback;
-    }
-    triggerActionDown() {
-        if (this.actionDownCallback) this.actionDownCallback();
-    }
-    triggerActionLeft() {
-        if (this.actionLeftCallback) this.actionLeftCallback();
-    }
-    triggerActionRight() {
-        if (this.actionRightCallback) this.actionRightCallback();
-    }
-    triggerActionSpace() {
-        if (this.actionSpaceCallback) this.actionSpaceCallback();
-    }
-    triggerActionUp() {
-        if (this.actionUpCallback) this.actionUpCallback();
-    }
-    update(dt) {}
-}
-
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2LLYT":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractComponent", ()=>AbstractComponent);
-class AbstractComponent {
-    _typeID = "";
-    constructor(source){}
-    get typeID() {
-        return this._typeID;
-    }
-    setEntity(entity) {
-        this._entity = entity;
-        return this;
-    }
-    update(dt) {}
-    remove() {}
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"M0rnZ":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BasicTeamComponent", ()=>BasicTeamComponent);
-var _abstractTeamComponent = require("./abstract-team-component");
-class BasicTeamComponent extends (0, _abstractTeamComponent.AbstractTeamComponent) {
-    constructor(source){
-        super(source);
-        if (source?._team) this._team = source._team;
-    }
-    clone() {
-        return new BasicTeamComponent(this);
-    }
-}
-
-},{"./abstract-team-component":"9vUi2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9vUi2":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractTeamComponent", ()=>AbstractTeamComponent);
-var _abstractComponent = require("../AbstractComponent");
-class AbstractTeamComponent extends (0, _abstractComponent.AbstractComponent) {
-    _typeID = "team";
-    _team = "";
-    _setTeamCallback = ()=>{};
-    getTeam() {
-        return this._team;
-    }
-    setTeam(team) {
-        this._team = team;
-        this._setTeamCallback();
-        return this;
-    }
-    onTeamSet(callback) {
-        this._setTeamCallback = callback;
-    }
-}
-
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bJjwP":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Tank", ()=>Tank);
-var _entity = require("../entity");
-var _pixiJs = require("pixi.js");
-var _directWalkMovementComponent = require("../behaviors/movement/direct-walk-movement-component");
-var _sceneManager = require("../../scene-manager");
-var _abstractWeaponComponent = require("../behaviors/weapon/abstract-weapon-component");
-var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
-var _abstractMovementComponent = require("../behaviors/movement/abstract-movement-component");
-var _appear = require("../fx/appear");
-var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
-var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
-var _utils = require("../../utils/utils");
-var _bigExplosion = require("../fx/big-explosion");
-var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
-var _soldier = require("./soldier");
-var _randomControlComponent = require("../behaviors/control/random-control-component");
-var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
-var _basicTeamComponent = require("../behaviors/team/basic-team-component");
-var _deadTank = require("../tiles/dead-tank");
-var _howler = require("howler");
-class Tank extends (0, _entity.Entity) {
-    constructor(source){
-        super(source);
-        this.speed = source?.speed || 2;
-        this.health = source?.health || 1;
-        this.setComponent(new (0, _directWalkMovementComponent.DirectionalWalkMovementBehavior)());
-        this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
-            if (object == this) return;
-            switch(object.entityType){
-                case "HardWall":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "ATHedgehogs":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "SmallWall":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                // case 'Water':
-                //     this.getComponent(AbstractMovementComponent).collides();
-                //     break;
-                case "Tank":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "DeadTank":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "Tractor":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "Soldier":
-                    object.takeDamage(9999);
-                    break;
-                case "Buff":
-                    new (0, _howler.Howl)({
-                        src: (0, _pixiJs.Loader).shared.resources["bonus_sound"].url
-                    }).play();
-                    this.setComponent(object.getBuff());
-                    object.destroy();
-            }
-        }));
-    }
-    clone() {
-        return new Tank(this);
-    }
-    takeDamage(damage) {
-        if (this.immortal) return;
-        this.health -= damage;
-        this.setComponent(new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(60));
-    }
-    setComponent(component) {
-        super.setComponent(component);
-        if (this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)) && this._initOnUpdate) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).onEntityMoved((vector)=>{
-            this._skin.loop = false;
-            if (!this._skin.playing) this._skin.gotoAndPlay(0);
-        });
-        if (Object.getPrototypeOf(component) instanceof (0, _abstractControlComponent.AbstractControlComponent)) {
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionUp(()=>{
-                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, -this.speed));
-            });
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionDown(()=>{
-                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(0, this.speed));
-            });
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionRight(()=>{
-                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(this.speed, 0));
-            });
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionLeft(()=>{
-                this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(-this.speed, 0));
-            });
-            this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionSpace(()=>{
-                if (this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent))) this.getComponent((0, _abstractWeaponComponent.AbstractWeaponComponent)).fire();
-            });
-        }
-    }
-    updateTilingData(tileMap, tileSize) {
-        const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
-        const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
-        if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
-        let collisionGroup = [
-            ...tileMap[tilePos.y][tilePos.x]
-        ];
-        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y][tilePos.x - 1]
-        ];
-        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y][tilePos.x + 1]
-        ];
-        if (tileMap[tilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y + 1][tilePos.x]
-        ];
-        if (tileMap[tilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y - 1][tilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
-        ];
-        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
-        ];
-        this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
-    }
-    update(dt) {
-        if (this.health <= 0) {
-            const dead = new (0, _deadTank.DeadTank)();
-            dead.x = this.x;
-            dead.y = this.y;
-            dead.angle = this.angle;
-            (0, _sceneManager.SceneManager).currentScene.addChild(dead);
-            let i = Math.floor((0, _utils.randNum)(3));
-            while(i--){
-                const soldier = new (0, _soldier.Soldier)();
-                soldier.setSkin({
-                    assetName: "soldier",
-                    numberOfFrames: 13,
-                    scaleX: 0.75,
-                    scaleY: 0.5,
-                    animationSpeed: 0.5
-                });
-                soldier.setComponent(new (0, _randomControlComponent.RandomControlComponent)());
-                soldier.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
-                soldier.x = this.x;
-                soldier.y = this.y;
-                (0, _sceneManager.SceneManager).currentScene.addChild(soldier);
-            }
-            const fx = new (0, _bigExplosion.BigExplosionFX)();
-            fx.x = this.x;
-            fx.y = this.y;
-            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
-            this.destroy();
-        }
-        if (this._initOnUpdate) {
-            const fx = new (0, _appear.AppearFX)();
-            fx.x = this.x;
-            fx.y = this.y;
-            (0, _sceneManager.SceneManager).currentScene.addChild(fx);
-        }
-        super.update(dt);
-    }
-}
-
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/buffs/immortal-buff-component":"85AQc","./soldier":"12agJ","../behaviors/control/random-control-component":"9oAyj","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/team/basic-team-component":"M0rnZ","../tiles/dead-tank":"5Xr4D","howler":"5Vjgk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5vwA6":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Entity", ()=>Entity);
-var _pixiJs = require("pixi.js");
-var _abstractDestroyComponent = require("./behaviors/destroy/abstract-destroy-component");
-class Entity extends (0, _pixiJs.Container) {
-    _components = [];
-    _initOnUpdate = true;
-    get entityType() {
-        return this.constructor.name;
-    }
-    get destroyed() {
-        return this._destroyed;
-    }
-    // protected getNextTilePosition(movementVector?: Point): Point {
-    //     const entityTilePos = this.tilePosition;
-    //     let vector = movementVector;
-    //     //TODO prototype code for advanced collision for fast moving objects (doesent work for now)
-    //     // if (!vector || (vector.x == 0 && vector.y == 0)) {
-    //     //     const radAngle: number = (this.angle-90) * (Math.PI/180);
-    //     //     vector = new Point(
-    //     //         (Math.abs(Math.cos(radAngle)) != 1 ? 0 : Math.cos(radAngle)),
-    //     //         (Math.abs(Math.sin(radAngle)) != 1 ? 0 : Math.sin(radAngle))
-    //     //     );
-    //     // }
-    //     const radAngle: number = (this.angle-90) * (Math.PI/180);
-    //     vector = new Point(
-    //         (Math.abs(Math.cos(radAngle)) != 1 ? 0 : Math.cos(radAngle)),
-    //         (Math.abs(Math.sin(radAngle)) != 1 ? 0 : Math.sin(radAngle))
-    //     );
-    //     return new Point(
-    //         entityTilePos.x + (vector.x >= 0 ? Math.ceil(vector.x / TILE_SIZE) : Math.floor(vector.x / TILE_SIZE)),
-    //         entityTilePos.y + (vector.y >= 0 ? Math.ceil(vector.y / TILE_SIZE) : Math.floor(vector.y / TILE_SIZE))
-    //     )
-    // }
-    get simpleBounds() {
-        return this.destroyed ? {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0
-        } : {
-            x: this.x,
-            y: this.y,
-            width: this._hitboxWidth || this.width,
-            height: this._hitboxHeight || this.height
-        };
-    }
-    updateTilingData(tileMap, tileSize) {}
-    constructor(source){
-        super();
-        this._initOnUpdate = true;
-        if (source?._skinOptions) this.setSkin(source._skinOptions);
-        if (source?._components) source._components.forEach((component)=>this.setComponent(component.clone()));
-        this.name = this.constructor.name + (0, _pixiJs.utils).uid();
-        if (this._skin) this.addChild(this._skin);
-    }
-    setSkin(options) {
-        this._skinOptions = options;
-        if (options?.assetName) {
-            const numberOfFrames = options?.numberOfFrames || 1;
-            const sheet = (0, _pixiJs.Loader).shared.resources[options.assetName].texture;
-            const frameWidth = sheet.width / numberOfFrames;
-            const frameHeight = sheet.height;
-            const frames = [];
-            for(let i = 0; i < numberOfFrames; i++){
-                const frame = sheet.clone();
-                frame.frame = new (0, _pixiJs.Rectangle)(i * frameWidth, 0, frameWidth, frameHeight);
-                frame.updateUvs();
-                frames.push(frame);
-            }
-            this._skin = new (0, _pixiJs.AnimatedSprite)(frames);
-            this.addChild(this._skin);
-        }
-        this._skin.anchor.set(0.5);
-        this._skin.scale.x = options?.scaleX || this._skin.scale.x;
-        this._skin.scale.y = options?.scaleY || this._skin.scale.y;
-        if (options?.hitboxWidth) this._hitboxWidth = options.hitboxWidth;
-        if (options?.hitboxHeight) this._hitboxHeight = options.hitboxHeight;
-        if (options?.animationSpeed) this._skin.animationSpeed = options.animationSpeed;
-    }
-    update(dt) {
-        if (this.destroyed) return;
-        if (this._initOnUpdate) this._initOnUpdate = false;
-        this._components.forEach((component)=>component.update(dt));
-    }
-    setComponent(component) {
-        component.setEntity(this);
-        let componentExist = false;
-        for (const [i, c] of this._components.entries())if (c.typeID == component.typeID) {
-            this._components[i].remove();
-            this._components[i] = component;
-            componentExist = true;
-            return;
-        }
-        if (!componentExist) this._components.push(component);
-    }
-    getComponent(componentType) {
-        for (const component of this._components){
-            if (component instanceof componentType) return component;
-        }
-        return undefined;
-    }
-    removeComponent(componentType) {
-        let toRemove;
-        let index;
-        for (const [i, component] of this._components.entries())if (component instanceof componentType) {
-            toRemove = component;
-            index = i;
-            break;
-        }
-        if (toRemove && index) {
-            toRemove.setEntity(null);
-            this._components.splice(index, 1);
-        }
-    }
-    onEvent(event, data) {}
-    destroy(_options) {
-        super.destroy(_options);
-        if (this.getComponent((0, _abstractDestroyComponent.AbstractDestroyComponent))) this.getComponent((0, _abstractDestroyComponent.AbstractDestroyComponent)).destroy();
-    }
-}
-
-},{"pixi.js":"1pSin","./behaviors/destroy/abstract-destroy-component":"8IMJl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8IMJl":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractDestroyComponent", ()=>AbstractDestroyComponent);
-var _abstractComponent = require("../AbstractComponent");
-class AbstractDestroyComponent extends (0, _abstractComponent.AbstractComponent) {
-    _typeID = "destroy";
-    _destroyCallback = ()=>{};
-    constructor(source){
-        super(source);
-        if (source?._destroyCallback) this._destroyCallback = source._destroyCallback;
-    }
-    onDestroy(callback) {
-        this._destroyCallback = callback;
-        return this;
-    }
-    destroy() {
-        this._destroyCallback();
-    }
-}
-
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4jmrJ":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "DirectionalWalkMovementBehavior", ()=>DirectionalWalkMovementBehavior);
-var _abstractMovementComponent = require("./abstract-movement-component");
-class DirectionalWalkMovementBehavior extends (0, _abstractMovementComponent.AbstractMovementComponent) {
-    setMovementVector(vector) {
-        if (vector.y < 0) {
-            vector.x = 0;
-            this.rotateTo(0);
-        }
-        if (vector.y > 0) {
-            vector.x = 0;
-            this.rotateTo(180);
-        }
-        if (vector.x < 0) {
-            vector.y = 0;
-            this.rotateTo(270);
-        }
-        if (vector.x > 0) {
-            vector.y = 0;
-            this.rotateTo(90);
-        }
-        return super.setMovementVector(vector);
-    }
-    update(dt) {
-        super.update(dt);
-        this.stop();
-    }
-    clone() {
-        return new DirectionalWalkMovementBehavior(this);
-    }
-}
-
-},{"./abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Zsay":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractMovementComponent", ()=>AbstractMovementComponent);
-var _abstractComponent = require("../AbstractComponent");
-var _pixiJs = require("pixi.js");
-class AbstractMovementComponent extends (0, _abstractComponent.AbstractComponent) {
-    _typeID = "movement";
-    // IgnoreDT needed for smooth collision
-    _ignoreDT = false;
-    _previousPosition = new (0, _pixiJs.Point)();
-    _movementVector = new (0, _pixiJs.Point)();
-    _rotationSpeed = 0;
-    _rotationTo = undefined;
-    get previousPosition() {
-        return this._previousPosition;
-    }
-    get movementVector() {
-        return this._movementVector;
-    }
-    get rotationVector() {
-        const radAngle = (this._entity.angle - 90) * (Math.PI / 180);
-        const vector = new (0, _pixiJs.Point)((Math.abs(Math.cos(radAngle)) != 1 ? 0 : Math.cos(radAngle)) * this._entity.width, (Math.abs(Math.sin(radAngle)) != 1 ? 0 : Math.sin(radAngle)) * this._entity.height);
-        // return new Point(
-        //     this._entity.x + (vector.x >= 0 ? Math.ceil(vector.x / this._entity.width) : Math.floor(vector.x / this._entity.width)),
-        //     this._entity.y + (vector.y >= 0 ? Math.ceil(vector.y / this._entity.width) : Math.floor(vector.y / this._entity.width))
-        // )
-        return new (0, _pixiJs.Point)(this._entity.x + vector.x, this._entity.y + vector.y);
-    }
-    setRotationSpeed(speed) {
-        this._rotationSpeed = speed;
-        return this;
-    }
-    rotateTo(angle) {
-        this._rotationTo = angle;
-        return this;
-    }
-    setMovementVector(vector) {
-        this._movementVector = vector;
-        return this;
-    }
-    stop() {
-        this._movementVector = new (0, _pixiJs.Point)();
-        this._rotationSpeed = 0;
-    }
-    collides() {
-        this.stop();
-        this._entity.position = this._previousPosition;
-        this._ignoreDT = true;
-    }
-    onEntityMoved(callback) {
-        this._onEntityMoved = callback;
-        return this;
-    }
-    update(dt) {
-        if (!this._entity || this._entity.destroyed) return;
-        if (!this._previousPosition.equals(this._entity.position) && this._onEntityMoved) this._onEntityMoved(this._movementVector, this._previousPosition);
-        this._previousPosition.copyFrom(this._entity.position);
-        this._entity.x += this._ignoreDT ? this._movementVector.x : this._movementVector.x * dt;
-        this._entity.y += this._ignoreDT ? this._movementVector.y : this._movementVector.y * dt;
-        this._entity.angle = this._rotationTo ?? this._entity.angle + this._rotationSpeed * dt;
-        this._rotationTo = undefined;
-        this._ignoreDT = false;
-    }
-}
-
-},{"../AbstractComponent":"2LLYT","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jiAqg":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractWeaponComponent", ()=>AbstractWeaponComponent);
-var _abstractComponent = require("../AbstractComponent");
-class AbstractWeaponComponent extends (0, _abstractComponent.AbstractComponent) {
-    _typeID = "weapon";
-    constructor(source){
-        super(source);
-        this._reloaded = true;
-        this._reloadTime = source?._reloadTime || 1;
-        this._reloadCounter = 0;
-    }
-    fire() {
-        this._reloadCounter = 0;
-        this._reloaded = false;
-    }
-    setReloadTime(value) {
-        this._reloadTime = value;
-    }
-    update(dt) {
-        this._reloadCounter += dt;
-        if (this._reloadCounter > this._reloadTime) this._reloaded = true;
-    }
-}
-
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j2Wc6":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AppearFX", ()=>AppearFX);
-var _entity = require("../entity");
-var _assetsVars = require("../../assets-vars");
-class AppearFX extends (0, _entity.Entity) {
-    constructor(source){
-        super(source);
-        this.setSkin({
-            assetName: (0, _assetsVars.Assets).FX.APPEAR,
-            numberOfFrames: 10
-        });
-        this._skin.onComplete = ()=>{
-            this.destroy();
-        };
-        this._skin.animationSpeed = 0.2;
-        this._skin.loop = false;
-        this._skin.play();
-    }
-    clone() {
-        return new AppearFX;
-    }
-}
-
-},{"../entity":"5vwA6","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cBooq":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Assets", ()=>Assets);
-parcelHelpers.export(exports, "LoaderAssets", ()=>LoaderAssets);
-let Assets;
-(function(Assets1) {
-    class Tiles {
-        static SMALL_WALL = "small_wall";
-        static WALL = "wall";
-        static WATER = "water";
-        static DIRT = "dirt";
-        static LAEVES = "leaves";
-        static EAGLE = "eagle";
-    }
-    Assets1.Tiles = Tiles;
-    class Bonuses {
-        static BONUS_IMMORTAL = "bonus_immortal";
-        static BONUS_LIVE = "bonus_live";
-        static BONUS_SLOW = "bonus_slow";
-        static BONUS_SPEED = "bonus_speed";
-        static BONUS_TRACTOR = "bonus_tractor";
-        static BUFF_TYPES = [
-            this.BONUS_IMMORTAL,
-            this.BONUS_LIVE,
-            this.BONUS_SLOW,
-            this.BONUS_SPEED,
-            this.BONUS_TRACTOR
-        ];
-    }
-    Assets1.Bonuses = Bonuses;
-    class Buttons {
-        static BUTTON = "button";
-        static BUTTON_SCORES = "button_scores";
-    }
-    Assets1.Buttons = Buttons;
-    class Bullets {
-        static BULLET = "bullet";
-        static BULLET_ENEMY = "enemy_bullet";
-    }
-    Assets1.Bullets = Bullets;
-    class FX {
-        static EXPLODE = "explode";
-        static EXPLODE_SMALL = "explode_small";
-        static APPEAR = "appear";
-    }
-    Assets1.FX = FX;
-    class Tanks {
-        static TANK_PLAYER = "tank_player";
-        static TANK_BLUE = "tank_blue";
-        static TANK_RED = "tank_red";
-        static TANK_WHITE = "tank_white";
-    }
-    Assets1.Tanks = Tanks;
-})(Assets || (Assets = {}));
-let LoaderAssets;
-(function(LoaderAssets1) {
-    class Loaders {
-        static LOADER_BACKGROUND = "loader_bg";
-        static LOADER_BAR = "loader_bar";
-    }
-    LoaderAssets1.Loaders = Loaders;
-})(LoaderAssets || (LoaderAssets = {}));
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iix3J":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BasicAabbCollisionComponent", ()=>BasicAabbCollisionComponent);
-var _abstractCollisionComponent = require("./abstract-collision-component");
-var _utils = require("../../../utils/utils");
-class BasicAabbCollisionComponent extends (0, _abstractCollisionComponent.AbstractCollisionComponent) {
-    getCollisionGroup() {
-        return this._collisionGroup;
-    }
-    setCollisionGroup(objects) {
-        this._collisionGroup = objects;
-        return this;
-    }
-    update(dt) {
-        if (!this._entity.destroyed) {
-            let i = this._collisionGroup.length;
-            while(i--)if (this._collisionGroup[i] && this._collisionGroup[i] !== this._entity && (0, _utils.AABB)(this._entity.simpleBounds, this._collisionGroup[i].simpleBounds)) this.collidedWith(this._collisionGroup[i]);
-        }
-    }
-    clone() {
-        return new BasicAabbCollisionComponent(this);
-    }
-}
-
-},{"./abstract-collision-component":"6rzC8","../../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6rzC8":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AbstractCollisionComponent", ()=>AbstractCollisionComponent);
-var _abstractComponent = require("../AbstractComponent");
-class AbstractCollisionComponent extends (0, _abstractComponent.AbstractComponent) {
-    _typeID = "collision";
-    _collisionGroup = [];
-    constructor(source){
-        super(source);
-        if (source?._collisionCallback) this._collisionCallback = source._collisionCallback;
-    }
-    onCollidedWith(callback) {
-        this._collisionCallback = callback;
-        return this;
-    }
-    collidedWith(object) {
-        this._collisionCallback(object);
-    }
-    getCollisionGroup() {
-        return this._collisionGroup;
-    }
-}
-
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ea5wt":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "randNum", ()=>randNum);
-parcelHelpers.export(exports, "validatePointIsPositive", ()=>validatePointIsPositive);
-parcelHelpers.export(exports, "getTitlePosition", ()=>getTitlePosition);
-parcelHelpers.export(exports, "AABB", ()=>AABB);
-var _pixiJs = require("pixi.js");
-function randNum(max, min = 0) {
-    return Math.random() * max + min;
-}
-function validatePointIsPositive(point) {
-    return point.x !== null && point.x !== undefined && point.x >= 0 && point.y !== null && point.y !== undefined && point.y >= 0;
-}
-function getTitlePosition(cords, tileSize) {
-    const row = Math.floor(cords.y / tileSize);
-    const column = Math.floor(cords.x / tileSize);
-    return new (0, _pixiJs.Point)(column, row);
-}
-function AABB(a, b) {
-    return a.x - a.width / 2 < b.x + b.width / 2 && a.x + a.width / 2 > b.x - b.width / 2 && a.y - a.height / 2 < b.y + b.height / 2 && a.y + a.height / 2 > b.y - b.height / 2;
-}
-
-},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4vaID":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "BigExplosionFX", ()=>BigExplosionFX);
-var _entity = require("../entity");
-var _pixiJs = require("pixi.js");
-var _howler = require("howler");
-var _assetsVars = require("../../assets-vars");
-class BigExplosionFX extends (0, _entity.Entity) {
-    constructor(source){
-        super(source);
-        this.setSkin({
-            assetName: (0, _assetsVars.Assets).FX.EXPLODE,
-            numberOfFrames: 16
-        });
-        this._skin.onComplete = ()=>{
-            this.destroy();
-        };
-        this._skin.animationSpeed = 0.25;
-        this._skin.loop = false;
-        this._skin.play();
-        new (0, _howler.Howl)({
-            src: (0, _pixiJs.Loader).shared.resources["explode_sound"].url
-        }).play();
-    }
-    clone() {
-        return new BigExplosionFX;
-    }
-}
-
-},{"../entity":"5vwA6","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"85AQc":[function(require,module,exports) {
+},{}],"ibCZq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ImmortalBuffComponent", ()=>ImmortalBuffComponent);
@@ -42297,7 +42300,7 @@ class ImmortalBuffComponent extends (0, _abstractBuffComponent.AbstractBuffCompo
     }
 }
 
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6az5d":[function(require,module,exports) {
+},{"./abstract-buff-component":"4GSnn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4GSnn":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AbstractBuffComponent", ()=>AbstractBuffComponent);
@@ -42338,22 +42341,23 @@ class AbstractBuffComponent extends (0, _abstractComponent.AbstractComponent) {
     }
 }
 
-},{"../AbstractComponent":"2LLYT","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"12agJ":[function(require,module,exports) {
+},{"../AbstractComponent":"dF7BW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2fiQn":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Soldier", ()=>Soldier);
 var _entity = require("../entity");
 var _pixiJs = require("pixi.js");
 var _directWalkMovementComponent = require("../behaviors/movement/direct-walk-movement-component");
-var _sceneManager = require("../../scene-manager");
 var _abstractWeaponComponent = require("../behaviors/weapon/abstract-weapon-component");
 var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
 var _abstractMovementComponent = require("../behaviors/movement/abstract-movement-component");
 var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
 var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
-var _utils = require("../../utils/utils");
 var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
 var _deadSoldier = require("../tiles/dead-soldier");
+var _utils = require("../../../../utils/utils");
+var _sceneManager = require("../../../../scene-manager");
+var _gameConstants = require("../../game-constants");
 class Soldier extends (0, _entity.Entity) {
     constructor(source){
         super(source);
@@ -42362,20 +42366,13 @@ class Soldier extends (0, _entity.Entity) {
         this.setComponent(new (0, _directWalkMovementComponent.DirectionalWalkMovementBehavior)());
         this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
             if (object == this) return;
-            switch(object.entityType){
-                case "HardWall":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "SmallWall":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "Tank":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "Tractor":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-            }
+            const stopObject = [
+                (0, _gameConstants.GameConstants).EntityTypes.HARD_WALL,
+                (0, _gameConstants.GameConstants).EntityTypes.SMALL_WALL,
+                (0, _gameConstants.GameConstants).EntityTypes.TANK,
+                (0, _gameConstants.GameConstants).EntityTypes.TRACTOR
+            ];
+            if (stopObject.includes(object.entityType)) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
         }));
     }
     clone() {
@@ -42457,16 +42454,17 @@ class Soldier extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../behaviors/buffs/immortal-buff-component":"85AQc","../tiles/dead-soldier":"iETuq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iETuq":[function(require,module,exports) {
+},{"../entity":"7O5J4","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"5Vj0c","../behaviors/weapon/abstract-weapon-component":"aDMpq","../behaviors/control/abstract-control-component":"iMT9O","../behaviors/movement/abstract-movement-component":"a64l3","../behaviors/collision/basic-aabb-collision-component":"htN9e","../behaviors/collision/abstract-collision-component":"l1gV3","../behaviors/buffs/immortal-buff-component":"ibCZq","../tiles/dead-soldier":"hIYqT","../../../../utils/utils":"ea5wt","../../../../scene-manager":"2FQ8z","../../game-constants":"k2kvk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hIYqT":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DeadSoldier", ()=>DeadSoldier);
+var _constants = require("../../../../constants");
 var _entity = require("../entity");
 class DeadSoldier extends (0, _entity.Entity) {
     constructor(source){
         super(source);
         this.setSkin({
-            assetName: "dead_soldier"
+            assetName: (0, _constants.Constants).AssetsTextures.SOLIDER_DEAD
         });
     }
     clone() {
@@ -42474,12 +42472,64 @@ class DeadSoldier extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9oAyj":[function(require,module,exports) {
+},{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k2kvk":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "GameConstants", ()=>GameConstants);
+let GameConstants;
+(function(GameConstants1) {
+    class EntityTypes {
+        static HARD_WALL = "HardWall";
+        static SMALL_WALL = "SmallWall";
+        static TANK = "Tank";
+        static TRACTOR = "Tractor";
+        static DEAD_TANK = "DeadTank";
+        static WATER = "Water";
+        static AT_HEDGEHOGS = "ATHedgehogs";
+        static BUFF = "Buff";
+        static BULLET = "Bullet";
+        static BASE = "Base";
+        static SOLDIER = "Soldier";
+    }
+    GameConstants1.EntityTypes = EntityTypes;
+    class Teams {
+        static PLAYER_1 = "player1";
+        static PLAYER_2 = "player2";
+    }
+    GameConstants1.Teams = Teams;
+    class Events {
+        static ENTITY_DESTROY = "entity_destroy";
+        static TEAM_WON = "entity_destroy";
+        static TEAM_LOST = "entity_destroy";
+    }
+    GameConstants1.Events = Events;
+    let EntityIDs1;
+    (function(EntityIDs) {
+        EntityIDs[EntityIDs["DIRT"] = 101] = "DIRT";
+        EntityIDs[EntityIDs["GRASS"] = 102] = "GRASS";
+        EntityIDs[EntityIDs["LEAVES"] = 112] = "LEAVES";
+        EntityIDs[EntityIDs["HARD_WALL"] = 201] = "HARD_WALL";
+        EntityIDs[EntityIDs["WALL"] = 202] = "WALL";
+        EntityIDs[EntityIDs["AT_HEDGEHOGS"] = 203] = "AT_HEDGEHOGS";
+        EntityIDs[EntityIDs["WATER"] = 211] = "WATER";
+        EntityIDs[EntityIDs["PLAYER_TANK"] = 901] = "PLAYER_TANK";
+        EntityIDs[EntityIDs["ENEMY_TANK"] = 902] = "ENEMY_TANK";
+        EntityIDs[EntityIDs["PLAYER_TRACTOR"] = 903] = "PLAYER_TRACTOR";
+        EntityIDs[EntityIDs["ENEMY_SOLDIER"] = 904] = "ENEMY_SOLDIER";
+        EntityIDs[EntityIDs["ENEMY_SUPPORT_TANK"] = 905] = "ENEMY_SUPPORT_TANK";
+        EntityIDs[EntityIDs["ENEMY_SMALL_SPAWNER"] = 912] = "ENEMY_SMALL_SPAWNER";
+        EntityIDs[EntityIDs["ENEMY_DEATH_COUNTER"] = 919] = "ENEMY_DEATH_COUNTER";
+        EntityIDs[EntityIDs["RANDOM_BONUS_SPAWNER"] = 921] = "RANDOM_BONUS_SPAWNER";
+        EntityIDs[EntityIDs["PLAYER_BASE"] = 777] = "PLAYER_BASE";
+    })(EntityIDs1 = GameConstants1.EntityIDs || (GameConstants1.EntityIDs = {}));
+})(GameConstants || (GameConstants = {}));
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hIlER":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "RandomControlComponent", ()=>RandomControlComponent);
+var _utils = require("../../../../../utils/utils");
 var _abstractControlComponent = require("./abstract-control-component");
-var _utils = require("../../../utils/utils");
 class RandomControlComponent extends (0, _abstractControlComponent.AbstractControlComponent) {
     _actionChangeTimer = 0;
     _actionChangeDelay = 50;
@@ -42522,25 +42572,26 @@ class RandomControlComponent extends (0, _abstractControlComponent.AbstractContr
     }
 }
 
-},{"./abstract-control-component":"8sX8j","../../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Xr4D":[function(require,module,exports) {
+},{"../../../../../utils/utils":"ea5wt","./abstract-control-component":"iMT9O","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5nGmE":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "DeadTank", ()=>DeadTank);
 var _entity = require("../entity");
-var _sceneManager = require("../../scene-manager");
 var _bigExplosion = require("../fx/big-explosion");
 var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
-var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
+var _sceneManager = require("../../../../scene-manager");
+var _constants = require("../../../../constants");
+var _staticMovementComponent = require("../behaviors/movement/static-movement-component");
 class DeadTank extends (0, _entity.Entity) {
     constructor(source){
         super(source);
         this.health = source?.health || 1;
         this.setSkin({
-            assetName: "dead_tank",
+            assetName: (0, _constants.Constants).AssetsTextures.TANK_DEAD,
             numberOfFrames: 4,
             animationSpeed: 0.1
         });
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+        this.setComponent(new (0, _staticMovementComponent.StaticMovementComponent)());
     }
     setSkin(options) {
         super.setSkin(options);
@@ -42567,22 +42618,18 @@ class DeadTank extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../../scene-manager":"2FQ8z","../fx/big-explosion":"4vaID","../behaviors/buffs/immortal-buff-component":"85AQc","../behaviors/movement/projectile-movement-component":"25Jss","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"25Jss":[function(require,module,exports) {
+},{"../entity":"7O5J4","../fx/big-explosion":"fqHpB","../behaviors/buffs/immortal-buff-component":"ibCZq","../../../../scene-manager":"2FQ8z","../../../../constants":"45DZp","../behaviors/movement/static-movement-component":"1IDmV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1IDmV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "ProjectileMovementComponent", ()=>ProjectileMovementComponent);
+parcelHelpers.export(exports, "StaticMovementComponent", ()=>StaticMovementComponent);
 var _abstractMovementComponent = require("./abstract-movement-component");
-class ProjectileMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
-    setMovementVector(vector) {
-        this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
-        return super.setMovementVector(vector);
-    }
+class StaticMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
     clone() {
-        return new ProjectileMovementComponent(this);
+        return new StaticMovementComponent(this);
     }
 }
 
-},{"./abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7694K":[function(require,module,exports) {
+},{"./abstract-movement-component":"a64l3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6dewe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Floor", ()=>Floor);
@@ -42600,57 +42647,58 @@ class Floor extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eKWJw":[function(require,module,exports) {
+},{"../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l6PUG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "HardWall", ()=>HardWall);
-var _assetsVars = require("../../assets-vars");
+var _constants = require("../../../../constants");
 var _entity = require("../entity");
 class HardWall extends (0, _entity.Entity) {
-    constructor(){
-        super();
+    constructor(source){
+        super(source);
         this.setSkin({
-            assetName: (0, _assetsVars.Assets).Tiles.WALL
+            assetName: (0, _constants.Constants).AssetsTextures.HARD_WALL
         });
+    }
+    clone() {
+        return new HardWall(this);
     }
 }
 
-},{"../../assets-vars":"cBooq","../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gs9Hp":[function(require,module,exports) {
+},{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hunmf":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Leaves", ()=>Leaves);
+var _constants = require("../../../../constants");
 var _entity = require("../entity");
-var _utils = require("../../utils/utils");
-var _assetsVars = require("../../assets-vars");
 class Leaves extends (0, _entity.Entity) {
-    constructor(){
-        super();
+    constructor(source){
+        super(source);
         this.setSkin({
-            assetName: (0, _assetsVars.Assets).Tiles.LAEVES
+            assetName: (0, _constants.Constants).AssetsTextures.LEAVES
         });
     }
-    update(dt) {
-        super.update(dt);
-        if (dt > 1) this._skin.skew.x = (0, _utils.randNum)(0.025);
+    clone() {
+        return new Leaves(this);
     }
 }
 
-},{"../entity":"5vwA6","../../utils/utils":"ea5wt","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4V1eD":[function(require,module,exports) {
+},{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4QX7V":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Wall", ()=>Wall);
 var _entity = require("../entity");
 var _smallWall = require("./small-wall");
-var _sceneManager = require("../../scene-manager");
-var _assetsVars = require("../../assets-vars");
-var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
+var _constants = require("../../../../constants");
+var _sceneManager = require("../../../../scene-manager");
+var _staticMovementComponent = require("../behaviors/movement/static-movement-component");
 class Wall extends (0, _entity.Entity) {
     update(dt) {
         super.update(dt);
         for(let i = 0; i < 2; i++)for(let j = 0; j < 2; j++){
             let swall = new (0, _smallWall.SmallWall)();
             swall.setSkin({
-                assetName: (0, _assetsVars.Assets).Tiles.SMALL_WALL
+                assetName: (0, _constants.Constants).AssetsTextures.SMALL_WALL
             });
             swall.x = this.x - swall.width / 2 + swall.width * j;
             swall.y = this.y - swall.height / 2 + swall.height * i;
@@ -42658,56 +42706,61 @@ class Wall extends (0, _entity.Entity) {
         }
         this.destroy();
     }
-    constructor(){
-        super();
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+    constructor(source){
+        super(source);
+        this.setComponent(new (0, _staticMovementComponent.StaticMovementComponent)());
+    }
+    clone() {
+        return new Wall(this);
     }
 }
 
-},{"../entity":"5vwA6","./small-wall":"ckGaW","../../scene-manager":"2FQ8z","../../assets-vars":"cBooq","../behaviors/movement/projectile-movement-component":"25Jss","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ckGaW":[function(require,module,exports) {
+},{"../entity":"7O5J4","./small-wall":"3QSsx","../../../../constants":"45DZp","../../../../scene-manager":"2FQ8z","../behaviors/movement/static-movement-component":"1IDmV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3QSsx":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SmallWall", ()=>SmallWall);
 var _entity = require("../entity");
 class SmallWall extends (0, _entity.Entity) {
+    constructor(source){
+        super(source);
+    }
+    clone() {
+        return new SmallWall(this);
+    }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"h4MBW":[function(require,module,exports) {
+},{"../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eCNzS":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Water", ()=>Water);
-var _assetsVars = require("../../assets-vars");
-var _sceneManager = require("../../scene-manager");
-var _utils = require("../../utils/utils");
+var _howler = require("howler");
+var _pixiJs = require("pixi.js");
+var _constants = require("../../../../constants");
+var _sceneManager = require("../../../../scene-manager");
+var _utils = require("../../../../utils/utils");
+var _gameConstants = require("../../game-constants");
 var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
 var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
 var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
-var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
+var _staticMovementComponent = require("../behaviors/movement/static-movement-component");
 var _entity = require("../entity");
 var _splash = require("../fx/splash");
 class Water extends (0, _entity.Entity) {
     constructor(source){
         super(source);
         this.setSkin({
-            assetName: (0, _assetsVars.Assets).Tiles.WATER
+            assetName: (0, _constants.Constants).AssetsTextures.WATER
         });
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+        this.setComponent(new (0, _staticMovementComponent.StaticMovementComponent)());
         this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
             if (object == this) return;
-            switch(object.entityType){
-                case "Tank":
-                    this.drown(object);
-                    break;
-                case "DeadTank":
-                    this.drown(object);
-                    break;
-                case "Tractor":
-                    this.drown(object);
-                    break;
-                case "Soldier":
-                    this.drown(object);
-                    break;
-            }
+            const drownObject = [
+                (0, _gameConstants.GameConstants).EntityTypes.TANK,
+                (0, _gameConstants.GameConstants).EntityTypes.DEAD_TANK,
+                (0, _gameConstants.GameConstants).EntityTypes.TRACTOR,
+                (0, _gameConstants.GameConstants).EntityTypes.SOLDIER
+            ];
+            if (drownObject.includes(object.entityType)) this.drown(object);
         }));
     }
     drown(object) {
@@ -42738,6 +42791,9 @@ class Water extends (0, _entity.Entity) {
                 fx.x = this.x;
                 fx.y = this.y;
                 (0, _sceneManager.SceneManager).currentScene.addChild(fx);
+                new (0, _howler.Howl)({
+                    src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.WATER_SPLASH].url
+                }).play();
             }
         }
     }
@@ -42746,16 +42802,17 @@ class Water extends (0, _entity.Entity) {
     }
 }
 
-},{"../../assets-vars":"cBooq","../../scene-manager":"2FQ8z","../../utils/utils":"ea5wt","../behaviors/collision/abstract-collision-component":"6rzC8","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/projectile-movement-component":"25Jss","../entity":"5vwA6","../fx/splash":"7nmiW","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7nmiW":[function(require,module,exports) {
+},{"../../../../constants":"45DZp","../../../../scene-manager":"2FQ8z","../../../../utils/utils":"ea5wt","../../game-constants":"k2kvk","../behaviors/collision/abstract-collision-component":"l1gV3","../behaviors/collision/basic-aabb-collision-component":"htN9e","../behaviors/control/abstract-control-component":"iMT9O","../behaviors/movement/static-movement-component":"1IDmV","../entity":"7O5J4","../fx/splash":"kNdns","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","howler":"5Vjgk","pixi.js":"1pSin"}],"kNdns":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Splash", ()=>Splash);
 var _entity = require("../entity");
+var _constants = require("../../../../constants");
 class Splash extends (0, _entity.Entity) {
     constructor(source){
         super(source);
         this.setSkin({
-            assetName: "splash",
+            assetName: (0, _constants.Constants).AssetsTextures.SPLASH_FX,
             numberOfFrames: 7
         });
         this._skin.onComplete = ()=>{
@@ -42770,23 +42827,23 @@ class Splash extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kCXtB":[function(require,module,exports) {
+},{"../entity":"7O5J4","../../../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dj8Y2":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EnemyBulletWeaponComponent", ()=>EnemyBulletWeaponComponent);
 var _abstractWeaponComponent = require("./abstract-weapon-component");
 var _bullet = require("../../interactive/bullet");
-var _sceneManager = require("../../../scene-manager");
 var _abstractTeamComponent = require("../team/abstract-team-component");
 var _basicTeamComponent = require("../team/basic-team-component");
-var _assetsVars = require("../../../assets-vars");
+var _constants = require("../../../../../constants");
+var _sceneManager = require("../../../../../scene-manager");
 class EnemyBulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWeaponComponent) {
     fire() {
         if (!this._reloaded) return;
         super.fire();
         const bullet = new (0, _bullet.Bullet)();
         bullet.setSkin({
-            assetName: (0, _assetsVars.Assets).Bullets.BULLET_ENEMY
+            assetName: (0, _constants.Constants).AssetsTextures.BULLET_2
         });
         if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) bullet.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
         bullet.x = this._entity.x;
@@ -42799,14 +42856,13 @@ class EnemyBulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWe
     }
 }
 
-},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","../../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6c7ss":[function(require,module,exports) {
+},{"./abstract-weapon-component":"aDMpq","../../interactive/bullet":"igMXs","../team/abstract-team-component":"f7VfU","../team/basic-team-component":"5ouad","../../../../../constants":"45DZp","../../../../../scene-manager":"2FQ8z","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"igMXs":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Bullet", ()=>Bullet);
 var _entity = require("../entity");
 var _pixiJs = require("pixi.js");
 var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
-var _sceneManager = require("../../scene-manager");
 var _abstractMovementComponent = require("../behaviors/movement/abstract-movement-component");
 var _smallExplosion = require("../fx/small-explosion");
 var _bigExplosion = require("../fx/big-explosion");
@@ -42814,9 +42870,11 @@ var _basicTeamComponent = require("../behaviors/team/basic-team-component");
 var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
 var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
 var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
-var _vars = require("../../vars");
-var _utils = require("../../utils/utils");
 var _howler = require("howler");
+var _utils = require("../../../../utils/utils");
+var _sceneManager = require("../../../../scene-manager");
+var _constants = require("../../../../constants");
+var _gameConstants = require("../../game-constants");
 class Bullet extends (0, _entity.Entity) {
     _speed = 6;
     _dttimer = 0;
@@ -42827,38 +42885,38 @@ class Bullet extends (0, _entity.Entity) {
         this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
             if (object == this) return;
             switch(object.entityType){
-                case (0, _vars.Vars).GameObjects.HARD_WALL:
+                case (0, _gameConstants.GameConstants).EntityTypes.HARD_WALL:
                     this.explode(new (0, _smallExplosion.SmallExplosionFX)());
                     break;
-                case (0, _vars.Vars).GameObjects.SMALL_WALL:
+                case (0, _gameConstants.GameConstants).EntityTypes.SMALL_WALL:
                     this.explode(new (0, _smallExplosion.SmallExplosionFX)());
                     object.destroy();
                     break;
-                case (0, _vars.Vars).GameObjects.TANK:
+                case (0, _gameConstants.GameConstants).EntityTypes.TANK:
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     this.destroy();
                     object.takeDamage(1);
                     break;
-                case "DeadTank":
+                case (0, _gameConstants.GameConstants).EntityTypes.DEAD_TANK:
                     this.destroy();
                     object.takeDamage(1);
                     break;
-                case "Tractor":
+                case (0, _gameConstants.GameConstants).EntityTypes.TRACTOR:
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     this.destroy();
                     object.takeDamage(1);
                     break;
-                case "Soldier":
+                case (0, _gameConstants.GameConstants).EntityTypes.SOLDIER:
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     this.explode(new (0, _smallExplosion.SmallExplosionFX)());
                     object.takeDamage(9999);
                     break;
-                case "Bullet":
+                case (0, _gameConstants.GameConstants).EntityTypes.BULLET:
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     this.explode(new (0, _smallExplosion.SmallExplosionFX)());
                     object.destroy();
                     break;
-                case "Base":
+                case (0, _gameConstants.GameConstants).EntityTypes.BASE:
                     this.explode(new (0, _bigExplosion.BigExplosionFX)());
                     object.destroy();
                     break;
@@ -42871,7 +42929,7 @@ class Bullet extends (0, _entity.Entity) {
     }
     launch(angle) {
         new (0, _howler.Howl)({
-            src: (0, _pixiJs.Loader).shared.resources["shot_sound"].url
+            src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.SHOT].url
         }).play();
         const radAngle = (angle - 90) * (Math.PI / 180);
         this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).setMovementVector(new (0, _pixiJs.Point)(Math.cos(radAngle) * this._speed, Math.sin(radAngle) * this._speed));
@@ -42918,19 +42976,34 @@ class Bullet extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/projectile-movement-component":"25Jss","../../scene-manager":"2FQ8z","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/small-explosion":"hcHEv","../fx/big-explosion":"4vaID","../behaviors/team/basic-team-component":"M0rnZ","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../vars":"7QgFK","../../utils/utils":"ea5wt","howler":"5Vjgk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hcHEv":[function(require,module,exports) {
+},{"../entity":"7O5J4","pixi.js":"1pSin","../behaviors/movement/projectile-movement-component":"jN6Xt","../behaviors/movement/abstract-movement-component":"a64l3","../fx/small-explosion":"63J6F","../fx/big-explosion":"fqHpB","../behaviors/team/basic-team-component":"5ouad","../behaviors/team/abstract-team-component":"f7VfU","../behaviors/collision/basic-aabb-collision-component":"htN9e","../behaviors/collision/abstract-collision-component":"l1gV3","howler":"5Vjgk","../../../../utils/utils":"ea5wt","../../../../scene-manager":"2FQ8z","../../../../constants":"45DZp","../../game-constants":"k2kvk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jN6Xt":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "ProjectileMovementComponent", ()=>ProjectileMovementComponent);
+var _abstractMovementComponent = require("./abstract-movement-component");
+class ProjectileMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
+    setMovementVector(vector) {
+        this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
+        return super.setMovementVector(vector);
+    }
+    clone() {
+        return new ProjectileMovementComponent(this);
+    }
+}
+
+},{"./abstract-movement-component":"a64l3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"63J6F":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SmallExplosionFX", ()=>SmallExplosionFX);
 var _entity = require("../entity");
 var _pixiJs = require("pixi.js");
 var _howler = require("howler");
-var _assetsVars = require("../../assets-vars");
+var _constants = require("../../../../constants");
 class SmallExplosionFX extends (0, _entity.Entity) {
     constructor(source){
         super(source);
         this.setSkin({
-            assetName: (0, _assetsVars.Assets).FX.EXPLODE_SMALL,
+            assetName: (0, _constants.Constants).AssetsTextures.EXPLODE_SMALL_FX,
             numberOfFrames: 8
         });
         this._skin.onComplete = ()=>{
@@ -42940,7 +43013,7 @@ class SmallExplosionFX extends (0, _entity.Entity) {
         this._skin.loop = false;
         this._skin.play();
         new (0, _howler.Howl)({
-            src: (0, _pixiJs.Loader).shared.resources["hit_sound"].url
+            src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.EXPLODE_SMALL].url
         }).play();
     }
     clone() {
@@ -42948,27 +43021,7 @@ class SmallExplosionFX extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","howler":"5Vjgk","../../assets-vars":"cBooq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7QgFK":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Vars", ()=>Vars);
-let Vars;
-(function(Vars1) {
-    class Teams {
-        static TEAM_1 = "player1";
-        static TEAM_2 = "player2";
-    }
-    Vars1.Teams = Teams;
-    class GameObjects {
-        static HARD_WALL = "HardWall";
-        static SMALL_WALL = "SmallWall";
-        static TANK = "Tank";
-        static WATER = "Water";
-    }
-    Vars1.GameObjects = GameObjects;
-})(Vars || (Vars = {}));
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lUX9i":[function(require,module,exports) {
+},{"../entity":"7O5J4","pixi.js":"1pSin","howler":"5Vjgk","../../../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hygE5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "WanderingAmountBasedSpawner", ()=>WanderingAmountBasedSpawner);
@@ -42979,8 +43032,9 @@ var _abstractControlComponent = require("../../behaviors/control/abstract-contro
 var _abstractMovementComponent = require("../../behaviors/movement/abstract-movement-component");
 var _pixiJs = require("pixi.js");
 var _basicAabbCollisionComponent = require("../../behaviors/collision/basic-aabb-collision-component");
-var _utils = require("../../../utils/utils");
 var _abstractCollisionComponent = require("../../behaviors/collision/abstract-collision-component");
+var _utils = require("../../../../../utils/utils");
+var _gameConstants = require("../../../game-constants");
 class WanderingAmountBasedSpawner extends (0, _amountBasedSpawner.AmountBasedSpawner) {
     constructor(source){
         super(source);
@@ -42990,7 +43044,7 @@ class WanderingAmountBasedSpawner extends (0, _amountBasedSpawner.AmountBasedSpa
             if (object == this) return;
             if (this._collisionGroup.includes(object.entityType)) this._collides = true;
             switch(object.entityType){
-                case "HardWall":
+                case (0, _gameConstants.GameConstants).EntityTypes.HARD_WALL:
                     this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
                     break;
             }
@@ -43047,15 +43101,15 @@ class WanderingAmountBasedSpawner extends (0, _amountBasedSpawner.AmountBasedSpa
     }
 }
 
-},{"../../behaviors/control/random-control-component":"9oAyj","../../behaviors/movement/direct-walk-movement-component":"4jmrJ","./amount-based-spawner":"lpKso","../../behaviors/control/abstract-control-component":"8sX8j","../../behaviors/movement/abstract-movement-component":"4Zsay","pixi.js":"1pSin","../../behaviors/collision/basic-aabb-collision-component":"iix3J","../../../utils/utils":"ea5wt","../../behaviors/collision/abstract-collision-component":"6rzC8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lpKso":[function(require,module,exports) {
+},{"../../behaviors/control/random-control-component":"hIlER","../../behaviors/movement/direct-walk-movement-component":"5Vj0c","./amount-based-spawner":"bRcGa","../../behaviors/control/abstract-control-component":"iMT9O","../../behaviors/movement/abstract-movement-component":"a64l3","pixi.js":"1pSin","../../behaviors/collision/basic-aabb-collision-component":"htN9e","../../behaviors/collision/abstract-collision-component":"l1gV3","../../../../../utils/utils":"ea5wt","../../../game-constants":"k2kvk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bRcGa":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AmountBasedSpawner", ()=>AmountBasedSpawner);
 var _spawner = require("./spawner");
 var _basicAabbCollisionComponent = require("../../behaviors/collision/basic-aabb-collision-component");
 var _abstractCollisionComponent = require("../../behaviors/collision/abstract-collision-component");
-var _utils = require("../../../utils/utils");
-var _projectileMovementComponent = require("../../behaviors/movement/projectile-movement-component");
+var _utils = require("../../../../../utils/utils");
+var _staticMovementComponent = require("../../behaviors/movement/static-movement-component");
 class AmountBasedSpawner extends (0, _spawner.Spawner) {
     _entities = [];
     _timeBetweenSpawns = 0;
@@ -43067,7 +43121,7 @@ class AmountBasedSpawner extends (0, _spawner.Spawner) {
             if (object == this) return;
             if (this._collisionGroup.includes(object.entityType)) this._collides = true;
         }));
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+        this.setComponent(new (0, _staticMovementComponent.StaticMovementComponent)());
     }
     clone() {
         return new AmountBasedSpawner(this);
@@ -43116,12 +43170,12 @@ class AmountBasedSpawner extends (0, _spawner.Spawner) {
     }
 }
 
-},{"./spawner":"4Uxgq","../../behaviors/collision/basic-aabb-collision-component":"iix3J","../../behaviors/collision/abstract-collision-component":"6rzC8","../../../utils/utils":"ea5wt","../../behaviors/movement/projectile-movement-component":"25Jss","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Uxgq":[function(require,module,exports) {
+},{"./spawner":"5BtMX","../../behaviors/collision/basic-aabb-collision-component":"htN9e","../../behaviors/collision/abstract-collision-component":"l1gV3","../../../../../utils/utils":"ea5wt","../../behaviors/movement/static-movement-component":"1IDmV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5BtMX":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Spawner", ()=>Spawner);
+var _sceneManager = require("../../../../../scene-manager");
 var _entity = require("../../entity");
-var _sceneManager = require("../../../scene-manager");
 class Spawner extends (0, _entity.Entity) {
     _dttimer = 0;
     _timeBetweenSpawns = 0;
@@ -43142,24 +43196,31 @@ class Spawner extends (0, _entity.Entity) {
     }
 }
 
-},{"../../entity":"5vwA6","../../../scene-manager":"2FQ8z","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8zU8G":[function(require,module,exports) {
+},{"../../../../../scene-manager":"2FQ8z","../../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1NWEN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Buff", ()=>Buff);
-var _assetsVars = require("../../assets-vars");
-var _utils = require("../../utils/utils");
 var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
 var _liveBuffComponent = require("../behaviors/buffs/live-buff-component");
 var _slowBuffComponent = require("../behaviors/buffs/slow-buff-component");
 var _speedBuffComponent = require("../behaviors/buffs/speed-buff-component");
-var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
 var _entity = require("../entity");
 var _spawnTractorBuffComponent = require("../behaviors/buffs/spawn-tractor-buff-component");
+var _utils = require("../../../../utils/utils");
+var _constants = require("../../../../constants");
+var _staticMovementComponent = require("../behaviors/movement/static-movement-component");
+const BUFF_TYPES = [
+    (0, _constants.Constants).AssetsTextures.BONUS_SPEED,
+    (0, _constants.Constants).AssetsTextures.BONUS_IMMORTAL,
+    (0, _constants.Constants).AssetsTextures.BONUS_LIVE,
+    (0, _constants.Constants).AssetsTextures.BONUS_SLOW,
+    (0, _constants.Constants).AssetsTextures.BONUS_TRACTOR
+];
 class Buff extends (0, _entity.Entity) {
     constructor(source){
         super(source);
         this.type = source?._type || "";
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+        this.setComponent(new (0, _staticMovementComponent.StaticMovementComponent)());
     }
     set type(value) {
         this._type = value;
@@ -43169,15 +43230,15 @@ class Buff extends (0, _entity.Entity) {
     }
     getBuff() {
         switch(this._type){
-            case (0, _assetsVars.Assets).Bonuses.BONUS_SPEED:
+            case (0, _constants.Constants).AssetsTextures.BONUS_SPEED:
                 return new (0, _speedBuffComponent.SpeedBuffComponent)().applyBuff(240);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_IMMORTAL:
+            case (0, _constants.Constants).AssetsTextures.BONUS_IMMORTAL:
                 return new (0, _immortalBuffComponent.ImmortalBuffComponent)().applyBuff(300);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_LIVE:
+            case (0, _constants.Constants).AssetsTextures.BONUS_LIVE:
                 return new (0, _liveBuffComponent.LiveBuffComponent)().applyBuff(0);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_SLOW:
+            case (0, _constants.Constants).AssetsTextures.BONUS_SLOW:
                 return new (0, _slowBuffComponent.SlowBuffComponent)().applyBuff(300);
-            case (0, _assetsVars.Assets).Bonuses.BONUS_TRACTOR:
+            case (0, _constants.Constants).AssetsTextures.BONUS_TRACTOR:
                 return new (0, _spawnTractorBuffComponent.SpawnSupportBuffComponent)().applyBuff(0);
             default:
                 break;
@@ -43185,7 +43246,7 @@ class Buff extends (0, _entity.Entity) {
     }
     update(dt) {
         if (this._initOnUpdate) {
-            this.type = (0, _assetsVars.Assets).Bonuses.BUFF_TYPES[Math.floor((0, _utils.randNum)((0, _assetsVars.Assets).Bonuses.BUFF_TYPES.length))];
+            this.type = BUFF_TYPES[Math.floor((0, _utils.randNum)(BUFF_TYPES.length))];
             this.setSkin({
                 assetName: this.type
             });
@@ -43197,7 +43258,7 @@ class Buff extends (0, _entity.Entity) {
     }
 }
 
-},{"../../assets-vars":"cBooq","../../utils/utils":"ea5wt","../behaviors/buffs/immortal-buff-component":"85AQc","../behaviors/buffs/live-buff-component":"2TMKl","../behaviors/buffs/slow-buff-component":"9mnDN","../behaviors/buffs/speed-buff-component":"fjyMt","../behaviors/movement/projectile-movement-component":"25Jss","../entity":"5vwA6","../behaviors/buffs/spawn-tractor-buff-component":"bKaTO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2TMKl":[function(require,module,exports) {
+},{"../behaviors/buffs/immortal-buff-component":"ibCZq","../behaviors/buffs/live-buff-component":"hTtsW","../behaviors/buffs/slow-buff-component":"8DIpe","../behaviors/buffs/speed-buff-component":"dDNtf","../entity":"7O5J4","../behaviors/buffs/spawn-tractor-buff-component":"cb88z","../../../../utils/utils":"ea5wt","../../../../constants":"45DZp","../behaviors/movement/static-movement-component":"1IDmV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hTtsW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "LiveBuffComponent", ()=>LiveBuffComponent);
@@ -43214,7 +43275,7 @@ class LiveBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent
     }
 }
 
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9mnDN":[function(require,module,exports) {
+},{"./abstract-buff-component":"4GSnn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8DIpe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SlowBuffComponent", ()=>SlowBuffComponent);
@@ -43231,7 +43292,7 @@ class SlowBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent
     }
 }
 
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fjyMt":[function(require,module,exports) {
+},{"./abstract-buff-component":"4GSnn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dDNtf":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SpeedBuffComponent", ()=>SpeedBuffComponent);
@@ -43248,22 +43309,23 @@ class SpeedBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponen
     }
 }
 
-},{"./abstract-buff-component":"6az5d","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bKaTO":[function(require,module,exports) {
+},{"./abstract-buff-component":"4GSnn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cb88z":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SpawnSupportBuffComponent", ()=>SpawnSupportBuffComponent);
-var _sceneManager = require("../../../scene-manager");
 var _abstractMovementComponent = require("../movement/abstract-movement-component");
 var _abstractTeamComponent = require("../team/abstract-team-component");
 var _abstractBuffComponent = require("./abstract-buff-component");
 var _entityFactory = require("../../entity-factory");
+var _sceneManager = require("../../../../../scene-manager");
+var _gameConstants = require("../../../game-constants");
 class SpawnSupportBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent) {
     _typeID = "buff-spawn";
     firstUpdate() {
         if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) {
             let support;
-            if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == "player1") support = (0, _entityFactory.EntityFactory).getEntity(903);
-            if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == "player2") support = (0, _entityFactory.EntityFactory).getEntity(905);
+            if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == (0, _gameConstants.GameConstants).Teams.PLAYER_1) support = (0, _entityFactory.EntityFactory).getEntity((0, _gameConstants.GameConstants).EntityIDs.PLAYER_TRACTOR);
+            if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == (0, _gameConstants.GameConstants).Teams.PLAYER_2) support = (0, _entityFactory.EntityFactory).getEntity((0, _gameConstants.GameConstants).EntityIDs.ENEMY_SUPPORT_TANK);
             if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
                 const vec = this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector;
                 support.x = this._entity.x * (this._entity.x / vec.x);
@@ -43281,15 +43343,15 @@ class SpawnSupportBuffComponent extends (0, _abstractBuffComponent.AbstractBuffC
     }
 }
 
-},{"../../../scene-manager":"2FQ8z","../movement/abstract-movement-component":"4Zsay","../team/abstract-team-component":"9vUi2","./abstract-buff-component":"6az5d","../../entity-factory":"dTnZv","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dC7wV":[function(require,module,exports) {
+},{"../movement/abstract-movement-component":"a64l3","../team/abstract-team-component":"f7VfU","./abstract-buff-component":"4GSnn","../../entity-factory":"e4Fm9","../../../../../scene-manager":"2FQ8z","../../../game-constants":"k2kvk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5gio5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Base", ()=>Base);
 var _entity = require("../entity");
-var _sceneManager = require("../../scene-manager");
-var _appear = require("../fx/appear");
-var _eventManager = require("../../event-manager");
 var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
+var _sceneManager = require("../../../../scene-manager");
+var _eventManager = require("../../../../event-manager");
+var _appear = require("../fx/appear");
 class Base extends (0, _entity.Entity) {
     constructor(source){
         super(source);
@@ -43313,24 +43375,24 @@ class Base extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../../scene-manager":"2FQ8z","../fx/appear":"j2Wc6","../../event-manager":"l75gk","../behaviors/team/abstract-team-component":"9vUi2","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jb7yn":[function(require,module,exports) {
+},{"../entity":"7O5J4","../behaviors/team/abstract-team-component":"f7VfU","../../../../scene-manager":"2FQ8z","../../../../event-manager":"l75gk","../fx/appear":"54360","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3cOKk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BulletWeaponComponent", ()=>BulletWeaponComponent);
 var _abstractWeaponComponent = require("./abstract-weapon-component");
 var _bullet = require("../../interactive/bullet");
-var _sceneManager = require("../../../scene-manager");
 var _abstractTeamComponent = require("../team/abstract-team-component");
 var _basicTeamComponent = require("../team/basic-team-component");
-var _assetsVars = require("../../../assets-vars");
 var _abstractMovementComponent = require("../movement/abstract-movement-component");
+var _sceneManager = require("../../../../../scene-manager");
+var _constants = require("../../../../../constants");
 class BulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWeaponComponent) {
     fire() {
         if (!this._reloaded) return;
         super.fire();
         const bullet = new (0, _bullet.Bullet)();
         bullet.setSkin({
-            assetName: (0, _assetsVars.Assets).Bullets.BULLET
+            assetName: (0, _constants.Constants).AssetsTextures.BULLET_1
         });
         if (this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) bullet.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam(this._entity.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()));
         if (this._entity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))) {
@@ -43349,26 +43411,32 @@ class BulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWeaponC
     }
 }
 
-},{"./abstract-weapon-component":"jiAqg","../../interactive/bullet":"6c7ss","../../../scene-manager":"2FQ8z","../team/abstract-team-component":"9vUi2","../team/basic-team-component":"M0rnZ","../../../assets-vars":"cBooq","../movement/abstract-movement-component":"4Zsay","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hc7Oq":[function(require,module,exports) {
+},{"./abstract-weapon-component":"aDMpq","../../interactive/bullet":"igMXs","../team/abstract-team-component":"f7VfU","../team/basic-team-component":"5ouad","../movement/abstract-movement-component":"a64l3","../../../../../scene-manager":"2FQ8z","../../../../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ixdmX":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Tractor", ()=>Tractor);
 var _entity = require("../entity");
 var _pixiJs = require("pixi.js");
 var _directWalkMovementComponent = require("../behaviors/movement/direct-walk-movement-component");
-var _sceneManager = require("../../scene-manager");
 var _abstractWeaponComponent = require("../behaviors/weapon/abstract-weapon-component");
 var _abstractControlComponent = require("../behaviors/control/abstract-control-component");
 var _abstractMovementComponent = require("../behaviors/movement/abstract-movement-component");
 var _appear = require("../fx/appear");
 var _basicAabbCollisionComponent = require("../behaviors/collision/basic-aabb-collision-component");
 var _abstractCollisionComponent = require("../behaviors/collision/abstract-collision-component");
-var _utils = require("../../utils/utils");
 var _bigExplosion = require("../fx/big-explosion");
 var _abstractTeamComponent = require("../behaviors/team/abstract-team-component");
 var _immortalBuffComponent = require("../behaviors/buffs/immortal-buff-component");
 var _howler = require("howler");
+var _constants = require("../../../../constants");
+var _utils = require("../../../../utils/utils");
+var _sceneManager = require("../../../../scene-manager");
+var _gameConstants = require("../../game-constants");
 class Tractor extends (0, _entity.Entity) {
+    _moveSound = new (0, _howler.Howl)({
+        src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.HEAVY_TRANSPORT_MOVE].url,
+        volume: 0.25
+    });
     constructor(source){
         super(source);
         this.speed = source?.speed || 3;
@@ -43376,35 +43444,30 @@ class Tractor extends (0, _entity.Entity) {
         this.setComponent(new (0, _directWalkMovementComponent.DirectionalWalkMovementBehavior)());
         this.setComponent(new (0, _basicAabbCollisionComponent.BasicAabbCollisionComponent)().onCollidedWith((object)=>{
             if (object == this) return;
+            const stopObject = [
+                (0, _gameConstants.GameConstants).EntityTypes.HARD_WALL,
+                (0, _gameConstants.GameConstants).EntityTypes.SMALL_WALL,
+                (0, _gameConstants.GameConstants).EntityTypes.AT_HEDGEHOGS,
+                (0, _gameConstants.GameConstants).EntityTypes.TANK,
+                (0, _gameConstants.GameConstants).EntityTypes.DEAD_TANK,
+                (0, _gameConstants.GameConstants).EntityTypes.TRACTOR
+            ];
+            if (stopObject.includes(object.entityType)) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
             switch(object.entityType){
-                case "HardWall":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "ATHedgehogs":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "SmallWall":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "Tank":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                case (0, _gameConstants.GameConstants).EntityTypes.TANK:
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     object.takeDamage(1);
                     break;
-                case "DeadTank":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
-                    break;
-                case "Tractor":
-                    this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+                case (0, _gameConstants.GameConstants).EntityTypes.TRACTOR:
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
                     object.takeDamage(1);
                     break;
-                case "Soldier":
+                case (0, _gameConstants.GameConstants).EntityTypes.SOLDIER:
                     object.takeDamage(9999);
                     break;
-                case "Buff":
+                case (0, _gameConstants.GameConstants).EntityTypes.BUFF:
                     new (0, _howler.Howl)({
-                        src: (0, _pixiJs.Loader).shared.resources["bonus_sound"].url
+                        src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.BONUS].url
                     }).play();
                     this.setComponent(object.getBuff());
                     object.destroy();
@@ -43423,7 +43486,13 @@ class Tractor extends (0, _entity.Entity) {
         super.setComponent(component);
         if (this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)) && this._initOnUpdate) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).onEntityMoved((vector)=>{
             this._skin.loop = false;
-            if (!this._skin.playing) this._skin.gotoAndPlay(0);
+            this._skin.onComplete = ()=>{
+                this._moveSound.pause();
+            };
+            if (!this._skin.playing) {
+                this._skin.gotoAndPlay(0);
+                this._moveSound.play();
+            }
         });
         if (Object.getPrototypeOf(component) instanceof (0, _abstractControlComponent.AbstractControlComponent)) {
             this.getComponent((0, _abstractControlComponent.AbstractControlComponent)).onActionUp(()=>{
@@ -43506,7 +43575,7 @@ class Tractor extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"4jmrJ","../../scene-manager":"2FQ8z","../behaviors/weapon/abstract-weapon-component":"jiAqg","../behaviors/control/abstract-control-component":"8sX8j","../behaviors/movement/abstract-movement-component":"4Zsay","../fx/appear":"j2Wc6","../behaviors/collision/basic-aabb-collision-component":"iix3J","../behaviors/collision/abstract-collision-component":"6rzC8","../../utils/utils":"ea5wt","../fx/big-explosion":"4vaID","../behaviors/team/abstract-team-component":"9vUi2","../behaviors/buffs/immortal-buff-component":"85AQc","howler":"5Vjgk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7tCQV":[function(require,module,exports) {
+},{"../entity":"7O5J4","pixi.js":"1pSin","../behaviors/movement/direct-walk-movement-component":"5Vj0c","../behaviors/weapon/abstract-weapon-component":"aDMpq","../behaviors/control/abstract-control-component":"iMT9O","../behaviors/movement/abstract-movement-component":"a64l3","../fx/appear":"54360","../behaviors/collision/basic-aabb-collision-component":"htN9e","../behaviors/collision/abstract-collision-component":"l1gV3","../fx/big-explosion":"fqHpB","../behaviors/team/abstract-team-component":"f7VfU","../behaviors/buffs/immortal-buff-component":"ibCZq","howler":"5Vjgk","../../../../constants":"45DZp","../../../../utils/utils":"ea5wt","../../../../scene-manager":"2FQ8z","../../game-constants":"k2kvk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dyUm8":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BasicDestroyComponent", ()=>BasicDestroyComponent);
@@ -43520,19 +43589,19 @@ class BasicDestroyComponent extends (0, _abstractDestroyComponent.AbstractDestro
     }
 }
 
-},{"./abstract-destroy-component":"8IMJl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"e82Po":[function(require,module,exports) {
+},{"./abstract-destroy-component":"7BYTl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iKGAS":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "InWorldEventCounter", ()=>InWorldEventCounter);
 var _entity = require("../entity");
-var _projectileMovementComponent = require("../behaviors/movement/projectile-movement-component");
-var _eventManager = require("../../event-manager");
+var _eventManager = require("../../../../event-manager");
+var _staticMovementComponent = require("../behaviors/movement/static-movement-component");
 class InWorldEventCounter extends (0, _entity.Entity) {
     _count = 0;
     _timesToCount = 0;
     constructor(source){
         super(source);
-        this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
+        this.setComponent(new (0, _staticMovementComponent.StaticMovementComponent)());
     }
     get count() {
         return this._count;
@@ -43567,23 +43636,27 @@ class InWorldEventCounter extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"5vwA6","../behaviors/movement/projectile-movement-component":"25Jss","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2bpzf":[function(require,module,exports) {
+},{"../entity":"7O5J4","../../../../event-manager":"l75gk","../behaviors/movement/static-movement-component":"1IDmV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"j65HL":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ATHedgehogs", ()=>ATHedgehogs);
+var _constants = require("../../../../constants");
 var _entity = require("../entity");
 class ATHedgehogs extends (0, _entity.Entity) {
-    constructor(){
-        super();
+    constructor(source){
+        super(source);
         this.setSkin({
-            assetName: "at_hedgehogs",
+            assetName: (0, _constants.Constants).AssetsTextures.AT_BARRICADE,
             hitboxWidth: 32,
             hitboxHeight: 32
         });
     }
+    clone() {
+        return new ATHedgehogs(this);
+    }
 }
 
-},{"../entity":"5vwA6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1SXu6":[function(require,module,exports) {
+},{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1SXu6":[function(require,module,exports) {
 module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,101,101,101,101,101,101,101,101,101,101,102,102,102,102,102,102,102,102,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,102,102,102,102,102,102,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,102,102,102,102,102,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,102,102,102,102,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,211,211,101,211,211,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,211,211,101,211,211,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,101,102,102,102,101,101,101,101,101,102,102,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,102,102,102,102,102,102,102,101,102,101,102,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,102,102,102,102,101,102,102,102,102,102,102,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,102,102,102,101,101,101,102,102,102,102,102,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,102,102,102,101,102,101,102,102,102,102,102,101,101,101,101,101,101,101,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,202,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,912,999,999,999,203,999,999,999,203,999,999,999,203,999,999,999,203,999,999,999,912,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,999,202,999,201],[201,999,203,203,999,203,203,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,203,203,999,203,203,999,201],[201,999,999,999,201,999,999,999,999,202,201,202,999,202,201,202,999,202,201,202,999,999,999,999,201,999,999,999,201],[201,999,203,203,999,203,203,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,203,203,999,203,203,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,999,202,999,202,999,203,999,999,999,203,999,999,999,203,999,999,999,203,999,202,999,202,999,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,202,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,112,999,112,999,112,999,999,999,999,112,999,112,999,112,999,999,999,999,999,999,999,112,999,112,999,112,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,112,999,112,999,112,999,999,999,999,999,999,999,112,999,999,999,112,999,999,999,999,112,999,112,999,112,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
 
 },{}],"6JDuJ":[function(require,module,exports) {
@@ -43592,9 +43665,11 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Level2Scene", ()=>Level2Scene);
 var _howler = require("howler");
 var _pixiJs = require("pixi.js");
+var _constants = require("../../../../constants");
 var _eventManager = require("../../../../event-manager");
 var _sceneManager = require("../../../../scene-manager");
 var _menuScene = require("../../../menu/menu-scene");
+var _gameConstants = require("../../game-constants");
 var _gameScene = require("../../game-scene");
 var _level3 = require("../level3/level3");
 var _level2Json = require("./level2.json");
@@ -43602,18 +43677,18 @@ class Level2Scene extends (0, _gameScene.GameScene) {
     constructor(){
         super();
         this.loadLevel(_level2Json);
-        (0, _eventManager.EventManager).subscribe("team_lost", this);
-        (0, _eventManager.EventManager).subscribe("team_won", this);
+        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_LOST, this);
+        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_WON, this);
     }
     onEvent(event, data) {
         if (this.paused) return;
         super.onEvent(event, data);
-        if (event == "team_lost") this._preUpdateAction = ()=>{
+        if (event == (0, _gameConstants.GameConstants).Events.TEAM_LOST) this._preUpdateAction = ()=>{
             this.pause();
             this.dynamicChildren.length = 0;
             this.tileMap.length = 0;
             new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources["lose_sound"].url,
+                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.LOSE].url,
                 onend: ()=>{
                     (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
                     this.destroy();
@@ -43621,12 +43696,12 @@ class Level2Scene extends (0, _gameScene.GameScene) {
                 }
             }).play();
         };
-        if (event == "team_won" && data == "player1") this._preUpdateAction = ()=>{
+        if (event == (0, _gameConstants.GameConstants).Events.TEAM_WON && data == (0, _gameConstants.GameConstants).Teams.PLAYER_1) this._preUpdateAction = ()=>{
             this.pause();
             this.dynamicChildren.length = 0;
             this.tileMap.length = 0;
             new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources["win_sound"].url,
+                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.WIN].url,
                 onend: ()=>{
                     (0, _sceneManager.SceneManager).changeScene(new (0, _level3.Level3Scene)());
                     this.destroy();
@@ -43637,15 +43712,17 @@ class Level2Scene extends (0, _gameScene.GameScene) {
     }
 }
 
-},{"howler":"5Vjgk","pixi.js":"1pSin","../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","../level3/level3":"jtkeB","./level2.json":"fP5rd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jtkeB":[function(require,module,exports) {
+},{"howler":"5Vjgk","pixi.js":"1pSin","../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-constants":"k2kvk","../../game-scene":"eoY4A","../level3/level3":"jtkeB","./level2.json":"fP5rd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../constants":"45DZp"}],"jtkeB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Level3Scene", ()=>Level3Scene);
 var _howler = require("howler");
 var _pixiJs = require("pixi.js");
+var _constants = require("../../../../constants");
 var _eventManager = require("../../../../event-manager");
 var _sceneManager = require("../../../../scene-manager");
 var _menuScene = require("../../../menu/menu-scene");
+var _gameConstants = require("../../game-constants");
 var _gameScene = require("../../game-scene");
 var _gameWonScreen = require("../../game_won_screen");
 var _level3Json = require("./level3.json");
@@ -43653,18 +43730,18 @@ class Level3Scene extends (0, _gameScene.GameScene) {
     constructor(){
         super();
         this.loadLevel(_level3Json);
-        (0, _eventManager.EventManager).subscribe("team_lost", this);
-        (0, _eventManager.EventManager).subscribe("team_won", this);
+        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_LOST, this);
+        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_WON, this);
     }
     onEvent(event, data) {
         if (this.paused) return;
         super.onEvent(event, data);
-        if (event == "team_lost") this._preUpdateAction = ()=>{
+        if (event == (0, _gameConstants.GameConstants).Events.TEAM_LOST) this._preUpdateAction = ()=>{
             this.pause();
             this.dynamicChildren.length = 0;
             this.tileMap.length = 0;
             new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources["lose_sound"].url,
+                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.LOSE].url,
                 onend: ()=>{
                     (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
                     this.destroy();
@@ -43672,12 +43749,12 @@ class Level3Scene extends (0, _gameScene.GameScene) {
                 }
             }).play();
         };
-        if (event == "team_won" && data == "player1") this._preUpdateAction = ()=>{
+        if (event == (0, _gameConstants.GameConstants).Events.TEAM_WON && data == (0, _gameConstants.GameConstants).Teams.PLAYER_1) this._preUpdateAction = ()=>{
             this.pause();
             this.dynamicChildren.length = 0;
             this.tileMap.length = 0;
             new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources["win_sound"].url,
+                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.WIN].url,
                 onend: ()=>{
                     (0, _sceneManager.SceneManager).changeScene(new (0, _gameWonScreen.GameWonScene)());
                     this.destroy();
@@ -43688,7 +43765,7 @@ class Level3Scene extends (0, _gameScene.GameScene) {
     }
 }
 
-},{"howler":"5Vjgk","pixi.js":"1pSin","../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","../../game_won_screen":"8w9F4","./level3.json":"6Axjl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8w9F4":[function(require,module,exports) {
+},{"howler":"5Vjgk","pixi.js":"1pSin","../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-constants":"k2kvk","../../game-scene":"eoY4A","../../game_won_screen":"8w9F4","./level3.json":"6Axjl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../constants":"45DZp"}],"8w9F4":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "GameWonScene", ()=>GameWonScene);
@@ -43698,16 +43775,17 @@ var _pixiJs = require("pixi.js");
 var _menuScene = require("../menu/menu-scene");
 var _howler = require("howler");
 var _savesHandler = require("../../utils/saves-handler");
+var _constants = require("../../constants");
 class GameWonScene extends (0, _scene.Scene) {
     constructor(){
         super();
-        this.background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["win_background"].texture);
+        this.background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.WIN_MENU_BG].texture);
         this.logoText = new (0, _pixiJs.Text)("You`ve completed the game!", new (0, _pixiJs.TextStyle)({
             fontSize: 64,
             align: "center",
             fill: "#ffffff"
         }));
-        this.startButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources["button_exit"].texture);
+        this.startButton = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.BUTTON_EXIT].texture);
         this.background.anchor.set(0.5);
         this.background.x = (0, _sceneManager.SceneManager).width / 2;
         this.background.y = (0, _sceneManager.SceneManager).height / 2;
@@ -43741,7 +43819,7 @@ class GameWonScene extends (0, _scene.Scene) {
     }
     initActions() {
         this.music = new (0, _howler.Howl)({
-            src: (0, _pixiJs.Loader).shared.resources["endgame_music"].url
+            src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.WIN_GAME_MUSIC].url
         });
         this.music.play();
         this.startButton.on("click", ()=>{
@@ -43752,7 +43830,7 @@ class GameWonScene extends (0, _scene.Scene) {
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../menu/menu-scene":"4nuFJ","howler":"5Vjgk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../utils/saves-handler":"1qn3x"}],"6Axjl":[function(require,module,exports) {
+},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../menu/menu-scene":"4nuFJ","howler":"5Vjgk","../../utils/saves-handler":"1qn3x","../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6Axjl":[function(require,module,exports) {
 module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,912,999,999,999,999,999,912,999,999,999,999,999,912,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
 
 },{}],"fP5rd":[function(require,module,exports) {
@@ -43763,180 +43841,185 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loaderAssets", ()=>loaderAssets);
 parcelHelpers.export(exports, "assets", ()=>assets);
+var _constants = require("./constants");
 const loaderAssets = [
     {
-        name: "loader_bg",
+        name: (0, _constants.Constants).AssetsTextures.LOADER_BAR_BG,
         url: "./assets/loader/loader-bg.png"
     },
     {
-        name: "loader_bar",
+        name: (0, _constants.Constants).AssetsTextures.LOADER_BAR,
         url: "./assets/loader/loader-bar.png"
     }, 
 ];
 const assets = [
     {
-        name: "bonus_immortal",
+        name: (0, _constants.Constants).AssetsTextures.BONUS_IMMORTAL,
         url: "./assets/bonus/bonus_immortal.png"
     },
     {
-        name: "bonus_live",
+        name: (0, _constants.Constants).AssetsTextures.BONUS_LIVE,
         url: "./assets/bonus/bonus_live.png"
     },
     {
-        name: "bonus_slow",
+        name: (0, _constants.Constants).AssetsTextures.BONUS_SLOW,
         url: "./assets/bonus/bonus_slow.png"
     },
     {
-        name: "bonus_speed",
+        name: (0, _constants.Constants).AssetsTextures.BONUS_SPEED,
         url: "./assets/bonus/bonus_speed.png"
     },
     {
-        name: "bonus_tractor",
+        name: (0, _constants.Constants).AssetsTextures.BONUS_TRACTOR,
         url: "./assets/bonus/bonus_tractor.png"
     },
     {
-        name: "button_play",
+        name: (0, _constants.Constants).AssetsTextures.BUTTON_PLAY,
         url: "./assets/buttons/play.png"
     },
     {
-        name: "button_exit",
+        name: (0, _constants.Constants).AssetsTextures.BUTTON_EXIT,
         url: "./assets/buttons/exit.png"
     },
     {
-        name: "menu_background",
+        name: (0, _constants.Constants).AssetsTextures.MENU_BG,
         url: "./assets/game_background.png"
     },
     {
-        name: "win_background",
+        name: (0, _constants.Constants).AssetsTextures.WIN_MENU_BG,
         url: "./assets/win_screen_background.png"
     },
     {
-        name: "appear",
+        name: (0, _constants.Constants).AssetsTextures.APPEAR_FX,
         url: "./assets/effects/appear.png"
     },
     {
-        name: "splash",
+        name: (0, _constants.Constants).AssetsTextures.SPLASH_FX,
         url: "./assets/effects/splash.png"
     },
     {
-        name: "bullet",
+        name: (0, _constants.Constants).AssetsTextures.BULLET_1,
         url: "./assets/effects/bullet.png"
     },
     {
-        name: "enemy_bullet",
+        name: (0, _constants.Constants).AssetsTextures.BULLET_2,
         url: "./assets/effects/enemy_bullet.png"
     },
     {
-        name: "explode",
+        name: (0, _constants.Constants).AssetsTextures.EXPLODE_BIG_FX,
         url: "./assets/effects/explode.png"
     },
     {
-        name: "explode_small",
+        name: (0, _constants.Constants).AssetsTextures.EXPLODE_SMALL_FX,
         url: "./assets/effects/explode_small.png"
     },
     {
-        name: "tank_enemy1",
+        name: (0, _constants.Constants).AssetsTextures.TANK_2,
         url: "./assets/tanks/tank_enemy1_move.png"
     },
     {
-        name: "tank_enemy2",
+        name: (0, _constants.Constants).AssetsTextures.TANK_3,
         url: "./assets/tanks/tank_enemy2_move.png"
     },
     {
-        name: "tank_enemy3",
+        name: (0, _constants.Constants).AssetsTextures.TANK_4,
         url: "./assets/tanks/tank_enemy3_move.png"
     },
     {
-        name: "tank_player",
+        name: (0, _constants.Constants).AssetsTextures.TANK_1,
         url: "./assets/tanks/tank_player_move.png"
     },
     {
-        name: "dead_tank",
+        name: (0, _constants.Constants).AssetsTextures.TANK_DEAD,
         url: "./assets/tanks/tank_dead_move.png"
     },
     {
-        name: "tractor",
+        name: (0, _constants.Constants).AssetsTextures.TRACTOR,
         url: "./assets/tanks/tractor_move.png"
     },
     {
-        name: "soldier",
+        name: (0, _constants.Constants).AssetsTextures.SOLIDER,
         url: "./assets/entities/soldier.png"
     },
     {
-        name: "dead_soldier",
+        name: (0, _constants.Constants).AssetsTextures.SOLIDER_DEAD,
         url: "./assets/entities/good_russian.png"
     },
     {
-        name: "empty",
+        name: (0, _constants.Constants).AssetsTextures.EMPTY_SPACE,
         url: "./assets/tanks/empty.png"
     },
     {
-        name: "eagle",
+        name: (0, _constants.Constants).AssetsTextures.EAGLE,
         url: "./assets/tiles/eagle.png"
     },
     {
-        name: "leaves",
+        name: (0, _constants.Constants).AssetsTextures.LEAVES,
         url: "./assets/tiles/leaves.png"
     },
     {
-        name: "small_wall",
+        name: (0, _constants.Constants).AssetsTextures.SMALL_WALL,
         url: "./assets/tiles/small_wall.png"
     },
     {
-        name: "at_hedgehogs",
+        name: (0, _constants.Constants).AssetsTextures.AT_BARRICADE,
         url: "./assets/tiles/anti_tank_hedgehogs.png"
     },
     {
-        name: "wall",
+        name: (0, _constants.Constants).AssetsTextures.HARD_WALL,
         url: "./assets/tiles/wall.png"
     },
     {
-        name: "dirt",
+        name: (0, _constants.Constants).AssetsTextures.DIRT,
         url: "./assets/tiles/dirt.png"
     },
     {
-        name: "grass",
+        name: (0, _constants.Constants).AssetsTextures.GRASS,
         url: "./assets/tiles/grass.png"
     },
     {
-        name: "water",
+        name: (0, _constants.Constants).AssetsTextures.WATER,
         url: "./assets/tiles/water.png"
     },
     {
-        name: "motor_sound",
+        name: (0, _constants.Constants).AssetsSounds.SHOT,
         url: "./assets/sounds/shot.wav"
     },
     {
-        name: "shot_sound",
-        url: "./assets/sounds/shot.wav"
-    },
-    {
-        name: "bonus_sound",
+        name: (0, _constants.Constants).AssetsSounds.BONUS,
         url: "./assets/sounds/bonus.wav"
     },
     {
-        name: "win_sound",
+        name: (0, _constants.Constants).AssetsSounds.WIN,
         url: "./assets/sounds/win.wav"
     },
     {
-        name: "lose_sound",
+        name: (0, _constants.Constants).AssetsSounds.LOSE,
         url: "./assets/sounds/lose.wav"
     },
     {
-        name: "explode_sound",
+        name: (0, _constants.Constants).AssetsSounds.EXPLODE_BIG,
         url: "./assets/sounds/explode.wav"
     },
     {
-        name: "hit_sound",
+        name: (0, _constants.Constants).AssetsSounds.EXPLODE_SMALL,
         url: "./assets/sounds/hit.wav"
     },
     {
-        name: "endgame_music",
+        name: (0, _constants.Constants).AssetsSounds.WIN_GAME_MUSIC,
         url: "./assets/sounds/endgame_music.mp3"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.HEAVY_TRANSPORT_MOVE,
+        url: "./assets/sounds/heavy_transport_move.wav"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.WATER_SPLASH,
+        url: "./assets/sounds/water_splash.wav"
     }, 
 ];
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"avp05":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./constants":"45DZp"}],"avp05":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ClientInputHandler", ()=>ClientInputHandler);
