@@ -43352,6 +43352,7 @@ var _abstractTeamComponent = require("../behaviors/team/abstract-team-component"
 var _sceneManager = require("../../../../scene-manager");
 var _eventManager = require("../../../../event-manager");
 var _appear = require("../fx/appear");
+var _gameConstants = require("../../game-constants");
 class Base extends (0, _entity.Entity) {
     constructor(source){
         super(source);
@@ -43362,7 +43363,7 @@ class Base extends (0, _entity.Entity) {
     onEvent(event, data) {}
     destroy(options) {
         super.destroy(options);
-        if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) (0, _eventManager.EventManager).notify("team_lost", this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+        if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) (0, _eventManager.EventManager).notify((0, _gameConstants.GameConstants).Events.TEAM_LOST, this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
     }
     update(dt) {
         if (this._initOnUpdate) {
@@ -43375,7 +43376,7 @@ class Base extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"7O5J4","../behaviors/team/abstract-team-component":"f7VfU","../../../../scene-manager":"2FQ8z","../../../../event-manager":"l75gk","../fx/appear":"54360","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3cOKk":[function(require,module,exports) {
+},{"../entity":"7O5J4","../behaviors/team/abstract-team-component":"f7VfU","../../../../scene-manager":"2FQ8z","../../../../event-manager":"l75gk","../fx/appear":"54360","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../game-constants":"k2kvk"}],"3cOKk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BulletWeaponComponent", ()=>BulletWeaponComponent);
