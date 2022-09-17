@@ -552,10 +552,10 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "SceneManager", ()=>SceneManager);
 var _pixiJs = require("pixi.js");
+var _scene = require("./scenes/scene");
 class SceneManager {
     constructor(){}
     static _cameraPos = new (0, _pixiJs.Point)(0, 0);
-    static _lastTick = 0;
     static get width() {
         return SceneManager._width;
     }
@@ -565,12 +565,10 @@ class SceneManager {
     static get currentScene() {
         return SceneManager._currentScene;
     }
-    // Use this function ONCE to start the entire game
     static initialize(width, height) {
         if (!this._app) {
             SceneManager._width = width;
             SceneManager._height = height;
-            // Create our pixi app
             SceneManager._app = new (0, _pixiJs.Application)({
                 view: document.getElementById("game-canvas"),
                 resolution: window.devicePixelRatio || 1,
@@ -579,7 +577,7 @@ class SceneManager {
                 width: width,
                 height: height
             });
-            requestAnimationFrame(this.tick.bind(this));
+            SceneManager._app.ticker.add(SceneManager.update.bind(this));
         }
     }
     static resize(width, height) {
@@ -588,27 +586,20 @@ class SceneManager {
             SceneManager._currentScene.scale.set((height + height / 3) / SceneManager.width, height / SceneManager.height);
         }
     }
-    // Call this function when you want to go to a new scene
     static changeScene(scene) {
-        if (SceneManager._currentScene) SceneManager._currentScene.visible = false;
-        // Add the new one
-        SceneManager._currentScene = scene;
-        SceneManager._currentScene.scale.set((SceneManager._app.renderer.height + SceneManager._app.renderer.height / 3) / SceneManager.width, SceneManager._app.renderer.height / SceneManager.height);
-        if (!SceneManager._app.stage.children.includes(SceneManager._currentScene)) SceneManager._app.stage.addChild(SceneManager._currentScene);
-        SceneManager._currentScene.visible = true;
+        let newCurrentScene;
+        if (typeof scene == "string") newCurrentScene = SceneManager._app.stage.children.find((child)=>child.name == scene);
+        if (scene instanceof (0, _scene.Scene)) newCurrentScene = scene;
+        if (newCurrentScene) {
+            if (SceneManager._currentScene) SceneManager._currentScene.visible = false;
+            SceneManager._currentScene = newCurrentScene;
+            SceneManager._currentScene.scale.set((SceneManager._app.renderer.height + SceneManager._app.renderer.height / 3) / SceneManager.width, SceneManager._app.renderer.height / SceneManager.height);
+            if (!SceneManager._app.stage.children.includes(SceneManager._currentScene)) SceneManager._app.stage.addChild(SceneManager._currentScene);
+            SceneManager._currentScene.visible = true;
+        }
     }
     static moveCameraTo(position) {
         SceneManager._cameraPos = new (0, _pixiJs.Point)().copyFrom(position);
-    }
-    static tick() {
-        let newTick = Date.now();
-        let deltaTime = newTick - this._lastTick;
-        this._lastTick = newTick;
-        if (deltaTime < 0) deltaTime = 0;
-        if (deltaTime > 100) deltaTime = 100;
-        let deltaFrame = deltaTime * 60 / 1000;
-        SceneManager.update(deltaFrame);
-        requestAnimationFrame(this.tick.bind(this));
     }
     static update(dt) {
         if (SceneManager._currentScene) {
@@ -619,37 +610,7 @@ class SceneManager {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","pixi.js":"1pSin"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"1pSin":[function(require,module,exports) {
+},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./scenes/scene":"aOCet"}],"1pSin":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils);
@@ -1060,7 +1021,37 @@ parcelHelpers.defineInteropFlag(exports);
 }
 exports.default = finallyConstructor;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iCseJ":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"iCseJ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function allSettled(arr) {
@@ -38342,7 +38333,38 @@ function __extends(d, b) {
     return AnimatedSprite1;
 }((0, _sprite.Sprite));
 
-},{"@pixi/core":"kXBmZ","@pixi/sprite":"lVBWr","@pixi/ticker":"6lPEf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Ri66n":[function(require,module,exports) {
+},{"@pixi/core":"kXBmZ","@pixi/sprite":"lVBWr","@pixi/ticker":"6lPEf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aOCet":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Scene", ()=>Scene);
+var _pixiJs = require("pixi.js");
+class Scene extends (0, _pixiJs.Container) {
+    paused = false;
+    _preUpdateAction = ()=>{};
+    _sceneTime = 0;
+    get sceneTime() {
+        return this._sceneTime;
+    }
+    constructor(){
+        super();
+        this.name = this.constructor.name;
+        this._sceneTime = 0;
+        this.sortableChildren = true;
+    }
+    pause() {
+        this.paused = true;
+    }
+    resume() {
+        this.paused = false;
+    }
+    update(dt) {
+        if (this.paused) return;
+        this._sceneTime += dt;
+        this._preUpdateAction();
+    }
+}
+
+},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Ri66n":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "LoaderScene", ()=>LoaderScene);
@@ -38391,50 +38413,267 @@ class LoaderScene extends (0, _scene.Scene) {
     }
 }
 
-},{"pixi.js":"1pSin","../scene":"aOCet","../../scene-manager":"2FQ8z","../menu/menu-scene":"4nuFJ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../assets-list":"9ftod","../../constants":"45DZp"}],"aOCet":[function(require,module,exports) {
+},{"pixi.js":"1pSin","../scene":"aOCet","../../scene-manager":"2FQ8z","../../assets-list":"9ftod","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../constants":"45DZp","../menu/menu-scene":"4nuFJ"}],"9ftod":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Scene", ()=>Scene);
-var _pixiJs = require("pixi.js");
-class Scene extends (0, _pixiJs.Container) {
-    paused = false;
-    _preUpdateAction = ()=>{};
-    _sceneTime = 0;
-    get sceneTime() {
-        return this._sceneTime;
-    }
-    constructor(){
-        super();
-        this.name = this.constructor.name;
-        this._sceneTime = 0;
-        this.sortableChildren = true;
-    }
-    pause() {
-        this.paused = true;
-    }
-    resume() {
-        this.paused = false;
-    }
-    update(dt) {
-        if (this.paused) return;
-        this._sceneTime += dt;
-        this._preUpdateAction();
-    }
-}
+parcelHelpers.export(exports, "loaderAssets", ()=>loaderAssets);
+parcelHelpers.export(exports, "assets", ()=>assets);
+var _constants = require("./constants");
+const loaderAssets = [
+    {
+        name: (0, _constants.Constants).AssetsTextures.LOADER_BAR_BG,
+        url: "./assets/loader/loader-bg.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.LOADER_BAR,
+        url: "./assets/loader/loader-bar.png"
+    }, 
+];
+const assets = [
+    {
+        name: (0, _constants.Constants).AssetsTextures.BONUS_IMMORTAL,
+        url: "./assets/bonus/bonus_immortal.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.BONUS_LIVE,
+        url: "./assets/bonus/bonus_live.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.BONUS_SLOW,
+        url: "./assets/bonus/bonus_slow.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.BONUS_SPEED,
+        url: "./assets/bonus/bonus_speed.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.BONUS_TRACTOR,
+        url: "./assets/bonus/bonus_tractor.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.BUTTON_PLAY,
+        url: "./assets/buttons/play.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.BUTTON_EXIT,
+        url: "./assets/buttons/exit.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.MENU_BG,
+        url: "./assets/game_background.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.WIN_MENU_BG,
+        url: "./assets/win_screen_background.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.APPEAR_FX,
+        url: "./assets/effects/appear.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.SPLASH_FX,
+        url: "./assets/effects/splash.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.BULLET_1,
+        url: "./assets/effects/bullet.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.BULLET_2,
+        url: "./assets/effects/enemy_bullet.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.EXPLODE_BIG_FX,
+        url: "./assets/effects/explode.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.EXPLODE_SMALL_FX,
+        url: "./assets/effects/explode_small.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.TANK_2,
+        url: "./assets/tanks/tank_enemy1_move.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.TANK_3,
+        url: "./assets/tanks/tank_enemy2_move.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.TANK_4,
+        url: "./assets/tanks/tank_enemy3_move.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.TANK_1,
+        url: "./assets/tanks/tank_player_move.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.TANK_DEAD,
+        url: "./assets/tanks/tank_dead_move.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.TRACTOR,
+        url: "./assets/tanks/tractor_move.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.SOLIDER,
+        url: "./assets/entities/soldier.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.SOLIDER_DEAD,
+        url: "./assets/entities/good_russian.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.EMPTY_SPACE,
+        url: "./assets/tanks/empty.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.EAGLE,
+        url: "./assets/tiles/eagle.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.LEAVES,
+        url: "./assets/tiles/leaves.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.SMALL_WALL,
+        url: "./assets/tiles/small_wall.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.AT_BARRICADE,
+        url: "./assets/tiles/anti_tank_hedgehogs.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.HARD_WALL,
+        url: "./assets/tiles/wall.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.DIRT,
+        url: "./assets/tiles/dirt.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.STONE_PATH,
+        url: "./assets/tiles/stone_path.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.GRASS,
+        url: "./assets/tiles/grass.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsTextures.WATER,
+        url: "./assets/tiles/water.png"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.SHOT,
+        url: "./assets/sounds/shot.wav"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.BONUS,
+        url: "./assets/sounds/bonus.wav"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.WIN,
+        url: "./assets/sounds/win.wav"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.LOSE,
+        url: "./assets/sounds/lose.wav"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.EXPLODE_BIG,
+        url: "./assets/sounds/explode.wav"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.EXPLODE_SMALL,
+        url: "./assets/sounds/hit.wav"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.WIN_GAME_MUSIC,
+        url: "./assets/sounds/endgame_music.mp3"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.HEAVY_TRANSPORT_MOVE,
+        url: "./assets/sounds/heavy_transport_move.wav"
+    },
+    {
+        name: (0, _constants.Constants).AssetsSounds.WATER_SPLASH,
+        url: "./assets/sounds/water_splash.wav"
+    }, 
+];
 
-},{"pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4nuFJ":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./constants":"45DZp"}],"45DZp":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Constants", ()=>Constants);
+let Constants;
+(function(Constants1) {
+    class AssetsTextures {
+        static LOADER_BAR_BG = "loader-bg";
+        static LOADER_BAR = "loader-bar";
+        static BONUS_IMMORTAL = "bonus_immortal";
+        static BONUS_LIVE = "bonus_live";
+        static BONUS_SLOW = "bonus_slow";
+        static BONUS_SPEED = "bonus_speed";
+        static BONUS_TRACTOR = "bonus_tractor";
+        static BUTTON_PLAY = "button_play";
+        static BUTTON_EXIT = "button_exit";
+        static MENU_BG = "menu_background";
+        static WIN_MENU_BG = "win_menu_background";
+        static APPEAR_FX = "appear_fx";
+        static SPLASH_FX = "splash_fx";
+        static BULLET_1 = "bullet_1";
+        static BULLET_2 = "bullet_2";
+        static EXPLODE_BIG_FX = "explode_big_fx";
+        static EXPLODE_SMALL_FX = "explode_small_fx";
+        static TANK_1 = "tank_player";
+        static TANK_2 = "tank_enemy_1";
+        static TANK_3 = "tank_enemy_2";
+        static TANK_4 = "tank_enemy_3";
+        static TANK_DEAD = "tank_dead";
+        static TRACTOR = "tractor";
+        static SOLIDER = "soldier";
+        static SOLIDER_DEAD = "soldier_dead";
+        static EMPTY_SPACE = "empty";
+        static EAGLE = "base_player";
+        static LEAVES = "leaves";
+        static SMALL_WALL = "small_wall";
+        static AT_BARRICADE = "at_hedgehogs";
+        static HARD_WALL = "hard_wall";
+        static DIRT = "dirt";
+        static GRASS = "grass";
+        static STONE_PATH = "stone_path";
+        static WATER = "water";
+    }
+    Constants1.AssetsTextures = AssetsTextures;
+    class AssetsSounds {
+        static SHOT = "shot_sound";
+        static BONUS = "bonus_sound";
+        static WIN = "win_sound";
+        static LOSE = "lose_sound";
+        static EXPLODE_SMALL = "explode_small_sound";
+        static EXPLODE_BIG = "explode_big_sound";
+        static WIN_GAME_MUSIC = "win_end_game_music";
+        static HEAVY_TRANSPORT_MOVE = "heavy_transport_move";
+        static WATER_SPLASH = "water_splash";
+    }
+    Constants1.AssetsSounds = AssetsSounds;
+    class GlobalNames {
+        static SCORE = "score";
+    }
+    Constants1.GlobalNames = GlobalNames;
+})(Constants || (Constants = {}));
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4nuFJ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "MenuScene", ()=>MenuScene);
-var _scene = require("../scene");
 var _sceneManager = require("../../scene-manager");
 var _pixiJs = require("pixi.js");
 var _level1 = require("../game/levels/level1/level1");
 var _savesHandler = require("../../utils/saves-handler");
 var _constants = require("../../constants");
-class MenuScene extends (0, _scene.Scene) {
-    constructor(){
-        super();
+var _plainScreenScene = require("./plain-screen-scene");
+class MenuScene extends (0, _plainScreenScene.PainScreenScene) {
+    initVisuals() {
         this.background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.MENU_BG].texture);
         this.logoText = new (0, _pixiJs.Text)("Orcs Thunder", new (0, _pixiJs.TextStyle)({
             fontSize: 84,
@@ -38458,8 +38697,8 @@ class MenuScene extends (0, _scene.Scene) {
         this.startButton.buttonMode = true;
         this.addChild(this.background);
         this.addChild(this.logoText);
-        if ((0, _savesHandler.SavesHandler).loadData("score")) {
-            this.score = new (0, _pixiJs.Text)(`Score: ${(0, _savesHandler.SavesHandler).loadData("score")}`, new (0, _pixiJs.TextStyle)({
+        if ((0, _savesHandler.SavesHandler).instance().loadData("score")) {
+            this.score = new (0, _pixiJs.Text)(`Score: ${(0, _savesHandler.SavesHandler).instance().loadData("score")}`, new (0, _pixiJs.TextStyle)({
                 fontSize: 84,
                 align: "center",
                 fill: "#ffffff"
@@ -38470,7 +38709,6 @@ class MenuScene extends (0, _scene.Scene) {
             this.addChild(this.score);
         }
         this.addChild(this.startButton);
-        this.initActions();
         (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(0, 0));
     }
     initActions() {
@@ -38480,66 +38718,111 @@ class MenuScene extends (0, _scene.Scene) {
     }
     startGame() {
         (0, _sceneManager.SceneManager).changeScene(new (0, _level1.Level1Scene)());
+    }
+}
+
+},{"../../scene-manager":"2FQ8z","pixi.js":"1pSin","../game/levels/level1/level1":"bMsfR","../../utils/saves-handler":"1qn3x","../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./plain-screen-scene":"8unnF"}],"bMsfR":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Level1Scene", ()=>Level1Scene);
+var _constants = require("../../../../constants");
+var _sceneManager = require("../../../../scene-manager");
+var _savesHandler = require("../../../../utils/saves-handler");
+var _gameWonScreen = require("../../game-won-screen");
+var _levelScene = require("../level-scene");
+var _level1Json = require("./level1.json");
+class Level1Scene extends (0, _levelScene.LevelScene) {
+    constructor(){
+        super();
+        this.loadLevel(_level1Json);
+        (0, _savesHandler.SavesHandler).instance().saveData((0, _constants.Constants).GlobalNames.SCORE, 0);
+    }
+    onTeamWon() {
+        // SceneManager.changeScene(new Level2Scene());
+        (0, _sceneManager.SceneManager).changeScene(new (0, _gameWonScreen.GameWonScene)());
         this.destroy();
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../game/levels/level1/level1":"bMsfR","../../utils/saves-handler":"1qn3x","../../constants":"45DZp"}],"bMsfR":[function(require,module,exports) {
+},{"../../../../constants":"45DZp","../../../../scene-manager":"2FQ8z","../../../../utils/saves-handler":"1qn3x","../level-scene":"cqqc7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../game-won-screen":"5Yn2Z","./level1.json":"1SXu6"}],"1qn3x":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Level1Scene", ()=>Level1Scene);
+parcelHelpers.export(exports, "SavesHandler", ()=>SavesHandler);
+class SavesHandler {
+    constructor(){}
+    static instance() {
+        if (!SavesHandler._instance) SavesHandler._instance = new SavesHandler();
+        return SavesHandler._instance;
+    }
+    saveData(key, data) {
+        sessionStorage.setItem(key, JSON.stringify(data));
+    }
+    loadData(key) {
+        return JSON.parse(sessionStorage.getItem(key));
+    }
+    saveDataLongTerm(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+    loadDataLongTerm(key) {
+        return JSON.parse(localStorage.getItem(key));
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cqqc7":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "LevelScene", ()=>LevelScene);
 var _howler = require("howler");
 var _pixiJs = require("pixi.js");
-var _constants = require("../../../../constants");
-var _eventManager = require("../../../../event-manager");
-var _sceneManager = require("../../../../scene-manager");
-var _savesHandler = require("../../../../utils/saves-handler");
-var _menuScene = require("../../../menu/menu-scene");
-var _gameConstants = require("../../game-constants");
-var _gameScene = require("../../game-scene");
-var _level2 = require("../level2/level2");
-var _level1Json = require("./level1.json");
-class Level1Scene extends (0, _gameScene.GameScene) {
+var _constants = require("../../../constants");
+var _eventManager = require("../../../event-manager");
+var _sceneManager = require("../../../scene-manager");
+var _gameConstants = require("../game-constants");
+var _gameScene = require("../game-scene");
+class LevelScene extends (0, _gameScene.GameScene) {
     constructor(){
         super();
-        this.loadLevel(_level1Json);
-        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_LOST, this);
-        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_WON, this);
-        (0, _savesHandler.SavesHandler).saveData((0, _constants.Constants).GlobalNames.SCORE, 0);
+        (0, _eventManager.EventManager).instance().subscribe((0, _gameConstants.GameConstants).Events.GAME_OVER, this);
+        (0, _eventManager.EventManager).instance().subscribe((0, _gameConstants.GameConstants).Events.TEAM_WON, this);
     }
     onEvent(event, data) {
         if (this.paused) return;
         super.onEvent(event, data);
-        if (event == (0, _gameConstants.GameConstants).Events.TEAM_LOST) this._preUpdateAction = ()=>{
+        if (event == (0, _gameConstants.GameConstants).Events.GAME_OVER) this._preUpdateAction = ()=>{
             this.pause();
-            this.dynamicChildren.length = 0;
-            this.tileMap.length = 0;
+            this.dynamicChildren = [];
+            this.tileMap = [];
             new (0, _howler.Howl)({
                 src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.LOSE].url,
                 onend: ()=>{
-                    (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
-                    this.destroy();
+                    this.onGameOver();
                     this._preUpdateAction = ()=>{};
                 }
             }).play();
         };
-        if (event == (0, _gameConstants.GameConstants).Events.TEAM_WON && data == (0, _gameConstants.GameConstants).Teams.PLAYER_1) this._preUpdateAction = ()=>{
+        if (event == (0, _gameConstants.GameConstants).Events.TEAM_WON) this._preUpdateAction = ()=>{
             this.pause();
-            this.dynamicChildren.length = 0;
-            this.tileMap.length = 0;
+            this.dynamicChildren = [];
+            this.tileMap = [];
             new (0, _howler.Howl)({
                 src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.WIN].url,
                 onend: ()=>{
-                    (0, _sceneManager.SceneManager).changeScene(new (0, _level2.Level2Scene)());
-                    this.destroy();
+                    this.onTeamWon();
                     this._preUpdateAction = ()=>{};
                 }
             }).play();
         };
     }
+    onGameOver() {
+        (0, _sceneManager.SceneManager).changeScene("MenuScene");
+        this.destroy();
+    }
+    onTeamWon() {
+        this.destroy();
+    }
 }
 
-},{"howler":"5Vjgk","pixi.js":"1pSin","../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../../utils/saves-handler":"1qn3x","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","./level1.json":"1SXu6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../level2/level2":"6JDuJ","../../../../constants":"45DZp","../../game-constants":"k2kvk"}],"5Vjgk":[function(require,module,exports) {
+},{"howler":"5Vjgk","pixi.js":"1pSin","../../../constants":"45DZp","../../../event-manager":"l75gk","../../../scene-manager":"2FQ8z","../game-constants":"k2kvk","../game-scene":"eoY4A","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Vjgk":[function(require,module,exports) {
 var global = arguments[3];
 /*!
  *  howler.js v2.2.3
@@ -41000,48 +41283,89 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "EventManager", ()=>EventManager);
 class EventManager {
     constructor(){}
-    static _listeners = new Map();
-    static subscribe(event, listener) {
-        const listeners = EventManager._listeners.get(event);
-        EventManager._listeners.set(event, listeners ? [
+    static instance() {
+        if (!EventManager._instance) EventManager._instance = new EventManager();
+        return EventManager._instance;
+    }
+    _listeners = new Map();
+    subscribe(event, listener) {
+        const listeners = this._listeners.get(event);
+        this._listeners.set(event, listeners ? [
             ...listeners,
             listener
         ] : [
             listener
         ]);
     }
-    static unsubscribe(event, listener) {
-        const listeners = EventManager._listeners.get(event);
-        if (listeners && listeners.indexOf(listener)) {
+    unsubscribe(event, listener) {
+        const listeners = this._listeners.get(event);
+        if (listeners && listeners.indexOf(listener) >= 0) {
             listeners.splice(listeners.indexOf(listener), 1);
-            EventManager._listeners.set(event, listeners);
+            this._listeners.set(event, listeners);
         }
     }
-    static notify(event, data) {
-        const listeners = EventManager._listeners.get(event);
+    notify(event, data) {
+        const listeners = this._listeners.get(event);
         if (listeners) for (let listener of listeners)listener.onEvent(event, data);
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1qn3x":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k2kvk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SavesHandler", ()=>SavesHandler);
-class SavesHandler {
-    constructor(){}
-    static saveData(key, data) {
-        sessionStorage.setItem(key, JSON.stringify(data));
+parcelHelpers.export(exports, "GameConstants", ()=>GameConstants);
+let GameConstants;
+(function(GameConstants1) {
+    class EntityTypes {
+        static HARD_WALL = "HardWall";
+        static SMALL_WALL = "SmallWall";
+        static TANK = "Tank";
+        static TRACTOR = "Tractor";
+        static DEAD_TANK = "DeadTank";
+        static WATER = "Water";
+        static AT_HEDGEHOGS = "ATHedgehogs";
+        static BUFF = "Buff";
+        static BULLET = "Bullet";
+        static BASE = "Base";
+        static SOLDIER = "Soldier";
+        static DEAD_SOLDIER = "DeadSoldier";
     }
-    static loadData(key) {
-        return JSON.parse(sessionStorage.getItem(key));
+    GameConstants1.EntityTypes = EntityTypes;
+    class Teams {
+        static PLAYER_1 = "player1";
+        static PLAYER_2 = "player2";
     }
-    static saveDataLongTerm(key, data) {
-        localStorage.setItem(key, JSON.stringify(data));
+    GameConstants1.Teams = Teams;
+    class Events {
+        static ENTITY_DESTROY = "entity_destroy";
+        static TEAM_WON = "team_won";
+        static GAME_OVER = "game_over";
     }
-    static loadDataLongTerm(key) {
-        return JSON.parse(localStorage.getItem(key));
-    }
-}
+    GameConstants1.Events = Events;
+    let EntityIDs1;
+    (function(EntityIDs) {
+        EntityIDs[EntityIDs["DIRT"] = 101] = "DIRT";
+        EntityIDs[EntityIDs["GRASS"] = 102] = "GRASS";
+        EntityIDs[EntityIDs["STONE_PATH"] = 103] = "STONE_PATH";
+        EntityIDs[EntityIDs["LEAVES"] = 112] = "LEAVES";
+        EntityIDs[EntityIDs["HARD_WALL"] = 201] = "HARD_WALL";
+        EntityIDs[EntityIDs["WALL"] = 202] = "WALL";
+        EntityIDs[EntityIDs["AT_HEDGEHOGS"] = 203] = "AT_HEDGEHOGS";
+        EntityIDs[EntityIDs["WATER"] = 211] = "WATER";
+        EntityIDs[EntityIDs["PLAYER_TANK"] = 901] = "PLAYER_TANK";
+        EntityIDs[EntityIDs["ENEMY_TANK"] = 902] = "ENEMY_TANK";
+        EntityIDs[EntityIDs["PLAYER_TRACTOR"] = 903] = "PLAYER_TRACTOR";
+        EntityIDs[EntityIDs["ENEMY_SOLDIER"] = 904] = "ENEMY_SOLDIER";
+        EntityIDs[EntityIDs["ENEMY_SUPPORT_TANK"] = 905] = "ENEMY_SUPPORT_TANK";
+        EntityIDs[EntityIDs["ENEMY_SMALL_SPAWNER"] = 912] = "ENEMY_SMALL_SPAWNER";
+        EntityIDs[EntityIDs["ENEMY_MEDIUM_SPAWNER"] = 913] = "ENEMY_MEDIUM_SPAWNER";
+        EntityIDs[EntityIDs["ENEMY_DEATH_COUNTER_SMALL"] = 916] = "ENEMY_DEATH_COUNTER_SMALL";
+        EntityIDs[EntityIDs["ENEMY_DEATH_COUNTER_MEDIUM"] = 917] = "ENEMY_DEATH_COUNTER_MEDIUM";
+        EntityIDs[EntityIDs["ENEMY_DEATH_COUNTER_BIG"] = 918] = "ENEMY_DEATH_COUNTER_BIG";
+        EntityIDs[EntityIDs["RANDOM_BONUS_SPAWNER"] = 921] = "RANDOM_BONUS_SPAWNER";
+        EntityIDs[EntityIDs["PLAYER_BASE"] = 777] = "PLAYER_BASE";
+    })(EntityIDs1 = GameConstants1.EntityIDs || (GameConstants1.EntityIDs = {}));
+})(GameConstants || (GameConstants = {}));
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eoY4A":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -41061,10 +41385,10 @@ class GameScene extends (0, _scene.Scene) {
     tileSize = 36;
     constructor(){
         super();
-        (0, _eventManager.EventManager).subscribe("keydown", this);
+        (0, _eventManager.EventManager).instance().subscribe("keydown", this);
     }
     loadLevel(level) {
-        this.tileMap.length = 0;
+        this.tileMap = [];
         for (let [zindex, tilemap] of level.depthLevels.entries()){
             if (!this.tileMap.length) this.tileMap = new Array(tilemap.length);
             let x = this.tileSize / 2;
@@ -41101,16 +41425,15 @@ class GameScene extends (0, _scene.Scene) {
     // Так и с кодом ниже
     update(dt) {
         super.update(dt);
-        console.log(dt);
         this.dynamicChildren = this.dynamicChildren.filter((entity)=>{
             return !entity.destroyed;
         });
-        let i = this.dynamicChildren.length;
-        while(i--){
-            const dynamicEntity = this.dynamicChildren[i];
+        for (const dynamicEntity of this.dynamicChildren){
+            // This check needed since entities may be destroyed during loop
             if (dynamicEntity.destroyed) continue;
-            if (dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)) && !dynamicEntity.position.equals(dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).previousPosition)) {
-                const prevTilePos = (0, _utils.getTitlePosition)(dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).previousPosition, this.tileSize);
+            const movementComponent = dynamicEntity.getComponent((0, _abstractMovementComponent.AbstractMovementComponent));
+            if (movementComponent && !dynamicEntity.position.equals(movementComponent.previousPosition)) {
+                const prevTilePos = (0, _utils.getTitlePosition)(movementComponent.previousPosition, this.tileSize);
                 const tilePos = (0, _utils.getTitlePosition)(dynamicEntity.position, this.tileSize);
                 this.moveEntityFromTileToTile(dynamicEntity, prevTilePos, tilePos);
             }
@@ -41119,49 +41442,40 @@ class GameScene extends (0, _scene.Scene) {
         }
     }
     addChild(...children) {
-        this.dynamicChildren = [
-            ...this.dynamicChildren,
-            ...[
-                ...children
-            ].filter((child)=>child.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)))
-        ];
-        let canBeAdded = true;
-        for (const child1 of [
+        const childrenCopy = [
             ...children
-        ]){
+        ];
+        this.dynamicChildren.push(...childrenCopy.filter((child)=>child.getComponent((0, _abstractMovementComponent.AbstractMovementComponent))));
+        let canBeAdded = true;
+        for (const child1 of childrenCopy){
             const pos = (0, _utils.getTitlePosition)(child1.position, this.tileSize);
-            if (this.tileMap[pos.y] && this.tileMap[pos.y][pos.x]) this.tileMap[pos.y][pos.x].push(child1);
+            const row = this.tileMap[pos.y] ? this.tileMap[pos.y] : undefined;
+            const tile = this.tileMap[pos.y] ? this.tileMap[pos.y][pos.x] : undefined;
+            if (row && tile) tile.push(child1);
             else canBeAdded = false;
         }
-        if (canBeAdded) return super.addChild(...children);
+        if (canBeAdded) return super.addChild(...childrenCopy);
         else {
-            for (const child of [
-                ...children
-            ])child.destroy();
-            return [
-                ...children
-            ][0];
+            for (const child of childrenCopy)child.destroy();
+            return childrenCopy[0];
         }
     }
     removeChild(...children) {
-        for (const child of [
+        const childrenCopy = [
             ...children
-        ]){
+        ];
+        for (const child of childrenCopy){
             const pos = (0, _utils.getTitlePosition)(child.position, this.tileSize);
-            if (this.tileMap[pos.y] && this.tileMap[pos.y][pos.x]) {
-                const index = this.tileMap[pos.y][pos.x].indexOf(child);
-                this.tileMap[pos.y][pos.x].splice(index, 1);
-            } else {
-                let i = this.tileMap.length;
-                while(i--){
-                    let j = this.tileMap[i].length;
-                    while(j--){
-                        const index = this.tileMap[i][j].indexOf(child);
-                        if (index >= 0) {
-                            this.tileMap[i][j].splice(index, 1);
-                            i = j = 0;
-                        }
-                    }
+            const row = this.tileMap[pos.y] ? this.tileMap[pos.y] : undefined;
+            const tile = this.tileMap[pos.y] ? this.tileMap[pos.y][pos.x] : undefined;
+            if (row && tile) {
+                const index = tile.indexOf(child);
+                tile.splice(index, 1);
+            } else rmark: for (const [i, row1] of this.tileMap.entries())for (const [j, tile1] of row1.entries()){
+                const findex = tile1.indexOf(child);
+                if (findex >= 0) {
+                    this.tileMap[i][j].splice(findex, 1);
+                    break rmark;
                 }
             }
         }
@@ -41169,44 +41483,32 @@ class GameScene extends (0, _scene.Scene) {
     }
     moveEntityFromTileToTile(entity, from, to) {
         let index = -1;
-        if (!this.tileMap[to.y] || !this.tileMap[to.y][to.x]) return;
-        if (this.tileMap[from.y] && this.tileMap[from.y][from.x]) index = this.tileMap[from.y][from.x].indexOf(entity);
-        if (index >= 0) this.tileMap[to.y][to.x].push(this.tileMap[from.y][from.x].splice(index, 1)[0]);
-        else {
-            let i = this.tileMap.length;
-            while(i--){
-                let j = this.tileMap[i].length;
-                while(j--){
-                    const findex = this.tileMap[i][j].indexOf(entity);
-                    if (findex >= 0) {
-                        this.tileMap[to.y][to.x].push(this.tileMap[i][j].splice(findex, 1)[0]);
-                        i = j = 0;
-                    }
-                }
+        const fromTile = this.tileMap[from.y] ? this.tileMap[from.y][from.x] : undefined;
+        const toTile = this.tileMap[to.y] ? this.tileMap[to.y][to.x] : undefined;
+        if (!toTile) return;
+        if (fromTile) index = fromTile.indexOf(entity);
+        if (index >= 0) toTile.push(fromTile.splice(index, 1)[0]);
+        else rmark: for (const row of this.tileMap)for (const tile of row){
+            const findex = tile.indexOf(entity);
+            if (findex >= 0) {
+                toTile.push(tile.splice(findex, 1)[0]);
+                break rmark;
             }
         }
     }
 }
 
-},{"../scene":"aOCet","../../event-manager":"l75gk","../../scene-manager":"2FQ8z","../menu/pause-scene":"iGHCP","pixi.js":"1pSin","../../utils/utils":"ea5wt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./entities/behaviors/movement/abstract-movement-component":"a64l3","./entities/entity-factory":"e4Fm9"}],"iGHCP":[function(require,module,exports) {
+},{"../scene":"aOCet","../../event-manager":"l75gk","../../scene-manager":"2FQ8z","../menu/pause-scene":"iGHCP","pixi.js":"1pSin","../../utils/utils":"ea5wt","./entities/behaviors/movement/abstract-movement-component":"a64l3","./entities/entity-factory":"e4Fm9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iGHCP":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "PauseScene", ()=>PauseScene);
-var _scene = require("../scene");
 var _sceneManager = require("../../scene-manager");
 var _pixiJs = require("pixi.js");
 var _eventManager = require("../../event-manager");
-var _menuScene = require("./menu-scene");
 var _savesHandler = require("../../utils/saves-handler");
 var _constants = require("../../constants");
-class PauseScene extends (0, _scene.Scene) {
-    constructor(){
-        super();
-        (0, _eventManager.EventManager).subscribe("keydown", this);
-        this.initVisuals();
-        this.initActions();
-        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(0, 0));
-    }
+var _plainScreenScene = require("./plain-screen-scene");
+class PauseScene extends (0, _plainScreenScene.PainScreenScene) {
     initVisuals() {
         this._background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.MENU_BG].texture);
         this._background.anchor.set(0.5);
@@ -41238,8 +41540,11 @@ class PauseScene extends (0, _scene.Scene) {
         this.addChild(this._menuStartButton);
         this.addChild(this._menuExitButton);
         this.addChild(this._menuText);
+        (0, _sceneManager.SceneManager).moveCameraTo(new (0, _pixiJs.Point)(0, 0));
     }
+    // you have same named function in at least 3 classes, better to move to abstract
     initActions() {
+        (0, _eventManager.EventManager).instance().subscribe("keydown", this);
         this._menuStartButton.on("click", ()=>{
             this.resumeParentScene();
         });
@@ -41260,79 +41565,32 @@ class PauseScene extends (0, _scene.Scene) {
     resumeParentScene() {
         (0, _sceneManager.SceneManager).changeScene(this._parentScene);
         this._parentScene.resume();
-        (0, _eventManager.EventManager).unsubscribe("keydown", this);
+        (0, _eventManager.EventManager).instance().unsubscribe("keydown", this);
         this.destroy();
     }
     exit() {
-        (0, _savesHandler.SavesHandler).saveData("score", 0);
-        (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
-        (0, _eventManager.EventManager).unsubscribe("keydown", this);
+        (0, _savesHandler.SavesHandler).instance().saveData("score", 0);
+        (0, _sceneManager.SceneManager).changeScene("MenuScene");
+        this._parentScene.destroy();
+        (0, _eventManager.EventManager).instance().unsubscribe("keydown", this);
         this.destroy();
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../../event-manager":"l75gk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./menu-scene":"4nuFJ","../../utils/saves-handler":"1qn3x","../../constants":"45DZp"}],"45DZp":[function(require,module,exports) {
+},{"../../scene-manager":"2FQ8z","pixi.js":"1pSin","../../event-manager":"l75gk","../../utils/saves-handler":"1qn3x","../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./plain-screen-scene":"8unnF"}],"8unnF":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Constants", ()=>Constants);
-let Constants;
-(function(Constants1) {
-    class AssetsTextures {
-        static LOADER_BAR_BG = "loader-bg";
-        static LOADER_BAR = "loader-bar";
-        static BONUS_IMMORTAL = "bonus_immortal";
-        static BONUS_LIVE = "bonus_live";
-        static BONUS_SLOW = "bonus_slow";
-        static BONUS_SPEED = "bonus_speed";
-        static BONUS_TRACTOR = "bonus_tractor";
-        static BUTTON_PLAY = "button_play";
-        static BUTTON_EXIT = "button_exit";
-        static MENU_BG = "menu_background";
-        static WIN_MENU_BG = "win_menu_background";
-        static APPEAR_FX = "appear_fx";
-        static SPLASH_FX = "splash_fx";
-        static BULLET_1 = "bullet_1";
-        static BULLET_2 = "bullet_2";
-        static EXPLODE_BIG_FX = "explode_big_fx";
-        static EXPLODE_SMALL_FX = "explode_small_fx";
-        static TANK_1 = "tank_player";
-        static TANK_2 = "tank_enemy_1";
-        static TANK_3 = "tank_enemy_2";
-        static TANK_4 = "tank_enemy_3";
-        static TANK_DEAD = "tank_dead";
-        static TRACTOR = "tractor";
-        static SOLIDER = "soldier";
-        static SOLIDER_DEAD = "soldier_dead";
-        static EMPTY_SPACE = "empty";
-        static EAGLE = "base_player";
-        static LEAVES = "leaves";
-        static SMALL_WALL = "small_wall";
-        static AT_BARRICADE = "at_hedgehogs";
-        static HARD_WALL = "hard_wall";
-        static DIRT = "dirt";
-        static GRASS = "grass";
-        static WATER = "water";
+parcelHelpers.export(exports, "PainScreenScene", ()=>PainScreenScene);
+var _scene = require("../scene");
+class PainScreenScene extends (0, _scene.Scene) {
+    constructor(){
+        super();
+        this.initVisuals();
+        this.initActions();
     }
-    Constants1.AssetsTextures = AssetsTextures;
-    class AssetsSounds {
-        static SHOT = "shot_sound";
-        static BONUS = "bonus_sound";
-        static WIN = "win_sound";
-        static LOSE = "lose_sound";
-        static EXPLODE_SMALL = "explode_small_sound";
-        static EXPLODE_BIG = "explode_big_sound";
-        static WIN_GAME_MUSIC = "win_end_game_music";
-        static HEAVY_TRANSPORT_MOVE = "heavy_transport_move";
-        static WATER_SPLASH = "water_splash";
-    }
-    Constants1.AssetsSounds = AssetsSounds;
-    class GlobalNames {
-        static SCORE = "score";
-    }
-    Constants1.GlobalNames = GlobalNames;
-})(Constants || (Constants = {}));
+}
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ea5wt":[function(require,module,exports) {
+},{"../scene":"aOCet","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ea5wt":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "randNum", ()=>randNum);
@@ -41431,12 +41689,17 @@ class AbstractComponent {
     get typeID() {
         return this._typeID;
     }
+    // you are not using return value
     setEntity(entity) {
         this._entity = entity;
         return this;
     }
     update(dt) {}
     remove() {}
+    clone() {
+        const cloned = this.constructor;
+        return new cloned(this);
+    }
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"e4Fm9":[function(require,module,exports) {
@@ -41470,6 +41733,10 @@ var _gameConstants = require("../game-constants");
 var _constants = require("../../../constants");
 class EntityFactory {
     constructor(){}
+    static instance() {
+        if (!EntityFactory._instance) EntityFactory._instance = new EntityFactory();
+        return EntityFactory._instance;
+    }
     static getEntity(entityID) {
         switch(entityID){
             case (0, _gameConstants.GameConstants).EntityIDs.DIRT:
@@ -41487,6 +41754,15 @@ class EntityFactory {
                         assetName: (0, _constants.Constants).AssetsTextures.GRASS,
                         numberOfFrames: 10,
                         animationSpeed: 0.1
+                    });
+                    return floor;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.STONE_PATH:
+                {
+                    const floor = new (0, _floor.Floor)();
+                    floor.setSkin({
+                        assetName: (0, _constants.Constants).AssetsTextures.STONE_PATH,
+                        numberOfFrames: 1
                     });
                     return floor;
                 }
@@ -41513,7 +41789,7 @@ class EntityFactory {
                     playerTank.setComponent(weapon);
                     playerTank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_1));
                     playerTank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
-                        (0, _eventManager.EventManager).notify((0, _gameConstants.GameConstants).Events.TEAM_LOST, playerTank.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+                        (0, _eventManager.EventManager).instance().notify((0, _gameConstants.GameConstants).Events.GAME_OVER, playerTank.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
                     }));
                     return playerTank;
                 }
@@ -41535,8 +41811,8 @@ class EntityFactory {
                     tank.setComponent(weapon);
                     tank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
                     tank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
-                        (0, _eventManager.EventManager).notify((0, _gameConstants.GameConstants).Events.ENTITY_DESTROY + (0, _gameConstants.GameConstants).Teams.PLAYER_2, tank);
-                        (0, _savesHandler.SavesHandler).saveData((0, _constants.Constants).GlobalNames.SCORE, (0, _savesHandler.SavesHandler).loadData((0, _constants.Constants).GlobalNames.SCORE) + 10);
+                        (0, _eventManager.EventManager).instance().notify((0, _gameConstants.GameConstants).Events.ENTITY_DESTROY + (0, _gameConstants.GameConstants).Teams.PLAYER_2, tank);
+                        (0, _savesHandler.SavesHandler).instance().saveData((0, _constants.Constants).GlobalNames.SCORE, (0, _savesHandler.SavesHandler).instance().loadData((0, _constants.Constants).GlobalNames.SCORE) + 10);
                     }));
                     return tank;
                 }
@@ -41585,7 +41861,7 @@ class EntityFactory {
                     supportTank.setComponent(weapon);
                     supportTank.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
                     supportTank.setComponent(new (0, _basicDestroyComponent.BasicDestroyComponent)().onDestroy(()=>{
-                        (0, _savesHandler.SavesHandler).saveData((0, _constants.Constants).GlobalNames.SCORE, (0, _savesHandler.SavesHandler).loadData((0, _constants.Constants).GlobalNames.SCORE) + 10);
+                        (0, _savesHandler.SavesHandler).instance().saveData((0, _constants.Constants).GlobalNames.SCORE, (0, _savesHandler.SavesHandler).instance().loadData((0, _constants.Constants).GlobalNames.SCORE) + 10);
                     }));
                     return supportTank;
                 }
@@ -41607,12 +41883,48 @@ class EntityFactory {
                     });
                     return spawner;
                 }
-            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_DEATH_COUNTER:
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_MEDIUM_SPAWNER:
+                {
+                    const spawner = new (0, _wanderingAmountBasedSpawner.WanderingAmountBasedSpawner)().setPrototypeEntity(EntityFactory.getEntity(902)).setTimeBetweenSpawns(250).setCollisionGroup([
+                        (0, _gameConstants.GameConstants).EntityTypes.TANK,
+                        (0, _gameConstants.GameConstants).EntityTypes.TRACTOR,
+                        (0, _gameConstants.GameConstants).EntityTypes.DEAD_TANK,
+                        (0, _gameConstants.GameConstants).EntityTypes.HARD_WALL,
+                        (0, _gameConstants.GameConstants).EntityTypes.SMALL_WALL,
+                        (0, _gameConstants.GameConstants).EntityTypes.WATER,
+                        (0, _gameConstants.GameConstants).EntityTypes.AT_HEDGEHOGS,
+                        (0, _gameConstants.GameConstants).EntityTypes.BASE
+                    ]).setTimesToSpawn(8).setMaxAmountPerTime(2);
+                    spawner.setSkin({
+                        hitboxWidth: 32,
+                        hitboxHeight: 32
+                    });
+                    return spawner;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_DEATH_COUNTER_SMALL:
                 {
                     const counter = new (0, _inWorldEventCounter.InWorldEventCounter)();
                     counter.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
                     counter.timesToCount(12).setEventToCount((0, _gameConstants.GameConstants).Events.ENTITY_DESTROY + (0, _gameConstants.GameConstants).Teams.PLAYER_2).onCountEnded(()=>{
-                        (0, _eventManager.EventManager).notify((0, _gameConstants.GameConstants).Events.TEAM_WON, (0, _gameConstants.GameConstants).Teams.PLAYER_1);
+                        (0, _eventManager.EventManager).instance().notify((0, _gameConstants.GameConstants).Events.TEAM_WON, (0, _gameConstants.GameConstants).Teams.PLAYER_1);
+                    });
+                    return counter;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_DEATH_COUNTER_MEDIUM:
+                {
+                    const counter = new (0, _inWorldEventCounter.InWorldEventCounter)();
+                    counter.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
+                    counter.timesToCount(24).setEventToCount((0, _gameConstants.GameConstants).Events.ENTITY_DESTROY + (0, _gameConstants.GameConstants).Teams.PLAYER_2).onCountEnded(()=>{
+                        (0, _eventManager.EventManager).instance().notify((0, _gameConstants.GameConstants).Events.TEAM_WON, (0, _gameConstants.GameConstants).Teams.PLAYER_1);
+                    });
+                    return counter;
+                }
+            case (0, _gameConstants.GameConstants).EntityIDs.ENEMY_DEATH_COUNTER_BIG:
+                {
+                    const counter = new (0, _inWorldEventCounter.InWorldEventCounter)();
+                    counter.setComponent(new (0, _basicTeamComponent.BasicTeamComponent)().setTeam((0, _gameConstants.GameConstants).Teams.PLAYER_2));
+                    counter.timesToCount(36).setEventToCount((0, _gameConstants.GameConstants).Events.ENTITY_DESTROY + (0, _gameConstants.GameConstants).Teams.PLAYER_2).onCountEnded(()=>{
+                        (0, _eventManager.EventManager).instance().notify((0, _gameConstants.GameConstants).Events.TEAM_WON, (0, _gameConstants.GameConstants).Teams.PLAYER_1);
                     });
                     return counter;
                 }
@@ -41660,8 +41972,8 @@ class PlayerControlComponent extends (0, _abstractControlComponent.AbstractContr
     action = ()=>{};
     constructor(source){
         super(source);
-        (0, _eventManager.EventManager).subscribe("keydown", this);
-        (0, _eventManager.EventManager).subscribe("keyup", this);
+        (0, _eventManager.EventManager).instance().subscribe("keydown", this);
+        (0, _eventManager.EventManager).instance().subscribe("keyup", this);
     }
     onEvent(event, data) {
         if (event == "keydown") switch(data){
@@ -41698,9 +42010,6 @@ class PlayerControlComponent extends (0, _abstractControlComponent.AbstractContr
     update(dt) {
         super.update(dt);
         this.action();
-    }
-    clone() {
-        return new PlayerControlComponent(this);
     }
 }
 
@@ -41753,9 +42062,6 @@ class BasicTeamComponent extends (0, _abstractTeamComponent.AbstractTeamComponen
     constructor(source){
         super(source);
         if (source?._team) this._team = source._team;
-    }
-    clone() {
-        return new BasicTeamComponent(this);
     }
 }
 
@@ -41831,6 +42137,11 @@ class Tank extends (0, _entity.Entity) {
                 case (0, _gameConstants.GameConstants).EntityTypes.SOLDIER:
                     object.takeDamage(9999);
                     break;
+                case (0, _gameConstants.GameConstants).EntityTypes.BULLET:
+                    if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
+                    this.takeDamage(1);
+                    object.destroy();
+                    break;
                 case (0, _gameConstants.GameConstants).EntityTypes.BUFF:
                     new (0, _howler.Howl)({
                         src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.BONUS].url
@@ -41839,9 +42150,6 @@ class Tank extends (0, _entity.Entity) {
                     object.destroy();
             }
         }));
-    }
-    clone() {
-        return new Tank(this);
     }
     takeDamage(damage) {
         if (this.immortal) return;
@@ -41882,45 +42190,21 @@ class Tank extends (0, _entity.Entity) {
         const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
         const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
         if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
-        let collisionGroup = [
+        const collisionGroup = [
             ...tileMap[tilePos.y][tilePos.x]
         ];
-        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y][tilePos.x - 1]
+        const collisionGroupAdditionalTilesRelativePositions = [
+            new (0, _pixiJs.Point)(tilePos.x - 1, tilePos.y),
+            new (0, _pixiJs.Point)(tilePos.x + 1, tilePos.y),
+            new (0, _pixiJs.Point)(tilePos.x, tilePos.y - 1),
+            new (0, _pixiJs.Point)(tilePos.x, tilePos.y + 1),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x - 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x + 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y - 1),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y + 1), 
         ];
-        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y][tilePos.x + 1]
-        ];
-        if (tileMap[tilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y + 1][tilePos.x]
-        ];
-        if (tileMap[tilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y - 1][tilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
-        ];
-        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
-        ];
+        for (const additionalTilePos of collisionGroupAdditionalTilesRelativePositions)if (tileMap[additionalTilePos.y] && tileMap[additionalTilePos.y][additionalTilePos.x]) collisionGroup.push(...tileMap[additionalTilePos.y][additionalTilePos.x]);
         this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
     }
     update(dt) {
@@ -41930,8 +42214,7 @@ class Tank extends (0, _entity.Entity) {
             dead.y = this.y;
             dead.angle = this.angle;
             (0, _sceneManager.SceneManager).currentScene.addChild(dead);
-            let i = Math.floor((0, _utils.randNum)(3));
-            while(i--){
+            for(let i = 0; i <= Math.floor((0, _utils.randNum)(3)); i++){
                 const soldier = new (0, _soldier.Soldier)();
                 soldier.setSkin({
                     assetName: (0, _constants.Constants).AssetsTextures.SOLIDER,
@@ -42020,6 +42303,11 @@ class Entity extends (0, _pixiJs.Container) {
         if (source?._components) source._components.forEach((component)=>this.setComponent(component.clone()));
         this.name = this.constructor.name + (0, _pixiJs.utils).uid();
         if (this._skin) this.addChild(this._skin);
+    }
+    // Clones entity without PIXI properties
+    clone() {
+        const cloned = this.constructor;
+        return new cloned(this);
     }
     setSkin(options) {
         this._skinOptions = options;
@@ -42138,9 +42426,6 @@ class DirectionalWalkMovementBehavior extends (0, _abstractMovementComponent.Abs
         super.update(dt);
         this.stop();
     }
-    clone() {
-        return new DirectionalWalkMovementBehavior(this);
-    }
 }
 
 },{"./abstract-movement-component":"a64l3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aDMpq":[function(require,module,exports) {
@@ -42189,9 +42474,6 @@ class AppearFX extends (0, _entity.Entity) {
         this._skin.loop = false;
         this._skin.play();
     }
-    clone() {
-        return new AppearFX;
-    }
 }
 
 },{"../entity":"7O5J4","../../../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"htN9e":[function(require,module,exports) {
@@ -42213,9 +42495,6 @@ class BasicAabbCollisionComponent extends (0, _abstractCollisionComponent.Abstra
             let i = this._collisionGroup.length;
             while(i--)if (this._collisionGroup[i] && this._collisionGroup[i] !== this._entity && (0, _utils.AABB)(this._entity.simpleBounds, this._collisionGroup[i].simpleBounds)) this.collidedWith(this._collisionGroup[i]);
         }
-    }
-    clone() {
-        return new BasicAabbCollisionComponent(this);
     }
 }
 
@@ -42268,9 +42547,6 @@ class BigExplosionFX extends (0, _entity.Entity) {
             src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.EXPLODE_BIG].url
         }).play();
     }
-    clone() {
-        return new BigExplosionFX;
-    }
 }
 
 },{"../entity":"7O5J4","pixi.js":"1pSin","howler":"5Vjgk","../../../../constants":"45DZp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ibCZq":[function(require,module,exports) {
@@ -42293,9 +42569,6 @@ class ImmortalBuffComponent extends (0, _abstractBuffComponent.AbstractBuffCompo
     endBuff() {
         this._entity.alpha = 1;
         super.endBuff();
-    }
-    clone() {
-        return new ImmortalBuffComponent(this);
     }
 }
 
@@ -42372,10 +42645,16 @@ class Soldier extends (0, _entity.Entity) {
                 (0, _gameConstants.GameConstants).EntityTypes.TRACTOR
             ];
             if (stopObject.includes(object.entityType)) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+            switch(object.entityType){
+                case (0, _gameConstants.GameConstants).EntityTypes.TANK:
+                    this.takeDamage(9999);
+                    break;
+                case (0, _gameConstants.GameConstants).EntityTypes.BULLET:
+                    this.takeDamage(9999);
+                    object.destroy();
+                    break;
+            }
         }));
-    }
-    clone() {
-        return new Soldier(this);
     }
     takeDamage(damage) {
         if (this.immortal) return;
@@ -42410,29 +42689,17 @@ class Soldier extends (0, _entity.Entity) {
         const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
         const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
         if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
-        let collisionGroup = [
+        const collisionGroup = [
             ...tileMap[tilePos.y][tilePos.x]
         ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x]
+        const collisionGroupAdditionalTilesRelativePositions = [
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x - 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x + 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y - 1),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y + 1), 
         ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
-        ];
-        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
-        ];
+        for (const additionalTilePos of collisionGroupAdditionalTilesRelativePositions)if (tileMap[additionalTilePos.y] && tileMap[additionalTilePos.y][additionalTilePos.x]) collisionGroup.push(...tileMap[additionalTilePos.y][additionalTilePos.x]);
         this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
     }
     update(dt) {
@@ -42466,64 +42733,9 @@ class DeadSoldier extends (0, _entity.Entity) {
             assetName: (0, _constants.Constants).AssetsTextures.SOLIDER_DEAD
         });
     }
-    clone() {
-        return new DeadSoldier(this);
-    }
 }
 
-},{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k2kvk":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "GameConstants", ()=>GameConstants);
-let GameConstants;
-(function(GameConstants1) {
-    class EntityTypes {
-        static HARD_WALL = "HardWall";
-        static SMALL_WALL = "SmallWall";
-        static TANK = "Tank";
-        static TRACTOR = "Tractor";
-        static DEAD_TANK = "DeadTank";
-        static WATER = "Water";
-        static AT_HEDGEHOGS = "ATHedgehogs";
-        static BUFF = "Buff";
-        static BULLET = "Bullet";
-        static BASE = "Base";
-        static SOLDIER = "Soldier";
-    }
-    GameConstants1.EntityTypes = EntityTypes;
-    class Teams {
-        static PLAYER_1 = "player1";
-        static PLAYER_2 = "player2";
-    }
-    GameConstants1.Teams = Teams;
-    class Events {
-        static ENTITY_DESTROY = "entity_destroy";
-        static TEAM_WON = "entity_destroy";
-        static TEAM_LOST = "entity_destroy";
-    }
-    GameConstants1.Events = Events;
-    let EntityIDs1;
-    (function(EntityIDs) {
-        EntityIDs[EntityIDs["DIRT"] = 101] = "DIRT";
-        EntityIDs[EntityIDs["GRASS"] = 102] = "GRASS";
-        EntityIDs[EntityIDs["LEAVES"] = 112] = "LEAVES";
-        EntityIDs[EntityIDs["HARD_WALL"] = 201] = "HARD_WALL";
-        EntityIDs[EntityIDs["WALL"] = 202] = "WALL";
-        EntityIDs[EntityIDs["AT_HEDGEHOGS"] = 203] = "AT_HEDGEHOGS";
-        EntityIDs[EntityIDs["WATER"] = 211] = "WATER";
-        EntityIDs[EntityIDs["PLAYER_TANK"] = 901] = "PLAYER_TANK";
-        EntityIDs[EntityIDs["ENEMY_TANK"] = 902] = "ENEMY_TANK";
-        EntityIDs[EntityIDs["PLAYER_TRACTOR"] = 903] = "PLAYER_TRACTOR";
-        EntityIDs[EntityIDs["ENEMY_SOLDIER"] = 904] = "ENEMY_SOLDIER";
-        EntityIDs[EntityIDs["ENEMY_SUPPORT_TANK"] = 905] = "ENEMY_SUPPORT_TANK";
-        EntityIDs[EntityIDs["ENEMY_SMALL_SPAWNER"] = 912] = "ENEMY_SMALL_SPAWNER";
-        EntityIDs[EntityIDs["ENEMY_DEATH_COUNTER"] = 919] = "ENEMY_DEATH_COUNTER";
-        EntityIDs[EntityIDs["RANDOM_BONUS_SPAWNER"] = 921] = "RANDOM_BONUS_SPAWNER";
-        EntityIDs[EntityIDs["PLAYER_BASE"] = 777] = "PLAYER_BASE";
-    })(EntityIDs1 = GameConstants1.EntityIDs || (GameConstants1.EntityIDs = {}));
-})(GameConstants || (GameConstants = {}));
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hIlER":[function(require,module,exports) {
+},{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hIlER":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "RandomControlComponent", ()=>RandomControlComponent);
@@ -42566,9 +42778,6 @@ class RandomControlComponent extends (0, _abstractControlComponent.AbstractContr
         }
         if (this._nextAction) this[`triggerAction${this._nextAction}`]();
     }
-    clone() {
-        return new RandomControlComponent(this);
-    }
 }
 
 },{"../../../../../utils/utils":"ea5wt","./abstract-control-component":"iMT9O","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5nGmE":[function(require,module,exports) {
@@ -42597,9 +42806,6 @@ class DeadTank extends (0, _entity.Entity) {
         this._skin.loop = true;
         this._skin.gotoAndPlay(0);
     }
-    clone() {
-        return new DeadTank(this);
-    }
     takeDamage(damage) {
         if (this.immortal) return;
         this.health -= damage;
@@ -42623,9 +42829,6 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "StaticMovementComponent", ()=>StaticMovementComponent);
 var _abstractMovementComponent = require("./abstract-movement-component");
 class StaticMovementComponent extends (0, _abstractMovementComponent.AbstractMovementComponent) {
-    clone() {
-        return new StaticMovementComponent(this);
-    }
 }
 
 },{"./abstract-movement-component":"a64l3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6dewe":[function(require,module,exports) {
@@ -42640,9 +42843,6 @@ class Floor extends (0, _entity.Entity) {
     setSkin(options) {
         super.setSkin(options);
         this._skin.gotoAndPlay(0);
-    }
-    clone() {
-        return new Floor(this);
     }
 }
 
@@ -42659,9 +42859,6 @@ class HardWall extends (0, _entity.Entity) {
             assetName: (0, _constants.Constants).AssetsTextures.HARD_WALL
         });
     }
-    clone() {
-        return new HardWall(this);
-    }
 }
 
 },{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hunmf":[function(require,module,exports) {
@@ -42676,9 +42873,6 @@ class Leaves extends (0, _entity.Entity) {
         this.setSkin({
             assetName: (0, _constants.Constants).AssetsTextures.LEAVES
         });
-    }
-    clone() {
-        return new Leaves(this);
     }
 }
 
@@ -42709,9 +42903,6 @@ class Wall extends (0, _entity.Entity) {
         super(source);
         this.setComponent(new (0, _staticMovementComponent.StaticMovementComponent)());
     }
-    clone() {
-        return new Wall(this);
-    }
 }
 
 },{"../entity":"7O5J4","./small-wall":"3QSsx","../../../../constants":"45DZp","../../../../scene-manager":"2FQ8z","../behaviors/movement/static-movement-component":"1IDmV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3QSsx":[function(require,module,exports) {
@@ -42722,9 +42913,6 @@ var _entity = require("../entity");
 class SmallWall extends (0, _entity.Entity) {
     constructor(source){
         super(source);
-    }
-    clone() {
-        return new SmallWall(this);
     }
 }
 
@@ -42757,7 +42945,8 @@ class Water extends (0, _entity.Entity) {
                 (0, _gameConstants.GameConstants).EntityTypes.TANK,
                 (0, _gameConstants.GameConstants).EntityTypes.DEAD_TANK,
                 (0, _gameConstants.GameConstants).EntityTypes.TRACTOR,
-                (0, _gameConstants.GameConstants).EntityTypes.SOLDIER
+                (0, _gameConstants.GameConstants).EntityTypes.SOLDIER,
+                (0, _gameConstants.GameConstants).EntityTypes.DEAD_SOLDIER
             ];
             if (drownObject.includes(object.entityType)) this.drown(object);
         }));
@@ -42775,7 +42964,7 @@ class Water extends (0, _entity.Entity) {
     updateTilingData(tileMap, tileSize) {
         const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
         if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos)) return;
-        let collisionGroup = [
+        const collisionGroup = [
             ...tileMap[tilePos.y][tilePos.x]
         ];
         this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
@@ -42795,9 +42984,6 @@ class Water extends (0, _entity.Entity) {
                 }).play();
             }
         }
-    }
-    clone() {
-        return new Water(this);
     }
 }
 
@@ -42820,9 +43006,6 @@ class Splash extends (0, _entity.Entity) {
         this._skin.animationSpeed = 0.2;
         this._skin.loop = false;
         this._skin.play();
-    }
-    clone() {
-        return new Splash;
     }
 }
 
@@ -42849,9 +43032,6 @@ class EnemyBulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWe
         bullet.y = this._entity.y;
         (0, _sceneManager.SceneManager).currentScene.addChild(bullet);
         bullet.launch(this._entity.angle);
-    }
-    clone() {
-        return new EnemyBulletWeaponComponent(this);
     }
 }
 
@@ -42923,9 +43103,6 @@ class Bullet extends (0, _entity.Entity) {
         }));
         this.setComponent(new (0, _projectileMovementComponent.ProjectileMovementComponent)());
     }
-    clone() {
-        return new Bullet(this);
-    }
     launch(angle) {
         new (0, _howler.Howl)({
             src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.SHOT].url
@@ -42943,29 +43120,17 @@ class Bullet extends (0, _entity.Entity) {
         const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
         const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
         if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
-        let collisionGroup = [
+        const collisionGroup = [
             ...tileMap[tilePos.y][tilePos.x]
         ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x]
+        const collisionGroupAdditionalTilesRelativePositions = [
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x - 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x + 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y - 1),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y + 1), 
         ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
-        ];
-        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
-        ];
+        for (const additionalTilePos of collisionGroupAdditionalTilesRelativePositions)if (tileMap[additionalTilePos.y] && tileMap[additionalTilePos.y][additionalTilePos.x]) collisionGroup.push(...tileMap[additionalTilePos.y][additionalTilePos.x]);
         this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
     }
     update(dt) {
@@ -42984,9 +43149,6 @@ class ProjectileMovementComponent extends (0, _abstractMovementComponent.Abstrac
     setMovementVector(vector) {
         this.rotateTo(Math.atan2(0 - -vector.x, 0 - vector.y) * (180 / Math.PI));
         return super.setMovementVector(vector);
-    }
-    clone() {
-        return new ProjectileMovementComponent(this);
     }
 }
 
@@ -43014,9 +43176,6 @@ class SmallExplosionFX extends (0, _entity.Entity) {
         new (0, _howler.Howl)({
             src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.EXPLODE_SMALL].url
         }).play();
-    }
-    clone() {
-        return new SmallExplosionFX;
     }
 }
 
@@ -43049,9 +43208,6 @@ class WanderingAmountBasedSpawner extends (0, _amountBasedSpawner.AmountBasedSpa
             }
         }));
     }
-    clone() {
-        return new WanderingAmountBasedSpawner(this);
-    }
     setComponent(component) {
         super.setComponent(component);
         if (Object.getPrototypeOf(component) instanceof (0, _abstractControlComponent.AbstractControlComponent)) {
@@ -43073,29 +43229,17 @@ class WanderingAmountBasedSpawner extends (0, _amountBasedSpawner.AmountBasedSpa
         const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
         const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
         if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
-        let collisionGroup = [
+        const collisionGroup = [
             ...tileMap[tilePos.y][tilePos.x]
         ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x]
+        const collisionGroupAdditionalTilesRelativePositions = [
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x - 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x + 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y - 1),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y + 1), 
         ];
-        if (vectorTilePos.y != 0 && tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
-        ];
-        if (vectorTilePos.y != 0 && tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
-        ];
-        if (vectorTilePos.x != 0 && tileMap[vectorTilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
-        ];
-        if (vectorTilePos.x != 0 && tileMap[vectorTilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
-        ];
+        for (const additionalTilePos of collisionGroupAdditionalTilesRelativePositions)if (tileMap[additionalTilePos.y] && tileMap[additionalTilePos.y][additionalTilePos.x]) collisionGroup.push(...tileMap[additionalTilePos.y][additionalTilePos.x]);
         this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
     }
 }
@@ -43122,9 +43266,6 @@ class AmountBasedSpawner extends (0, _spawner.Spawner) {
         }));
         this.setComponent(new (0, _staticMovementComponent.StaticMovementComponent)());
     }
-    clone() {
-        return new AmountBasedSpawner(this);
-    }
     setTimeBetweenSpawns(time) {
         this._timeBetweenSpawns = time;
         return this;
@@ -43147,7 +43288,7 @@ class AmountBasedSpawner extends (0, _spawner.Spawner) {
     updateTilingData(tileMap, tileSize) {
         const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
         if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos)) return;
-        let collisionGroup = [
+        const collisionGroup = [
             ...tileMap[tilePos.y][tilePos.x]
         ];
         this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
@@ -43252,12 +43393,9 @@ class Buff extends (0, _entity.Entity) {
         }
         super.update(dt);
     }
-    clone() {
-        return new Buff(this);
-    }
 }
 
-},{"../behaviors/buffs/immortal-buff-component":"ibCZq","../behaviors/buffs/live-buff-component":"hTtsW","../behaviors/buffs/slow-buff-component":"8DIpe","../behaviors/buffs/speed-buff-component":"dDNtf","../entity":"7O5J4","../../../../utils/utils":"ea5wt","../../../../constants":"45DZp","../behaviors/movement/static-movement-component":"1IDmV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../behaviors/buffs/spawn-support-buff-component":"7PrKd"}],"hTtsW":[function(require,module,exports) {
+},{"../behaviors/buffs/immortal-buff-component":"ibCZq","../behaviors/buffs/live-buff-component":"hTtsW","../behaviors/buffs/slow-buff-component":"8DIpe","../behaviors/buffs/speed-buff-component":"dDNtf","../entity":"7O5J4","../behaviors/buffs/spawn-support-buff-component":"7PrKd","../../../../utils/utils":"ea5wt","../../../../constants":"45DZp","../behaviors/movement/static-movement-component":"1IDmV","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hTtsW":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "LiveBuffComponent", ()=>LiveBuffComponent);
@@ -43268,9 +43406,6 @@ class LiveBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent
         this._propToChange = "health";
         this._changeTo = this._entity[this._propToChange] + 1;
         super.firstUpdate();
-    }
-    clone() {
-        return new LiveBuffComponent(this);
     }
 }
 
@@ -43286,9 +43421,6 @@ class SlowBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponent
         this._changeTo = 1;
         super.firstUpdate();
     }
-    clone() {
-        return new SlowBuffComponent(this);
-    }
 }
 
 },{"./abstract-buff-component":"4GSnn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dDNtf":[function(require,module,exports) {
@@ -43302,9 +43434,6 @@ class SpeedBuffComponent extends (0, _abstractBuffComponent.AbstractBuffComponen
         this._propToChange = "speed";
         this._changeTo = 4;
         super.firstUpdate();
-    }
-    clone() {
-        return new SpeedBuffComponent(this);
     }
 }
 
@@ -43352,9 +43481,6 @@ class SpawnSupportBuffComponent extends (0, _abstractBuffComponent.AbstractBuffC
         }
         super.firstUpdate();
     }
-    clone() {
-        return new SpawnSupportBuffComponent(this);
-    }
 }
 
 },{"../movement/abstract-movement-component":"a64l3","../team/abstract-team-component":"f7VfU","./abstract-buff-component":"4GSnn","../../entity-factory":"e4Fm9","../../../../../scene-manager":"2FQ8z","../../../game-constants":"k2kvk","../../interactive/spawners/wandering-amount-based-spawner":"hygE5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5gio5":[function(require,module,exports) {
@@ -43371,13 +43497,10 @@ class Base extends (0, _entity.Entity) {
     constructor(source){
         super(source);
     }
-    clone() {
-        return new Base(this);
-    }
     onEvent(event, data) {}
     destroy(options) {
         super.destroy(options);
-        if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) (0, _eventManager.EventManager).notify((0, _gameConstants.GameConstants).Events.TEAM_LOST, this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
+        if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent))) (0, _eventManager.EventManager).instance().notify((0, _gameConstants.GameConstants).Events.GAME_OVER, this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam);
     }
     update(dt) {
         if (this._initOnUpdate) {
@@ -43390,7 +43513,7 @@ class Base extends (0, _entity.Entity) {
     }
 }
 
-},{"../entity":"7O5J4","../behaviors/team/abstract-team-component":"f7VfU","../../../../scene-manager":"2FQ8z","../../../../event-manager":"l75gk","../fx/appear":"54360","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../game-constants":"k2kvk"}],"3cOKk":[function(require,module,exports) {
+},{"../entity":"7O5J4","../behaviors/team/abstract-team-component":"f7VfU","../../../../scene-manager":"2FQ8z","../../../../event-manager":"l75gk","../fx/appear":"54360","../../game-constants":"k2kvk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3cOKk":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "BulletWeaponComponent", ()=>BulletWeaponComponent);
@@ -43420,9 +43543,6 @@ class BulletWeaponComponent extends (0, _abstractWeaponComponent.AbstractWeaponC
         }
         (0, _sceneManager.SceneManager).currentScene.addChild(bullet);
         bullet.launch(this._entity.angle);
-    }
-    clone() {
-        return new BulletWeaponComponent(this);
     }
 }
 
@@ -43468,6 +43588,7 @@ class Tractor extends (0, _entity.Entity) {
                 (0, _gameConstants.GameConstants).EntityTypes.TRACTOR
             ];
             if (stopObject.includes(object.entityType)) this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).collides();
+            /////////// // /// // //// // //
             switch(object.entityType){
                 case (0, _gameConstants.GameConstants).EntityTypes.TANK:
                     if (this.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam() == object.getComponent((0, _abstractTeamComponent.AbstractTeamComponent)).getTeam()) break;
@@ -43488,9 +43609,6 @@ class Tractor extends (0, _entity.Entity) {
                     object.destroy();
             }
         }));
-    }
-    clone() {
-        return new Tractor(this);
     }
     takeDamage(damage) {
         if (this.immortal) return;
@@ -43531,45 +43649,21 @@ class Tractor extends (0, _entity.Entity) {
         const tilePos = (0, _utils.getTitlePosition)(this.position, tileSize);
         const vectorTilePos = (0, _utils.getTitlePosition)(this.getComponent((0, _abstractMovementComponent.AbstractMovementComponent)).rotationVector, tileSize);
         if (!tileMap || !(0, _utils.validatePointIsPositive)(tilePos) || !(0, _utils.validatePointIsPositive)(vectorTilePos)) return;
-        let collisionGroup = [
+        const collisionGroup = [
             ...tileMap[tilePos.y][tilePos.x]
         ];
-        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y][tilePos.x - 1]
+        const collisionGroupAdditionalTilesRelativePositions = [
+            new (0, _pixiJs.Point)(tilePos.x - 1, tilePos.y),
+            new (0, _pixiJs.Point)(tilePos.x + 1, tilePos.y),
+            new (0, _pixiJs.Point)(tilePos.x, tilePos.y - 1),
+            new (0, _pixiJs.Point)(tilePos.x, tilePos.y + 1),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x - 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x + 1, vectorTilePos.y),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y - 1),
+            new (0, _pixiJs.Point)(vectorTilePos.x, vectorTilePos.y + 1), 
         ];
-        if (tileMap[tilePos.y] && tileMap[tilePos.y][tilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y][tilePos.x + 1]
-        ];
-        if (tileMap[tilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y + 1][tilePos.x]
-        ];
-        if (tileMap[tilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[tilePos.y - 1][tilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x - 1]
-        ];
-        if (tileMap[vectorTilePos.y] && tileMap[vectorTilePos.y][vectorTilePos.x + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y][vectorTilePos.x + 1]
-        ];
-        if (tileMap[vectorTilePos.y + 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y + 1][vectorTilePos.x]
-        ];
-        if (tileMap[vectorTilePos.y - 1]) collisionGroup = [
-            ...collisionGroup,
-            ...tileMap[vectorTilePos.y - 1][vectorTilePos.x]
-        ];
+        for (const additionalTilePos of collisionGroupAdditionalTilesRelativePositions)if (tileMap[additionalTilePos.y] && tileMap[additionalTilePos.y][additionalTilePos.x]) collisionGroup.push(...tileMap[additionalTilePos.y][additionalTilePos.x]);
         this.getComponent((0, _abstractCollisionComponent.AbstractCollisionComponent)).setCollisionGroup(collisionGroup);
     }
     update(dt) {
@@ -43599,9 +43693,6 @@ class BasicDestroyComponent extends (0, _abstractDestroyComponent.AbstractDestro
     onDestroy(callback) {
         return super.onDestroy(callback);
     }
-    clone() {
-        return new BasicDestroyComponent(this);
-    }
 }
 
 },{"./abstract-destroy-component":"7BYTl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iKGAS":[function(require,module,exports) {
@@ -43622,9 +43713,9 @@ class InWorldEventCounter extends (0, _entity.Entity) {
         return this._count;
     }
     setEventToCount(event) {
-        if (this._eventToCount) (0, _eventManager.EventManager).unsubscribe(this._eventToCount, this);
+        if (this._eventToCount) (0, _eventManager.EventManager).instance().unsubscribe(this._eventToCount, this);
         this._eventToCount = event;
-        (0, _eventManager.EventManager).subscribe(this._eventToCount, this);
+        (0, _eventManager.EventManager).instance().subscribe(this._eventToCount, this);
         return this;
     }
     timesToCount(timesToCount) {
@@ -43641,9 +43732,6 @@ class InWorldEventCounter extends (0, _entity.Entity) {
             this._count = 0;
             if (this._onCountEnded) this._onCountEnded();
         }
-    }
-    clone() {
-        return new InWorldEventCounter(this);
     }
     onEvent(event, data) {
         super.onEvent(event, data);
@@ -43666,134 +43754,20 @@ class ATHedgehogs extends (0, _entity.Entity) {
             hitboxHeight: 32
         });
     }
-    clone() {
-        return new ATHedgehogs(this);
-    }
 }
 
-},{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1SXu6":[function(require,module,exports) {
-module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,101,101,101,101,101,101,101,101,101,101,102,102,102,102,102,102,102,102,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,102,102,102,102,102,102,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,102,102,102,102,102,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,102,102,102,102,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,211,211,101,211,211,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,211,211,101,211,211,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,101,102,102,102,101,101,101,101,101,102,102,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,102,102,102,102,102,102,102,101,102,101,102,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,102,102,102,102,101,102,102,102,102,102,102,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,102,102,102,101,101,101,102,102,102,102,102,101,101,101,101,101,101,101,999],[999,101,101,101,101,101,101,101,102,102,102,102,102,101,102,101,102,102,102,102,102,101,101,101,101,101,101,101,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,202,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,912,999,999,999,203,999,999,999,203,999,999,999,203,999,999,999,203,999,999,999,912,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,999,202,999,201],[201,999,203,203,999,203,203,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,203,203,999,203,203,999,201],[201,999,999,999,201,999,999,999,999,202,201,202,999,202,201,202,999,202,201,202,999,999,999,999,201,999,999,999,201],[201,999,203,203,999,203,203,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,203,203,999,203,203,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,999,202,999,202,999,203,999,999,999,203,999,999,999,203,999,999,999,203,999,202,999,202,999,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,202,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,112,999,112,999,112,999,999,999,999,112,999,112,999,112,999,999,999,999,999,999,999,112,999,112,999,112,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,112,999,112,999,112,999,999,999,999,999,999,999,112,999,999,999,112,999,999,999,999,112,999,112,999,112,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
-
-},{}],"6JDuJ":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Level2Scene", ()=>Level2Scene);
-var _howler = require("howler");
-var _pixiJs = require("pixi.js");
-var _constants = require("../../../../constants");
-var _eventManager = require("../../../../event-manager");
-var _sceneManager = require("../../../../scene-manager");
-var _menuScene = require("../../../menu/menu-scene");
-var _gameConstants = require("../../game-constants");
-var _gameScene = require("../../game-scene");
-var _level3 = require("../level3/level3");
-var _level2Json = require("./level2.json");
-class Level2Scene extends (0, _gameScene.GameScene) {
-    constructor(){
-        super();
-        this.loadLevel(_level2Json);
-        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_LOST, this);
-        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_WON, this);
-    }
-    onEvent(event, data) {
-        if (this.paused) return;
-        super.onEvent(event, data);
-        if (event == (0, _gameConstants.GameConstants).Events.TEAM_LOST) this._preUpdateAction = ()=>{
-            this.pause();
-            this.dynamicChildren.length = 0;
-            this.tileMap.length = 0;
-            new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.LOSE].url,
-                onend: ()=>{
-                    (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
-                    this.destroy();
-                    this._preUpdateAction = ()=>{};
-                }
-            }).play();
-        };
-        if (event == (0, _gameConstants.GameConstants).Events.TEAM_WON && data == (0, _gameConstants.GameConstants).Teams.PLAYER_1) this._preUpdateAction = ()=>{
-            this.pause();
-            this.dynamicChildren.length = 0;
-            this.tileMap.length = 0;
-            new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.WIN].url,
-                onend: ()=>{
-                    (0, _sceneManager.SceneManager).changeScene(new (0, _level3.Level3Scene)());
-                    this.destroy();
-                    this._preUpdateAction = ()=>{};
-                }
-            }).play();
-        };
-    }
-}
-
-},{"howler":"5Vjgk","pixi.js":"1pSin","../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","../level3/level3":"jtkeB","./level2.json":"fP5rd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../constants":"45DZp","../../game-constants":"k2kvk"}],"jtkeB":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Level3Scene", ()=>Level3Scene);
-var _howler = require("howler");
-var _pixiJs = require("pixi.js");
-var _constants = require("../../../../constants");
-var _eventManager = require("../../../../event-manager");
-var _sceneManager = require("../../../../scene-manager");
-var _menuScene = require("../../../menu/menu-scene");
-var _gameConstants = require("../../game-constants");
-var _gameScene = require("../../game-scene");
-var _gameWonScreen = require("../../game_won_screen");
-var _level3Json = require("./level3.json");
-class Level3Scene extends (0, _gameScene.GameScene) {
-    constructor(){
-        super();
-        this.loadLevel(_level3Json);
-        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_LOST, this);
-        (0, _eventManager.EventManager).subscribe((0, _gameConstants.GameConstants).Events.TEAM_WON, this);
-    }
-    onEvent(event, data) {
-        if (this.paused) return;
-        super.onEvent(event, data);
-        if (event == (0, _gameConstants.GameConstants).Events.TEAM_LOST) this._preUpdateAction = ()=>{
-            this.pause();
-            this.dynamicChildren.length = 0;
-            this.tileMap.length = 0;
-            new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.LOSE].url,
-                onend: ()=>{
-                    (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
-                    this.destroy();
-                    this._preUpdateAction = ()=>{};
-                }
-            }).play();
-        };
-        if (event == (0, _gameConstants.GameConstants).Events.TEAM_WON && data == (0, _gameConstants.GameConstants).Teams.PLAYER_1) this._preUpdateAction = ()=>{
-            this.pause();
-            this.dynamicChildren.length = 0;
-            this.tileMap.length = 0;
-            new (0, _howler.Howl)({
-                src: (0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsSounds.WIN].url,
-                onend: ()=>{
-                    (0, _sceneManager.SceneManager).changeScene(new (0, _gameWonScreen.GameWonScene)());
-                    this.destroy();
-                    this._preUpdateAction = ()=>{};
-                }
-            }).play();
-        };
-    }
-}
-
-},{"howler":"5Vjgk","pixi.js":"1pSin","../../../../event-manager":"l75gk","../../../../scene-manager":"2FQ8z","../../../menu/menu-scene":"4nuFJ","../../game-scene":"eoY4A","../../game_won_screen":"8w9F4","./level3.json":"6Axjl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../constants":"45DZp","../../game-constants":"k2kvk"}],"8w9F4":[function(require,module,exports) {
+},{"../../../../constants":"45DZp","../entity":"7O5J4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"5Yn2Z":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "GameWonScene", ()=>GameWonScene);
-var _scene = require("../scene");
 var _sceneManager = require("../../scene-manager");
 var _pixiJs = require("pixi.js");
-var _menuScene = require("../menu/menu-scene");
 var _howler = require("howler");
 var _savesHandler = require("../../utils/saves-handler");
 var _constants = require("../../constants");
-class GameWonScene extends (0, _scene.Scene) {
-    constructor(){
-        super();
+var _plainScreenScene = require("../menu/plain-screen-scene");
+class GameWonScene extends (0, _plainScreenScene.PainScreenScene) {
+    initVisuals() {
         this.background = new (0, _pixiJs.Sprite)((0, _pixiJs.Loader).shared.resources[(0, _constants.Constants).AssetsTextures.WIN_MENU_BG].texture);
         this.logoText = new (0, _pixiJs.Text)("You`ve completed the game!", new (0, _pixiJs.TextStyle)({
             fontSize: 64,
@@ -43817,8 +43791,8 @@ class GameWonScene extends (0, _scene.Scene) {
         this.startButton.buttonMode = true;
         this.addChild(this.background);
         this.addChild(this.logoText);
-        if ((0, _savesHandler.SavesHandler).loadData("score")) {
-            this.score = new (0, _pixiJs.Text)(`Score: ${(0, _savesHandler.SavesHandler).loadData("score")}`, new (0, _pixiJs.TextStyle)({
+        if ((0, _savesHandler.SavesHandler).instance().loadData("score")) {
+            this.score = new (0, _pixiJs.Text)(`Score: ${(0, _savesHandler.SavesHandler).instance().loadData("score")}`, new (0, _pixiJs.TextStyle)({
                 fontSize: 84,
                 align: "center",
                 fill: "#ffffff"
@@ -43838,203 +43812,17 @@ class GameWonScene extends (0, _scene.Scene) {
         });
         this.music.play();
         this.startButton.on("click", ()=>{
-            (0, _sceneManager.SceneManager).changeScene(new (0, _menuScene.MenuScene)());
+            (0, _sceneManager.SceneManager).changeScene("MenuScene");
             this.music.stop();
             this.destroy();
         });
     }
 }
 
-},{"../scene":"aOCet","../../scene-manager":"2FQ8z","pixi.js":"1pSin","../menu/menu-scene":"4nuFJ","howler":"5Vjgk","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../utils/saves-handler":"1qn3x","../../constants":"45DZp"}],"6Axjl":[function(require,module,exports) {
-module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,912,999,999,999,999,999,912,999,999,999,999,999,912,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
+},{"../../scene-manager":"2FQ8z","pixi.js":"1pSin","howler":"5Vjgk","../../utils/saves-handler":"1qn3x","../../constants":"45DZp","../menu/plain-screen-scene":"8unnF","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1SXu6":[function(require,module,exports) {
+module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,103,103,103,103,103,103,103,101,101,101,102,102,102,102,102,102,102,102,103,103,103,103,103,103,103,103,103,999],[999,103,101,101,103,101,101,101,101,101,101,101,102,102,102,102,102,102,101,101,101,101,101,101,103,101,101,103,999],[999,103,101,101,103,101,101,101,101,101,101,101,102,102,102,102,102,101,101,101,101,101,101,101,103,101,101,103,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,102,102,102,102,101,101,101,101,101,101,101,103,101,101,103,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,999],[999,103,211,211,101,211,211,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,211,211,101,211,211,101,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,101,101,101,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,101,101,101,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,101,101,103,999],[999,103,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,999],[999,103,101,101,101,101,101,101,102,102,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,101,103,999],[999,103,101,101,101,101,101,101,102,102,101,102,102,102,101,101,101,101,101,102,102,101,101,101,101,101,101,103,999],[999,103,101,101,101,101,101,101,102,102,102,102,102,102,102,102,102,101,102,101,102,101,101,101,101,101,101,103,999],[999,103,101,101,103,101,101,101,102,102,102,102,102,102,101,102,102,102,102,102,102,101,101,101,103,101,101,103,999],[999,103,101,101,103,101,101,103,102,102,102,102,102,101,101,101,102,102,102,102,102,101,101,101,103,101,101,103,999],[999,103,103,103,103,103,103,103,102,102,102,102,102,101,102,101,102,102,102,102,102,103,103,103,103,103,103,103,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,912,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,202,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,912,999,999,999,203,999,999,999,203,999,999,999,203,999,999,999,203,999,999,999,912,999,999,999,201],[201,999,202,999,202,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,202,999,202,999,201],[201,999,203,203,999,203,203,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,203,203,999,203,203,999,201],[201,999,999,999,201,999,999,999,999,202,201,202,999,202,201,202,999,202,201,202,999,999,999,999,201,999,999,999,201],[201,999,203,203,999,203,203,999,999,999,202,999,999,999,202,999,999,999,202,999,999,999,203,203,999,203,203,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,999,202,999,202,999,203,999,999,999,203,999,999,999,203,999,999,999,203,999,202,999,202,999,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,921,999,999,999,201],[201,999,999,999,921,999,999,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,202,999,999,202,999,202,999,999,202,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[916,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,112,112,112,999,999,999,999,999,112,112,112,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,112,999,112,999,112,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,112,999,112,999,112,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,112,999,112,999,112,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,112,999,112,999,112,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,112,112,112,999,999,999,999,999,112,112,112,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
 
-},{}],"fP5rd":[function(require,module,exports) {
-module.exports = JSON.parse('{"depthLevels":[[[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,101,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,102,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]],[[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,912,999,999,999,999,999,912,999,999,999,999,999,912,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,202,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,999,999,202,999,999,999,201],[201,999,999,999,202,999,999,999,999,999,999,999,202,999,999,999,202,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,901,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,921,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,999,202,999,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,202,202,999,202,202,999,999,999,999,999,999,202,202,202,999,999,999,999,999,999,202,202,999,202,202,999,201],[201,999,999,999,999,999,999,999,999,999,999,999,999,202,777,202,999,999,999,999,999,999,999,999,999,999,999,999,201],[201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201]],[[919,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999],[999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999]]]}');
-
-},{}],"9ftod":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "loaderAssets", ()=>loaderAssets);
-parcelHelpers.export(exports, "assets", ()=>assets);
-var _constants = require("./constants");
-const loaderAssets = [
-    {
-        name: (0, _constants.Constants).AssetsTextures.LOADER_BAR_BG,
-        url: "./assets/loader/loader-bg.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.LOADER_BAR,
-        url: "./assets/loader/loader-bar.png"
-    }, 
-];
-const assets = [
-    {
-        name: (0, _constants.Constants).AssetsTextures.BONUS_IMMORTAL,
-        url: "./assets/bonus/bonus_immortal.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.BONUS_LIVE,
-        url: "./assets/bonus/bonus_live.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.BONUS_SLOW,
-        url: "./assets/bonus/bonus_slow.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.BONUS_SPEED,
-        url: "./assets/bonus/bonus_speed.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.BONUS_TRACTOR,
-        url: "./assets/bonus/bonus_tractor.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.BUTTON_PLAY,
-        url: "./assets/buttons/play.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.BUTTON_EXIT,
-        url: "./assets/buttons/exit.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.MENU_BG,
-        url: "./assets/game_background.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.WIN_MENU_BG,
-        url: "./assets/win_screen_background.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.APPEAR_FX,
-        url: "./assets/effects/appear.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.SPLASH_FX,
-        url: "./assets/effects/splash.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.BULLET_1,
-        url: "./assets/effects/bullet.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.BULLET_2,
-        url: "./assets/effects/enemy_bullet.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.EXPLODE_BIG_FX,
-        url: "./assets/effects/explode.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.EXPLODE_SMALL_FX,
-        url: "./assets/effects/explode_small.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.TANK_2,
-        url: "./assets/tanks/tank_enemy1_move.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.TANK_3,
-        url: "./assets/tanks/tank_enemy2_move.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.TANK_4,
-        url: "./assets/tanks/tank_enemy3_move.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.TANK_1,
-        url: "./assets/tanks/tank_player_move.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.TANK_DEAD,
-        url: "./assets/tanks/tank_dead_move.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.TRACTOR,
-        url: "./assets/tanks/tractor_move.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.SOLIDER,
-        url: "./assets/entities/soldier.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.SOLIDER_DEAD,
-        url: "./assets/entities/good_russian.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.EMPTY_SPACE,
-        url: "./assets/tanks/empty.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.EAGLE,
-        url: "./assets/tiles/eagle.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.LEAVES,
-        url: "./assets/tiles/leaves.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.SMALL_WALL,
-        url: "./assets/tiles/small_wall.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.AT_BARRICADE,
-        url: "./assets/tiles/anti_tank_hedgehogs.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.HARD_WALL,
-        url: "./assets/tiles/wall.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.DIRT,
-        url: "./assets/tiles/dirt.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.GRASS,
-        url: "./assets/tiles/grass.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsTextures.WATER,
-        url: "./assets/tiles/water.png"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.SHOT,
-        url: "./assets/sounds/shot.wav"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.BONUS,
-        url: "./assets/sounds/bonus.wav"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.WIN,
-        url: "./assets/sounds/win.wav"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.LOSE,
-        url: "./assets/sounds/lose.wav"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.EXPLODE_BIG,
-        url: "./assets/sounds/explode.wav"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.EXPLODE_SMALL,
-        url: "./assets/sounds/hit.wav"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.WIN_GAME_MUSIC,
-        url: "./assets/sounds/endgame_music.mp3"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.HEAVY_TRANSPORT_MOVE,
-        url: "./assets/sounds/heavy_transport_move.wav"
-    },
-    {
-        name: (0, _constants.Constants).AssetsSounds.WATER_SPLASH,
-        url: "./assets/sounds/water_splash.wav"
-    }, 
-];
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./constants":"45DZp"}],"avp05":[function(require,module,exports) {
+},{}],"avp05":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ClientInputHandler", ()=>ClientInputHandler);
@@ -44043,13 +43831,13 @@ class ClientInputHandler {
     constructor(){}
     static init() {
         window.addEventListener("keydown", (ev)=>{
-            (0, _eventManager.EventManager).notify("keydown", ev.key);
+            (0, _eventManager.EventManager).instance().notify("keydown", ev.key);
         });
         window.addEventListener("keyup", (ev)=>{
-            (0, _eventManager.EventManager).notify("keyup", ev.key);
+            (0, _eventManager.EventManager).instance().notify("keyup", ev.key);
         });
         window.addEventListener("keypress", (ev)=>{
-            (0, _eventManager.EventManager).notify("keypress", ev.key);
+            (0, _eventManager.EventManager).instance().notify("keypress", ev.key);
         });
     }
 }
